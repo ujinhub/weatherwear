@@ -1,0 +1,529 @@
+@charset "UTF-8";
+
+.mypage_menu {
+	list-style: none;
+	display: flex;
+	padding-left: 0;
+	width: 75%;
+	font-size: x-large;
+	color: silver;
+	margin: 0px;
+}
+
+.mypage_menu_head {
+	display: inline;
+	margin: 5px auto;
+	text-align: center;
+	border: 1px solid pink;
+	height: 80px;
+}
+
+.mypage_a {
+	text-decoration: none;
+	color: black;
+}
+
+.mypage_body {
+	width: 100%;
+	display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* 주문/배송 */
+.orderList{
+	width: 90%;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+}
+
+.order_table {
+	width: 90%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 1px solid pink;
+    padding: 20px;
+}
+
+.order_idlist {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.order_cate {
+	width: 80%;
+	margin-bottom: 10px;
+}
+
+.order_date {
+	float: left;
+	margin-right: 30px;
+}
+
+.order_id {
+	float: left;
+}
+
+.order_detail {
+	float: right;
+	margin-left: 30px;
+}
+
+.orderdetail_btn:hover {
+	color: red;
+	cursor: pointer;
+}
+
+.orderDetail_div {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding-left: 10%;
+}
+
+.orderDetail {
+	width: 100%;
+	display: none;
+	flex-direction: column;
+	align-items: center;
+}
+
+.order_status {
+	float: right;
+}
+
+.order_product {
+	width: 90%;
+    list-style-type: none;
+    display: flex;
+    flex-direction: row;
+    align-items: inherit;
+    padding: 0px;
+    margin: 0;
+	border : 1px solid pink;
+}
+
+.order_product_mystatus{
+	width: 90%;
+    list-style-type: none;
+    display: flex;
+    flex-direction: row;
+    align-items: inherit;
+    padding: 0px;
+    margin: 0;
+	border : 1px solid pink;
+    justify-content: space-evenly;
+}
+
+.order_product > li {
+	border : 1px solid pink;
+	padding: 5px;
+}
+
+.order_head {
+	display: inline-block;
+	margin: 5px auto;
+	text-align: center;
+}
+
+/* 배송정보 */
+.deliver_info{
+	width: 90%;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.deliver_table {
+	width: 100%;
+    display: flex;
+    flex-direction: row;
+}
+
+.deliver_header {
+	width: 25%;
+    display: flex;
+    list-style-type: none;
+    padding-left: 0px;
+    flex-direction: column;
+}
+
+.deliver_content {
+	width: 75%;
+    display: flex;
+    list-style-type: none;
+    padding-left: 0px;
+    flex-direction: column;
+}
+
+.deliver_table > ul > li {
+	border : 1px solid pink;
+	padding: 5px;
+}
+
+/* 금액 정보 */
+.order_info{
+	width: 90%;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.order_info_table {
+	width: 100%;
+    display: flex;
+    flex-direction: row;
+}
+
+.order_info_header {
+	width: 30%;
+    display: flex;
+    list-style-type: none;
+    padding-left: 0px;
+    flex-direction: column;
+}
+
+.order_info_content {
+	width: 70%;
+    display: flex;
+    list-style-type: none;
+    padding-left: 0px;
+    flex-direction: column;
+}
+
+.order_info_table > ul > li {
+	border : 1px solid pink;
+	padding: 5px;
+}
+
+
+/* 결제 정보 */
+.pay_info_info{
+	width: 90%;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.pay_info_table {
+	width: 100%;
+    display: flex;
+    flex-direction: row;
+}
+
+.pay_info_header {
+	width: 30%;
+    display: flex;
+    list-style-type: none;
+    padding-left: 0px;
+    flex-direction: column;
+}
+
+.pay_info_content {
+	width: 70%;
+    display: flex;
+    list-style-type: none;
+    padding-left: 0px;
+    flex-direction: column;
+}
+
+.pay_info_table > ul > li {
+	border : 1px solid pink;
+	padding: 5px;
+}
+
+/* 위시리스트 */
+.wishList{
+	width: 90%;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+}
+
+.wish_table {
+	width: 90%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.wish_header {
+	width: 90%;
+	height: 40px;
+    list-style-type: none;
+    display: flex;
+    flex-direction: row;
+    align-items: inherit;
+    padding: 0px;
+    margin: 0;
+	border : 1px solid pink;
+}
+
+.wish_content {
+	width: 90%;
+	height: 150px;
+    list-style-type: none;
+    display: flex;
+    flex-direction: row;
+    align-items: inherit;
+    padding: 0px;
+    margin: 0;
+	border : 1px solid pink;
+}
+
+.wish_table > ul > li {
+	border : 1px solid pink;
+}
+
+.wish_head {
+	display: inline-block;
+	margin: 5px auto;
+	text-align: center;
+}
+
+
+/* 쿠폰리스트 */
+.couponList{
+	width: 90%;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+}
+
+.coupon_table {
+	width: 90%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.coupon_table > ul {
+	width: 90%;
+	height: 40px;
+    list-style-type: none;
+    display: flex;
+    flex-direction: row;
+    align-items: inherit;
+    padding: 0px;
+    margin: 0;
+	border : 1px solid pink;
+}
+
+.coupon_table > ul > li {
+	border : 1px solid pink;
+}
+
+.coupon_head {
+	display: inline-block;
+	margin: 5px auto;
+	text-align: center;
+}
+
+
+/* 포인트 내역 */
+.pointList{
+	width: 90%;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+}
+
+.point_table {
+	width: 90%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.point_table > ul {
+	width: 90%;
+	height: 40px;
+    list-style-type: none;
+    display: flex;
+    flex-direction: row;
+    align-items: inherit;
+    padding: 0px;
+    margin: 0;
+	border : 1px solid pink;
+}
+
+.point_table > ul > li {
+	border : 1px solid pink;
+}
+
+.point_head {
+	display: inline-block;
+	margin: 5px auto;
+	text-align: center;
+}
+
+/* 리뷰 */
+.reviewList{
+	width: 90%;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+}
+
+.review_table {
+	width: 90%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 1px solid pink;
+    padding: 20px;
+}
+
+.review_idlist {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.review_cate {
+	width: 80%;
+	margin-bottom: 10px;
+}
+
+.review_date {
+	float: left;
+	margin-right: 30px;
+}
+
+.review_id {
+	float: left;
+}
+
+.review_product {
+	width: 90%;
+    list-style-type: none;
+    display: flex;
+    flex-direction: row;
+    align-items: inherit;
+    padding: 0px;
+    margin: 0;
+	border : 1px solid pink;
+}
+
+.review_product_mystatus{
+	width: 90%;
+    list-style-type: none;
+    display: flex;
+    flex-direction: row;
+    align-items: inherit;
+    padding: 0px;
+    margin: 0;
+	border : 1px solid pink;
+    justify-content: flex-end;
+}
+
+.review_product > li {
+	border : 1px solid pink;
+}
+
+.review_head {
+	display: inline-block;
+	margin: 5px auto;
+	text-align: center;
+}
+
+.no { width: 5%; text-align: center; }
+.title { width: 50%; padding-left: 15px;}
+.writer { width: 15%; text-align: center; }
+.date { width: 20%; text-align: center; }
+.view { width: 10%; text-align: center; }
+
+/* 주문내역 */
+.order_product_info {
+	width: 70%;
+	height:150px; 
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-evenly;
+	flex-direction: column;
+}
+
+/* 위시리스트 */
+.checkbox { width: 5%; text-align: center; }
+.wishProduct { width: 95%; display: flex; justify-content: space-between; }
+.product_img { 
+	width: 30%; 
+	text-align: center; 
+	height:150px; 
+	display: flex;
+	align-items: center;
+	justify-content: space-evenly;
+}
+.product_name { 
+	width: 65%; 
+	text-align: center; 
+	height:150px; 
+	display: flex;
+	align-items: stretch;
+	justify-content: space-evenly;
+}
+
+/* 포인트 */
+.history { width: 35%; padding-left: 15px;}
+.getPoint, .usePoint, .total { width: 15%; text-align: center; }
+.product { width: 20%; text-align: center; }
+
+/* 쿠폰 */
+.coupon { width: 40%; }
+.status { width: 25%; text-align: center; }
+.dudate { width: 35%; text-align: center; }
+
+/* 리뷰 */
+.review_product_info {
+	width: 70%;
+	height:150px; 
+	display: flex;
+	align-items: flex-start;
+	justify-content: flex-start;
+	flex-direction: column;
+}
+
+.review_content {	
+	border: 1px solid pink;
+	min-height: 80px;
+	width: 100%;
+	overflow-y: auto;
+}
+
+.mypage_proName {
+	border: 1px solid pink;
+	width: 100%;
+	height: 35px;
+}
+
+.mypage_proOption {
+	border: 1px solid pink;
+	width: 100%;
+	height: 35px;
+}
+
+/* 개인정보 */
+.submenu {
+	width: 80%;
+}
+
+.submenu_ul {
+	float: right;
+	list-style-type: none;
+}
+
+.submenu_li {
+	text-decoration: none;
+	color: dimgrey;
+	cursor: pointer;
+}
+
+.submenu_li:hover {
+	color: black;	
+}

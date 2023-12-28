@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- MyBatis 다운 파일 PDF 에서 붙여넣은 내용입니다. -->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	 			
+<mapper namespace="ClientDAO">
+	<resultMap type="com.w2.client.ClientVO" id="client">
+		<id property="clientId" column="cId" />
+		<result property="clientPwd" column="cPwd" />
+		<result property="clientName" column="cName" />
+		<result property="clientNum" column="cNum" />
+		<result property="clientEmail" column="cEmail" />
+		<result property="clientEmailCheck" column="cEmailCheck" />
+		<result property="clientBirth" column="cBirth" />
+		<result property="clientNickName" column="cNickName" />
+		<result property="gradeId" column="grId" />
+		<result property="clientPoint" column="cPoint" />
+		<result property="clientLogDate" column="cLogDate" />
+		<result property="chPwdDate" column="chPwdDate" />
+	</resultMap>
+	
+	<!-- 사용 가능 
+	<sql id="미리 지정가능">지정하고 싶은 값 입력 가능</sql>
+	<include refid="미리 지정가능"/>
+	-->
+	
+	<!-- 정보 중복 확인 -->
+	<select id="checkService" resultType="int" parameterType="Map">
+		SELECT COUNT(*) FROM client
+		<choose>
+			<when test="#{ comp eq 'cId' }">
+				WHERE cId = #{ with }
+			</when>
+			<when test="#{ comp eq 'cNickName' }">
+				WHERE cNickName = #{ with }
+			</when>
+			<when test="#{ comp eq 'cEmail' }">
+				WHERE cEmail = #{ with }
+			</when>
+		</choose>
+	</select>
+	
+	<!-- 회원 가입 -->
+	<insert id="clientSignup" parameterType="client">
+		INSERT INTO client (cId, cPwd, cName, cNum, cEmail, cEmailCheck, cBirth, cNickName, grId, cPoint)
+		VALUES (#{ clientId }, #{ clientPwd }, #{ clientName }, #{ clientNum }, #{ clientEmail }, #{ clientEmailCheck }, 
+				#{ clientBirth }, #{ clientNickName }, #{ gradeId }, #{ clientPoint });
+	</insert>
+	
+	<!-- 회원 정보 조회 -->
+	<select id="getClient" parameterType="String" resultMap="client">
+		SELECT * FROM client WHERE cId=#{ clientId }
+	</select>
+	
+	<!-- 마지막 로그인 일자 업데이트 -->
+	<update id="setLogDate" parameterType="String">
+		UPDATE client SET cLogDate = CURRENT_TIMESTAMP WHERE cId = #{ clientId }
+	</update>
+	
+	<!-- 아이디 찾기 -->
+	<select id="clientFindId" parameterType="Map" resultType="String">
+		SELECT cId FROM client WHERE cName = #{ clientName } AND ${ type } = #{ keyword }
+	</select>
+	
+	<!-- 비밀번호 찾기 -->
+	<select id="clientFindPwd" parameterType="Map" resultType="int">
+		SELECT COUNT(*) FROM client 
+		WHERE cId = #{ clientId } 
+		AND cName = #{ clientName }
+		AND ${ type } = #{ keyword }
+	</select>
+	
+	<!-- 비밀번호 변경 -->
+	<update id="clientSetPwd" parameterType="client">
+		UPDATE client SET cPwd = #{ clientPwd }, chPwdDate = CURRENT_TIMESTAMP
+		WHERE cId = #{ clientId }
+	</update>
+	
+	<!-- 마이페이지 기본 정보 -->
+	<select id="clientSetMypage" parameterType="String" resultType="HashMap">
+		SELECT 
+		    client.cPoint as point, 
+		    IFNULL((LENGTH(client.cmarkList) - LENGTH(REPLACE(client.cmarkList, ', ', ''))), 0) as wish,
+		    COUNT(orders.cid) as "order",
+		    COUNT(coupon_list.cId) as coupon,
+		    COUNT(review.cId) as review
+		FROM client
+		LEFT JOIN orders ON client.cId = orders.cid
+		LEFT JOIN coupon_list ON client.cId = coupon_list.cId
+		LEFT JOIN review ON client.cId = review.cId
+		WHERE client.cId = #{ clientId }
+		GROUP BY client.cId;
+	</select>
+	
+</mapper>

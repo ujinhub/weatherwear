@@ -1,0 +1,23 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<header class="header clear">
+	<img src='/w2/resources/admin/admin_image/logo.png' class="header_img">
+	<nav class="user_menu">
+		<ul>
+			<li><a href="#">정보수정</a></li>
+			<li><a href="#">로그아웃</a></li>
+		</ul>
+	</nav>
+	<div class="clear_con"></div>
+	<nav class="main_menu">
+		<ul>
+			<li><a class="main_menu_a" href="#"><strong>통계 관리</strong></a></li>				
+			<li><a class="main_menu_a" href="#"><strong>상품 관리</strong></a></li>				
+			<li><a class="main_menu_a" href="#"><strong>주문 관리</strong></a></li>				
+			<li><a class="main_menu_a" href="#"><strong>정산 관리</strong></a></li>				
+			<li><a class="main_menu_a" href="#"><strong>회원 관리</strong></a></li>				
+			<li><a class="main_menu_a" href="#"><strong>공지 관리</strong></a></li>				
+			<li><a class="main_menu_a" href="#"><strong>문의 관리</strong></a></li>				
+		</ul>
+	</nav>
+</header>

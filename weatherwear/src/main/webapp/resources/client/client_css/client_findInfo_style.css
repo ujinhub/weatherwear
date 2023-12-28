@@ -1,0 +1,93 @@
+@charset "UTF-8";
+
+.client {
+	display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    align-items: center;
+}
+
+.client_table {
+	width: 400px;
+}
+
+.btn_form{
+	width: 100% !important;
+}
+
+.findInfo_ul {
+	list-style: none;
+	display: inline-block;
+	padding-left: 0px;
+}
+
+.findInfo_ul > li {
+	display: inline;
+	margin: 5px;
+}
+
+.findInfo_ul > li > a{
+	text-decoration: none;
+	color: grey;
+}
+
+#findInfo_id_num {
+	display: none;
+}
+
+#findInfo_id_email {
+	display: none;
+}
+
+#findInfo_pwd_email {
+	display: none;
+}
+
+#findInfo_pwd_num {
+	display: none;
+}
+
+.client_table {
+	
+}
+
+.client_table_ul {
+	list-style-type: none;
+	display: flex;
+	justify-content: space-around;
+	padding-left: 0px;
+}
+
+.client_table_th {
+	margin: 2px;
+	width: 30%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.client_table_td {
+	margin: 2px;
+	width: 70%;
+}
+
+.col {
+	width: 100%;
+}
+
+#result_div {
+	display: none;
+	flex-direction: column;
+}
+
+.result_div_a {
+	text-decoration: none;
+	color: dimgrey;
+	cursor: pointer;
+}
+
+#resetPassword {
+	display: flex;	
+	flex-direction: column;
+	align-items: center;
+}

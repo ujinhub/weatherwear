@@ -1,0 +1,41 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<header class="header clear">
+	<img src='/w2/resources/client/client_image/logo_pull.png' class="header_img" onclick="location.href='clientMain.do'">
+	<!-- 익명의 사용자 -->
+	<c:if test="${ session == null }">
+		<nav class="user_menu">
+			<ul>
+				<li><a href="clientLogin.do">LOGIN</a></li>
+				<li><a href="clientSignup.do">JOIN</a></li>
+				<li><a href="clientCart.do">CART</a></li>
+			</ul>
+		</nav>
+	</c:if>
+		
+	<!-- 로그인한 사용자 -->
+	<c:if test="${ session != null }">
+		<nav class="user_menu">
+			<ul>
+				<li><a href="clientCart.do">CART</a></li>
+				<li><a href="clientMypage.do">MYPAGE</a></li>
+				<li><a href="clientLogout.do">LOGOUT</a></li>
+			</ul>
+		</nav>
+	</c:if>
+	<div class="clear_con"></div>
+	<nav class="main_menu">
+		<ul>
+			<li><a class="main_menu_a" href="clientProductList.do?gubun=all"><strong class="all">ALL</strong></a></li>				
+			<li><a class="main_menu_a" href="clientProductList.do?gubun=outer"><strong class="outer">OUTER</strong></a></li>				
+			<li><a class="main_menu_a" href="clientProductList.do?gubun=top"><strong class="top">TOP</strong></a></li>				
+			<li><a class="main_menu_a" href="clientProductList.do?gubun=pants"><strong class="pants">PANTS</strong></a></li>				
+			<li><a class="main_menu_a" href="clientProductList.do?gubun=skirts"><strong class="skirts">SKIRTS</strong></a></li>				
+			<li><a class="main_menu_a" href="clientProductList.do?gubun=dress"><strong class="dress">DRESS</strong></a></li>				
+			<li><a class="main_menu_a" href="clientCommunity.do"><strong>COMMUNITY</strong></a></li>				
+		</ul>
+	</nav>
+	<script>
+
+	</script>
+</header>

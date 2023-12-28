@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- MyBatis 다운 파일 PDF 에서 붙여넣은 내용입니다. -->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	 			
+<mapper namespace="ClientCartDAO">
+	
+	<!-- 장바구니 담기 -->
+	<insert id="insertClientCart">
+		INSERT INTO cart(proId, opId, cId, caCnt, ckId)
+		VALUES(#{proId}, #{opId}, #{cId}, #{caCnt}, #{ckId})
+	</insert>
+	
+	<!-- 장바구니 가져오기 -->
+	<select id="getClientCart" resultType="cartDto">
+		SELECT c.caId, c.proId, c.opId, c.caCnt, p.proName, pp.proPrice, i.ImageDir, i.ImageName, o.opColor, o.opSize, o.stCnt
+		FROM cart AS c
+		JOIN product AS p
+		ON c.proId = p.proId
+		JOIN product_price AS pp
+		ON p.proId = pp.proId
+		JOIN product_image AS i
+		ON p.proId = i.ImageBy
+		JOIN option_info AS o
+		ON c.opId = o.opId
+		<where>
+			<choose>
+				<when test="cId != null">
+					c.cId = #{cId} 
+				</when>
+				<when test="ckId != null">
+					c.ckId = #{ckId}
+				</when>
+			</choose>
+			
+			AND  i.ImageStatus = '대표'
+		</where>
+		ORDER BY caId DESC
+	</select>
+	<!-- select id="getClientCart" parameterType="String" resultType="clientCart">
+		SELECT *
+		FROM cart
+		WHERE cId = #{value}
+	</select -->
+	
+	<!-- 비회원 장바구니 회원 장바구니로 변경 -->
+	<update id="updateClientCart">
+		UPDATE cart
+		SET cId = #{cId}, ckId = null
+		WHERE ckId = #{ckId}
+	</update>
+	
+	<!-- 장바구니 수량 업데이트 -->
+	<update id="updateClientCartCnt">
+		UPDATE cart
+		SET caCnt = #{caCnt}
+		<if test="ckId != null">
+			, ckLimit = default
+		</if>
+		WHERE caId = #{caId}
+	</update>
+	
+	<!-- 장바구니 존재 여부 확인 -->
+	<select id="checkClientCart" parameterType="clientCart" resultType="clientCart">
+		SELECT *
+		FROM cart
+		WHERE opId = #{opId}
+		<choose>
+			<when test="cId != null">
+				AND cId = #{cId} 
+			</when>
+			<when test="ckId != null">
+				AND ckId = #{ckId}
+			</when>
+		</choose>
+	</select>
+	
+	<!-- 상품 수량 확인 -->
+	<select id="checkProCnt" resultType="int">
+		SELECT stCnt
+		FROM option_info
+		WHERE opId = #{opId}
+	</select>
+	
+	<!-- 장바구니 삭제 -->
+	<delete id="deleteClientCart">
+		DELETE FROM cart
+		WHERE caId = #{caId}
+	</delete>
+	
+	<!-- 비회원 장바구니 조회 -->
+	<select id="getNonClientCart" resultType="clientCart">
+		SELECT *
+		FROM cart
+		WHERE ckId IS NOT NULL
+		AND cId IS NULL 
+	</select>
+	
+</mapper>

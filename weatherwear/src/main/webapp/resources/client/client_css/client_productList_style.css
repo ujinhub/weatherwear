@@ -1,0 +1,93 @@
+@charset "UTF-8";
+.productList > .Title > h2 {
+	text-transform: uppercase;
+}
+
+.productList {
+	display: flex;
+	flex-direction: column;
+	padding-left: 1%;
+}
+
+.product {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: flex-start;
+	padding-left: 2%;
+}
+
+.product_list {
+	max-width: 100%;
+	max-height: 100%;
+	list-style-type: none;
+	display: flex;
+	flex-direction: column;
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+.productList_img {
+	width: 200px;
+	height: 200px;
+	min-width: 80px;
+	min-height: 80px;
+	max-width: 100%;
+	min-height: 100%;
+}
+
+.name > a {
+	text-decoration: none;
+	color: black;
+}
+
+.name {
+	width: 200px;
+	text-align: left;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	max-width: 100%
+}
+
+.paging {
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	padding-left: 0px;
+}
+
+.prev_btn {
+	width: 15%;
+	display: flex;
+	padding-left: 0px;
+}
+
+.page_btn {
+	min-width: 30%;
+	display: flex;
+	padding-left: 0px;
+}
+
+.next_btn {
+	width: 15%;
+	display: flex;
+	padding-left: 0px;
+}
+
+.paging_ul {
+	width: 100%;
+	list-style-type: none;
+	display: flex;
+	justify-content: space-evenly;
+	padding-left: 0px;
+}
+
+.paging_li > a {
+	text-decoration: none;
+	color: dimgrey;
+}
+
+.paging_li > a:hover {
+	font-weight: bold;
+}

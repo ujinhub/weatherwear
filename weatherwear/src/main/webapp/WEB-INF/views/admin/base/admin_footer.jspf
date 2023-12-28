@@ -1,0 +1,22 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<div class="footer">
+	<nav class="footer_menu">
+		<ul>
+			<li><a class="footer_menu_a" href="#">NOTICE</a></li>
+			<li><a class="footer_menu_a" href="#">EVENT</a></li>
+			<li><a class="footer_menu_a" href="#">REVIEW</a></li>
+			<li><a class="footer_menu_a" href="#">TERMS</a></li>
+			<li><a class="footer_menu_a" href="#">POLICY</a></li>
+		</ul>
+	</nav>
+	<span class="footer_logo">WEATHERWEAR</span>
+	<div class="clear_con"></div>
+	<dl class="footer_info">
+		<dd>OWNER : 김 희 진</dd>
+		<dd>ADDRESS : 서울시 종로구</dd>
+		<dd>NUMBER : 010-1212-8989</dd>
+		<dd>PERMIT NUMBER: 123-12-12345</dd>
+		<dd>BANK ACCOUNT : SHINHAN 111-111-111111 주) weatherwear</dd>
+	</dl>
+</div>

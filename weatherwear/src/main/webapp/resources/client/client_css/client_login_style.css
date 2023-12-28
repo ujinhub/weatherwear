@@ -1,0 +1,44 @@
+@charset "UTF-8";
+
+.client {
+	display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    align-items: center;
+}
+
+.btn_form{
+	width: 100% !important;
+}
+
+.client_table {
+	
+}
+
+.client_table_ul {
+	list-style-type: none;
+	display: flex;
+	justify-content: space-around;
+	padding-left: 0px;
+}
+
+.client_table_th {
+	width: 30%;
+	margin: 2px;
+	padding-left: 15px;
+	display: flex;
+	align-items: center;
+}
+
+.client_table_td {
+	width: 70%;
+	margin: 2px;
+}
+
+.client_table_li {
+	margin: 2px;
+}
+
+.login_btn {
+	width: 100%;
+}

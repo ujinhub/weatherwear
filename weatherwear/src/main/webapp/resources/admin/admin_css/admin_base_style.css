@@ -1,0 +1,242 @@
+@charset "UTF-8";
+
+* {
+	font-family: fangsong;
+}
+
+.container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: space-around;
+}
+
+/* float 정리 : 하위 태그들만 적용됩니다. */
+.clear:after {
+	content:'';
+	display: block;
+	clear: both;
+}
+
+.clear_con {
+	content: '';
+	diplay: block;
+	clear: both;
+}
+
+/* 헤더 */
+.header {
+	box-sizing: border-box;
+	width: 95%;
+	height:25%;
+	margin: 10px;
+	padding:10px;
+	border: 2px dotted grey;
+	
+	max-width: 3600px; 
+	max-height: 100%;
+	
+	min-width: 600px;
+	min-height: auto;
+}
+
+/* 헤더: 로고 */
+.header_img{
+	float:left;
+	width: 100px;
+	height: auto;
+	padding: 20px;
+	
+	max-width: 300px;
+	min-width: 80px;
+	max-height: auto;
+	min-height: auto;
+}	
+
+/* 헤더: 사용자 메뉴 */
+.user_menu{
+	float: right;
+}
+
+.user_menu > ul {
+	list-style: none;
+	display: inline-block;
+}
+
+.user_menu > ul > li {
+	display: inline;
+	margin: 5px;
+}
+
+.user_menu > ul > li > a{
+	text-decoration: none;
+	color: grey;
+}
+
+/* 헤더: 매인 메뉴 */
+.main_menu {
+	display: flex;
+	justify-content: center;
+	border-bottom: 3px solid dimgrey;
+}
+
+.main_menu > ul {
+	list-style: none;
+	display: flex;
+	padding-left: 0;
+	width: 98%;
+}
+
+.main_menu > ul > li {
+	display: inline;
+	margin: 5px auto;
+	text-align: center;
+	font-size: x-large;
+}
+
+.main_menu > ul > li > a{
+	text-decoration: none;
+	color: black;
+}
+
+.main_menu > ul > li > a:hover{
+	color: red;
+}
+
+/* 콘텐츠 고정 크기 */
+.body {
+	box-sizing: border-box;
+	width: 95%;
+	height:900px;
+	margin: 10px;
+	padding:10px;
+	border: 2px dotted grey;
+	
+	max-width: 3600px; 
+	max-height: 100%;
+	
+	min-width: 600px;
+	min-height: auto;
+}
+
+/* footer */
+.footer {
+	box-sizing: border-box;
+	background-color: lightgrey;
+	width: 95%;
+	height:10%;
+	margin: 10px;
+	padding:10px;
+	border: 2px dotted grey;
+	
+	max-width: 3600px; 
+	max-height: 100%;
+	
+	min-width: 600px;
+	min-height: auto;
+}
+
+.footer_menu {
+	float: right;
+}
+
+.footer_menu > ul {
+	list-style: none;
+	display: inline-block;
+	margin-right: 10px;
+}
+
+.footer_menu > ul > li {
+	display: inline;
+	margin: 5px;
+}
+
+.footer_menu > ul > li > a {
+	text-decoration: none;
+	color: grey;
+}
+
+.footer_logo {
+	font-size: xx-large;
+	color: dimgrey;
+	padding: 15px;
+}
+
+.footer_info > dd {
+	margin-bottom: 5px;
+	color: dimgrey;
+}
+
+input[type="text"], 
+input[type="submit"], 
+input[type="password"], 
+input[type="search"], 
+input[type="number"], 
+input[type="reset"], 
+input[type="email"], 
+input[type="tel"], 
+input[type="email"], 
+input[type="tel"], 
+input[type="date"], 
+textarea { 
+	width: 200px; 
+	border-radius: 0; 	/* 테두리 모서리 */
+	box-shadow: none; 	/* 그림자 효과 */
+	-webkit-appearance: none;	/* 기본 외관 제거 */ 
+	border: 1px solid #ddd; /* 테두리 */
+	height: 36px; 		/* 높이 */
+	box-sizing: border-box; 	/* 테두리 포함한 크기 */
+	padding: 0 20px; 	/* 왼쪽,오른쪽 값 지정 */
+	font-size: 15px; 	/* 폰트 크기 */
+	color: #111; 		/* 색상: 검은색 */
+	letter-spacing: -0.2px; /* 글자 간격 */
+	font-weight: 500; 	/* 글짜 두께 */
+	font-family: "Roboto","Noto",sans-serif; /* 폰트 */ 
+}
+
+/* 파일 업로드 버튼 */
+input[type=file]::file-selector-button {
+	width: 100px;
+	height: 36px;
+	background: #fff;
+	border: 1px solid #ddd; /* 테두리 */
+	border-radius: 10px;
+	cursor: pointer;
+	&:hover {
+			background: rgb(77,77,77);
+			color: #fff;}
+}
+
+/* <select> styles */
+.select {
+	/* Reset */
+	appearance: none; /* 기본 외관 제거 */
+	border: 0;	
+	outline: 0;
+	font: inherit;
+	
+	/* Personalize */
+	width: 200px;	/* 요소 너비 설정 */
+	height: 36px;
+	text-align: center;
+	color: black;
+	border: 1px solid #ddd; /* 테두리 */
+	border-radius: 0.25em;	/* 모서리 둥글림 */
+	cursor: pointer;
+	
+	/* Remove IE arrow */
+	&::-ms-expand {
+		display: none;
+	}
+	
+	/* Remove focus outline */
+	&:focus {
+		outline: none;
+	}
+
+	/* <option> colors */
+	option {
+		color: inherit;
+		background-color: var(--option-bg);
+	}
+}
