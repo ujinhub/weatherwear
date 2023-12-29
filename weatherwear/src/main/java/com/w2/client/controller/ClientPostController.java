@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.util.WebUtils;
 
@@ -245,7 +246,7 @@ public class ClientPostController {
 	
 	/** 장바구니 업데이트 */
 	@ResponseBody
-	@PostMapping("updateClientCartCnt.do")
+	@RequestMapping("updateClientCartCnt.do")
 	public String updateClientCartCnt(@RequestBody ClientCartVO cart) {
 		cartService.updateClientCartCnt(cart);
 		return "success";
