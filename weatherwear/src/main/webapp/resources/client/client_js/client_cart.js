@@ -44,8 +44,6 @@ $(document).ready(function() {
 		});
 		
 		totalPrice();
-		
-		cartdao
 	});
 	
 	// 전체 삭제
@@ -192,7 +190,7 @@ function updateCart(caId, opId, caCnt) {
 	
 	$.ajax({
 		type: "post",
-		url: "updateClientCart.do",
+		url: "updateClientCartCnt.do",
 		dataType: "text",
 		contentType: "application/json",
 		data: jsonData,
