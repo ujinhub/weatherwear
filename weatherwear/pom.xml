@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.w2</groupId>
 	<artifactId>w2</artifactId>
-	<name>teamProject_weatherwear</name>
+	<name>weatherwear</name>
 	<packaging>war</packaging>
 	<version>1.0.0-BUILD-SNAPSHOT</version>
 	<properties>
