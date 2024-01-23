@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	 			
+<mapper namespace="OrderDAO">
+	<select id="getOrderList" resultType="hashMap">
+		SELECT od.orderId, od.orderDate, od.clientId, 
+			cl.clientName, cl.clientNum, di.deliverNum,
+	        ad.addressName, ad.addressNum, ad.addressPostNum, ad.address1, ad.address2, ad.addressMemo, SUBSTRING(oi.optionId, 1,9) as '옵션값',
+	        pr.productName, pr.productId, SUBSTRING(oi.optionId, 10, LENGTH(oi.optionId)) as optionName, oi.orderProCnt, oi.orderTotal, oi.orderStatus, 
+	        od.orderPrice, od.usedPoint, ci.couponPrice, pi.paymentMethod, pi.paymentDate, pi.paymentStatus
+		FROM orders od
+		LEFT JOIN orders_info oi ON (od.orderId=oi.orderId)
+		LEFT JOIN client cl ON (od.clientId=cl.clientId)
+		LEFT JOIN client_address ad ON (od.clientId=ad.clientId AND od.addressId=ad.addressId)
+		LEFT JOIN payment_info pi ON (od.orderId=pi.orderId)
+		LEFT JOIN deliver_info di ON (od.orderId=di.orderId)
+		LEFT JOIN coupon_info ci ON (od.couponId=ci.couponId)
+		LEFT JOIN product pr ON (SUBSTRING(oi.optionId, 1, 9)=pr.productId)
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="keyword != null and keyword != ''">
+				<if test="searchType == 'orderId'">
+					AND od.orderId like CONCAT('%', #{keyword}, '%')
+				</if>
+				<if test="searchType == 'clientId'">
+					AND od.clientId like CONCAT('%', #{keyword}, '%')
+				</if>
+			</if>
+		</trim>
+		ORDER BY od.orderId, ${ orderby }
+		LIMIT #{startList}, #{listSize};
+	</select>
+	
+	<select id="getOrderListCnt" resultType="int">
+		SELECT count(*)
+		FROM orders_info oi
+		LEFT JOIN orders od ON (oi.orderId=od.orderId)
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="keyword != null and keyword != ''">
+				<if test="searchType == 'orderId'">
+					AND od.orderId like CONCAT('%', #{keyword}, '%')
+				</if>
+				<if test="searchType == 'clientId'">
+					AND od.clientId like CONCAT('%', #{keyword}, '%')
+				</if>
+			</if>
+		</trim>
+		ORDER BY ${ orderby }, od.orderId
+	</select>
+	
+	<update id="modifyOrderStatus" parameterType="map">
+		UPDATE orders_info SET orderStatus=#{ changeValue }
+		WHERE orderId=#{ orderId } AND optionId LIKE CONCAT(#{ productId }, '%')
+	</update>
+	
+	<update id="modifyDeliverNum" parameterType="map">
+		UPDATE deliver_info SET deliverNum=#{ changeValue }
+		WHERE orderId=#{ orderId }
+	</update>
+</mapper>

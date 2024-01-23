@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	 			
+<mapper namespace="DeliveryDAO">
+	<select id="getDeliveryList" resultType="hashMap">
+		SELECT *
+		FROM delivery
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="keyword != null and keyword != ''">
+				<if test="searchType == 'deliveryId'">
+					AND deliveryId like CONCAT('%', #{keyword}, '%')
+				</if>
+				<if test="searchType == 'deliveryComName'">
+					AND deliveryComName like CONCAT('%', #{keyword}, '%')
+				</if>
+			</if>
+		</trim>
+		ORDER BY deliveryId DESC
+		LIMIT #{startList}, #{listSize};
+	</select>
+	
+	<select id="getDeliveryListCnt" resultType="int">
+		SELECT count(*)
+		FROM delivery 
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="keyword != null and keyword != ''">
+				<if test="searchType == 'deliveryId'">
+					AND deliveryId like CONCAT('%', #{keyword}, '%')
+				</if>
+				<if test="searchType == 'deliveryComName'">
+					AND deliveryComName like CONCAT('%', #{keyword}, '%')
+				</if>
+			</if>
+		</trim>
+	</select>
+	
+	<insert id="insert">
+		INSERT delivery
+		VALUES(#{ deliveryId }, #{ deliveryComName }, #{ deliveryComNum }, #{ deliveryPrice }, #{ deliveryName }, #{ deliveryNum })
+	</insert>
+	
+	<update id="update">
+		UPDATE delivery
+		SET deliveryComName=#{ deliveryComName }, 
+			deliveryComNum=#{ deliveryComNum }, 
+			deliveryPrice=#{ deliveryPrice }, 
+			deliveryName=#{ deliveryName }, 
+			deliveryNum=#{ deliveryNum }
+		WHERE deliveryId=#{ deliveryId }
+	</update>
+	
+	<delete id="delete">
+		DELETE FROM delivery
+		WHERE deliveryId=#{ deliveryId }
+	</delete>
+	
+	<select id="check" resultType="int">
+		SELECT count(*) FROM delivery WHERE deliveryId=#{ deliveryId }
+	</select>
+</mapper>

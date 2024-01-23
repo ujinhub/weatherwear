@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	 			
+<mapper namespace="ProductDAO">
+	<resultMap id="optionInfoResult" type="hashMap">
+		<result property="optionColor" column="optionColor" />
+		<result property="optionSize" column="optionSize" />
+		<result property="stockCnt" column="stockCnt" />
+	</resultMap>
+	
+	<resultMap id="insertResult" type="String">
+		<result property="productId" column="productId" />
+	</resultMap>
+
+	<select id="getProductList" resultType="product">
+		SELECT p.*, CONCAT(pm.imageDir, pm.imageName) as mainImage, pr.productPrice
+		FROM product p
+		LEFT JOIN product_image pm ON (p.productId = pm.imageBy AND pm.imageStatus = '대표')
+		LEFT JOIN product_price pr ON (p.productId = pr.productId)
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="keyword != null and keyword != ''">
+				<if test="searchType == 'productName'">
+					AND productName like CONCAT('%', #{keyword}, '%')
+				</if>
+				<if test="searchType == 'productId'">
+					AND productId like CONCAT('%', #{keyword}, '%')
+				</if>
+			</if>
+		</trim>
+		ORDER BY ${ orderby }
+		LIMIT #{startList}, #{listSize};
+	</select>
+	
+	<select id="getProductListCnt" resultType="int">
+		SELECT count(*)
+		FROM product
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="keyword != null and keyword != ''">
+				<if test="searchType == 'productName'">
+					AND productName like CONCAT('%', #{keyword}, '%')
+				</if>
+				<if test="searchType == 'productId'">
+					AND productId like CONCAT('%', #{keyword}, '%')
+				</if>
+			</if>
+		</trim>
+		ORDER BY ${ orderby }
+	</select>
+	
+	<select id="getProduct" resultType="hashmap">
+		SELECT p.*, pr.*, CONCAT(pm.imageDir, pm.imageName) as mainImage
+		FROM product p
+		LEFT JOIN product_price pr ON(p.productId = pr.productId) 
+		LEFT JOIN product_image pm ON (p.productId = pm.imageBy AND pm.imageStatus = '대표')
+		WHERE p.productId=#{ productId }
+	</select>
+	
+	<select id="getOptionInfo" resultType="hashmap">
+		SELECT GROUP_CONCAT(DISTINCT optionColor SEPARATOR ',') as optionColorList, 
+				GROUP_CONCAT(DISTINCT optionSize SEPARATOR ',') as optionSizeList
+		FROM option_info
+		WHERE productId=#{ productId }
+	</select>
+	
+	<select id="getOptionList" resultMap="optionInfoResult">
+		SELECT optionColor, optionSize, stockCnt
+		FROM option_info
+		WHERE productId=#{ productId }
+	</select>
+	
+	<select id="getDetailImage" resultType="hashmap">
+		SELECT CONCAT(imageDir, imageName) as detailImage
+		FROM product_image
+		WHERE imageBy=#{ productId } AND imageStatus='상세'
+	</select>
+	
+<!-- 상품 등록 -->
+	<insert id="insertProduct" parameterType="product" useGeneratedKeys="true" keyProperty="productId">
+		INSERT INTO product(productId, productName, productContent, productCate, productSell) 
+		VALUES(#{ productId }, #{ productName }, #{ productContent }, #{ productCate }, 'Y')
+	</insert>
+	
+<!-- 가격 등록 -->	
+	<insert id="insertPrice" parameterType="hashmap">
+		INSERT INTO product_price(productId, productPrimeCost) 
+		VALUES(#{ product.productId }, #{ productPrimeCost })
+	</insert>
+	
+<!-- 옵션 등록 -->
+	<insert id="insertOption" parameterType="list">
+		INSERT INTO option_info(productId, optionColor, optionSize, stockCnt)
+		VALUES
+		<foreach collection="list" item="option" separator=",">
+			(#{ option.productId }, #{ option.optionColor }, #{ option.optionSize }, #{ option.stockCnt })
+		</foreach>
+	</insert>
+	
+<!-- 이미지 등록 -->
+<!-- 	<insert id="insertImage" parameterType="list"> -->
+<!-- 		INSERT INTO product_image(imageId, imageName, imageDir, imageStatus, imageBy) -->
+<!-- 		VALUES -->
+<!-- 		<foreach collection="list" item="imvo" separator=","> -->
+<!-- 			(#{ imvo.imageId }, #{ imvo.imageName }, #{ imvo.imageDir }, #{ imvo.imageStatus }, #{ imvo.imageBy }, ) -->
+<!-- 		</foreach> -->
+<!-- 	</insert> -->
+
+<!-- 상품 수정 -->
+	<update id="updateProduct" parameterType="product">
+		UPDATE product
+		SET productName=#{ productName }, productContent=#{ productContent }
+		WHERE productId=#{ productId }
+	</update>
+	
+<!-- 가격 수정 -->	
+	<update id="updatePrice" parameterType="hashmap">
+		UPDATE product_price
+		SET productPrimeCost=#{ productPrimeCost } 
+		WHERE productId=#{ product.productId }
+	</update>
+
+<!-- 상품상태 수정 -->
+	<update id="updateStatus" parameterType="hashmap">
+		UPDATE product
+		SET productSell=#{ productSell }
+		WHERE productId=#{ productId }
+	</update>
+<!-- 옵션 수정 -->
+	<update id="updateOption" parameterType="list">
+		UPDATE option_info
+		SET 
+		(productId, optionColor, optionSize, stockCnt)
+		VALUES
+		<foreach collection="list" item="option" separator=",">
+			(#{ option.productId }, #{ option.optionColor }, #{ option.optionSize }, #{ option.stockCnt })
+		</foreach>
+		WHERE productId=#{ productId }
+	</update>
+	
+<!-- 옵션 삭제 -->
+	<delete id="deleteOption">
+		DELETE FROM option_info WHERE productId=#{ productId }
+	</delete>
+	
+<!-- 상품가격 삭제 -->
+	<delete id="deletePrice">
+		DELETE FROM product_price WHERE productId=#{ productId }
+	</delete>
+	
+<!-- 상품 삭제 -->
+	<delete id="deleteProduct">
+		DELETE FROM product WHERE productId=#{ productId }
+	</delete>
+	
+<!-- 이미지 수정 -->
+<!-- 	<update id="updateImage" parameterType="list"> -->
+<!-- 		UPDATE product_image
+			SET 
+			(imageId, imageName, imageDir, imageStatus, imageBy) -->
+<!-- 		VALUES -->
+<!-- 		<foreach collection="list" item="imvo" separator=","> -->
+<!-- 			(#{ imvo.imageId }, #{ imvo.imageName }, #{ imvo.imageDir }, #{ imvo.imageStatus }, #{ imvo.imageBy }, ) -->
+<!-- 		</foreach> -->
+<!-- 	</update> -->
+</mapper>
