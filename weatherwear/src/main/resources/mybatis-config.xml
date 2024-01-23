@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" 
+                "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+    
+    <typeAliases>
+        <!-- typeAlias
+        		- 매핑파일에서 사용하는 type을 지정
+                - 애플리케이션에서 SQL 문으로 값을 전달합니다
+                - SQL 문 실행 시 반환되는 레코드를 저장하는 용도로 사용하기 위한 빈을 생성합니다.-->
+                
+        <typeAlias type="com.w2.admin.AdminVO" alias="admin"/>
+        <typeAlias type="com.w2.client.ClientVO" alias="client"/>
+        <typeAlias type="com.w2.board.NoticeVO" alias="notice"/>
+        <typeAlias type="com.w2.board.QnaVO" alias="qna"/>
+        <typeAlias type="com.w2.board.TermsVO" alias="terms"/>
+        
+    </typeAliases>
+
+    <!-- SQL 작성문을 지정하여 mapper 파일 경로 알려주는 역할입니다. -->
+    <mappers>
+    	<mapper resource="mappings/admin-mapping.xml"/>
+    	<mapper resource="mappings/notice-mapping.xml"/>
+    	<mapper resource="mappings/client-mapping.xml"/>
+    	<mapper resource="mappings/qna-mapping.xml"/>
+    	<mapper resource="mappings/terms-mapping.xml"/>
+    </mappers>
+</configuration>

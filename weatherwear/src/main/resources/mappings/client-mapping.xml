@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	 			
+<mapper namespace="ClientDAO">
+	<select id="getClientList" resultType="client">
+		SELECT row_number() over(ORDER BY clientRegDate) as clientIdx, c.*
+		FROM client c
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="keyword != null and keyword != ''">
+				<if test="searchType == 'clientId'">
+					AND clientId like CONCAT('%', #{keyword}, '%')
+				</if>
+				<if test="searchType == 'clientName'">
+					AND clientName like CONCAT('%', #{keyword}, '%')
+				</if>
+				<if test="searchType == 'gradeId'">
+					AND gradeId = #{keyword}
+				</if>
+			</if>
+		</trim>
+		ORDER BY clientIdx DESC
+		LIMIT #{startList}, #{listSize}
+	</select>
+	
+	<select id="getClientListCnt" resultType="int">
+		SELECT count(*)
+		FROM client
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="keyword != null and keyword != ''">
+				<if test="searchType == 'clientId'">
+					AND clientId like CONCAT('%', #{keyword}, '%')
+				</if>
+				<if test="searchType == 'clientName'">
+					AND clientName like CONCAT('%', #{keyword}, '%')
+				</if>
+				<if test="searchType == 'gradeId'">
+					AND gradeId = #{keyword}
+				</if>
+			</if>
+		</trim>
+	</select>
+	
+	<select id="getClient" resultType="client">
+		SELECT *
+		FROM client
+		WHERE clientId = #{clientId}
+	</select>
+</mapper>

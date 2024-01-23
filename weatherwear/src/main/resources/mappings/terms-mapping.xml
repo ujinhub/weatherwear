@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	 			
+<mapper namespace="TermsDAO">
+	<select id="getTermsList" resultType="terms">
+		SELECT row_number() over(ORDER BY termRegDate) as termIdx, t.*
+		FROM terms t
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="keyword != null and keyword != ''">
+				<if test="searchType == 'termTitle'">
+					AND termTitle like CONCAT('%', #{keyword}, '%')
+				</if>
+				<if test="searchType == 'termContent'">
+					AND termContent like CONCAT('%', #{keyword}, '%')
+				</if>
+				<if test="searchType == 'termNecessary'">
+					AND termNecessary = #{termNecessary}
+				</if>
+			</if>
+		</trim>
+		ORDER BY termIdx DESC
+		LIMIT #{startList}, #{listSize};
+	</select>
+	
+	<select id="getTermsListCnt" resultType="int">
+		SELECT count(*)
+		FROM terms
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="keyword != null and keyword != ''">
+				<if test="searchType == 'termTitle'">
+					AND termTitle like CONCAT('%', #{keyword}, '%')
+				</if>
+				<if test="searchType == 'termContent'">
+					AND termContent like CONCAT('%', #{keyword}, '%')
+				</if>
+				<if test="searchType == 'termNecessary'">
+					AND termNecessary = #{termNecessary}
+				</if>
+			</if>
+		</trim>
+	</select>
+	
+	<select id="getTerms" resultType="terms">
+		SELECT *
+		FROM terms
+		WHERE termId = #{termId}
+	</select>
+	
+	<insert id="insertTerms">
+		INSERT INTO terms
+		VALUES(#{termId}, #{termTitle}, #{termContent}, #{termNecessary}, default, #{termEndDate}, default, #{termApplyDate})
+	</insert>
+	
+	<update id="updateTerms">
+		UPDATE terms
+		SET termTitle = #{termTitle}, termContent = #{termContent}, termNecessary = #{termNecessary}, termEndDate = #{termEndDate}, termApplyDate = #{termApplyDate}
+		WHERE termId = #{termId}
+	</update>
+	
+	<delete id="deleteTerms">
+		DELETE FROM terms
+		WHERE termId = #{termId}
+	</delete>
+</mapper>
