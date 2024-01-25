@@ -53,7 +53,7 @@
 											<button id="orderDate" type="button" class="orderbyBtn btn btn-sm btn-outline-light <c:if test="${search.orderby == 'orderDate'}">active</c:if>">최신순</button>
 											<button id="clientId" type="button" class="orderbyBtn btn btn-sm btn-outline-light <c:if test="${search.orderby == 'clientId'}">active</c:if>">아이디순</button>
 											<button id="orderStatus" type="button" class="orderbyBtn btn btn-sm btn-outline-light <c:if test="${search.orderby == 'orderStatus'}">active</c:if>">주문상태순</button>
-											<button class="btn btn-sm btn-secondary buttons-pdf buttons-html5 download" tabindex="0" aria-controls="example1" type="button" id="excelDownload">
+											<button class="btn btn-sm btn-secondary buttons-pdf buttons-html5 download" tabindex="0" aria-controls="example1" type="button" id="excelDownload" onclick="exportExcel('주문내역')">
 												<span>Excel 저장</span>
 											</button>
 										</div>
@@ -169,13 +169,13 @@
 														<td>${item.orderDate}</td>
 														<td>${item.clientId}</td>
 														<td>${item.clientName}</td>
-														<td>${item.clientNum}</td>
+														<td>${fn:substring(item.clientNum,0,3)}-${fn:substring(item.clientNum,3,7)}-${fn:substring(item.clientNum,7,11)}</td>
 														<td>${item.productName}</td>
 														<td>${item.optionName}</td>
 														<td>${item.orderProCnt}</td>
 														<td><fmt:formatNumber value="${item.orderTotal}" pattern="###,###"/></td>
 														<td>${item.addressName}</td>
-														<td>${item.addressNum}</td>
+														<td>${fn:substring(item.addressNum,0,3)}-${fn:substring(item.addressNum,3,7)}-${fn:substring(item.addressNum,7,11)}</td>
 														<td><input type="text" value="${item.deliverNum}"></td>
 														<td>${item.addressPostNum}</td>
 														<td>${item.address1}</td>
@@ -238,6 +238,7 @@
 
 <script src="resources/util/js/orderbypaging.js"></script>
 <script src="resources/util/js/checkbox.js"></script>
+<script src="resources/util/js/saveExcel.js"></script>
 <script src="resources/admin/js/manageOrderList.js"></script>
 </body>
 </html>
