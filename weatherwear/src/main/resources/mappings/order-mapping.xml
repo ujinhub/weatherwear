@@ -26,7 +26,28 @@
 				</if>
 			</if>
 		</trim>
-		ORDER BY od.orderId, ${ orderby }
+		ORDER BY 
+			<choose>
+				<when test="orderby == 'clientId'">
+					od.clientId ASC , od.orderId DESC
+				</when>
+				<when test="orderby == 'orderStatus'">
+					CASE WHEN oi.orderStatus = '상품준비중' THEN 1
+						WHEN oi.orderStatus = '배송준비중' THEN 2
+						WHEN oi.orderStatus = '배송보류' THEN 3
+						WHEN oi.orderStatus = '배송대기' THEN 4
+						WHEN oi.orderStatus = '배송중' THEN 5
+						WHEN oi.orderStatus = '배송완료' THEN 6
+						WHEN oi.orderStatus = '교환중' THEN 7
+						WHEN oi.orderStatus = '환불중' THEN 8
+						WHEN oi.orderStatus = '교환완료' THEN 9
+						WHEN oi.orderStatus = '환불완료' THEN 10
+					END
+				</when>
+				<otherwise>
+					od.orderDate DESC
+				</otherwise>
+			</choose>
 		LIMIT #{startList}, #{listSize};
 	</select>
 	
@@ -44,15 +65,27 @@
 				</if>
 			</if>
 		</trim>
-		ORDER BY ${ orderby }, od.orderId
+		ORDER BY 
+			<choose>
+				<when test="orderby == 'clientId'">
+					od.clientId
+				</when>
+				<when test="orderby == 'orderStatus'">
+					oi.orderStatus
+				</when>
+				<otherwise>
+					od.orderDate
+				</otherwise>
+			</choose>
+		, od.orderId
 	</select>
 	
-	<update id="modifyOrderStatus" parameterType="map">
+	<update id="updateOrderStatus" parameterType="map">
 		UPDATE orders_info SET orderStatus=#{ changeValue }
 		WHERE orderId=#{ orderId } AND optionId LIKE CONCAT(#{ productId }, '%')
 	</update>
 	
-	<update id="modifyDeliverNum" parameterType="map">
+	<update id="updateDeliverNum" parameterType="map">
 		UPDATE deliver_info SET deliverNum=#{ changeValue }
 		WHERE orderId=#{ orderId }
 	</update>

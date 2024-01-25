@@ -46,7 +46,7 @@ function modify(){
 	}
 	
 	$.ajax({
-		url: "/w2/modifyOrder.mdo?modifyType=" + modifyType,
+		url: "/w2/orderUpdate.mdo?modifyType=" + modifyType,
 		type: "POST",
 		data: JSON.stringify(checkList),
 		dataType: "json",

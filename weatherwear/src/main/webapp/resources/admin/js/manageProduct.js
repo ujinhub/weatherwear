@@ -116,7 +116,7 @@ function submit(type){
 	let optionSizeList = $("input[name='optionSizeList']").val();
 	
 	if(type == 'register'){
-		url_type = 'registerProductProc.mdo';
+		url_type = 'productRegisterProc.mdo';
 	
 		switch(productCate){
 		case "11":
@@ -133,7 +133,7 @@ function submit(type){
 			productId += 'AL'; break;
 		}
 	} else if(type == 'modify'){
-		url_type = 'modifyProductProc.mdo';
+		url_type = 'productUpdateProc.mdo';
 		productId = $("input[name='productId']").val();
 	}
 	
@@ -183,7 +183,7 @@ function deleteProduct(){
 
 		$.ajax({
 			type: "post",
-			url: "deleteProduct.mdo",
+			url: "productDelete.mdo",
 			dataType: "json",
 			data: {
 				productId: productId,
@@ -204,4 +204,41 @@ function deleteProduct(){
 			}
 		})
 	}
+}
+
+// 상품 상태 변경
+function update(){
+	let checkList = [];
+	let selectedList = document.querySelectorAll("input[type='checkbox']:checked");
+	let productSell = $("#productSell_value").val();
+	
+	if(selectedList.length < 1){
+		alert("변경할 데이터를 선택해주세요");
+		return;
+	}
+	
+	for(let i=0; i<selectedList.length; i++){ 
+		if(!checkList.includes(selectedList[i].value)){
+			let product = {};
+			
+			product.productSell = productSell;
+			product.productId = selectedList[i].value;
+			checkList.push(product);
+		}
+	}
+	
+	$.ajax({
+		url: "/w2/productUpdateStatus.mdo",
+		type: "POST",
+		data: JSON.stringify(checkList),
+		dataType: "json",
+		contentType: "application/json",
+		success: function(){
+			alert("수정되었습니다.");
+			window.location.reload();
+		},
+		error: function(){
+			console.log("실패");
+		}
+	});
 }

@@ -63,11 +63,11 @@ public class ProductDAO {
 		return sqlSessionTemplate.selectOne("ProductDAO.getProduct", productId);
 	}
 
-	public int modifyProduct(ProductVO product) {
+	public int updateProduct(ProductVO product) {
 		return sqlSessionTemplate.update("ProductDAO.updateProduct", product);
 	}
 
-	public int modifyPrice(Map<String, Object> pro) {
+	public int updatePrice(Map<String, Object> pro) {
 		return sqlSessionTemplate.update("ProductDAO.updatePrice", pro);
 	}
 
@@ -83,7 +83,7 @@ public class ProductDAO {
 		return sqlSessionTemplate.delete("ProductDAO.deletePrice", productId);
 	}
 
-	public int modifyProductStatus(List<Map<String, String>> checkList) {
+	public int updateProductStatus(List<Map<String, String>> checkList) {
 		int result = -1;
 		for(Map<String, String> product: checkList) {
 			result = sqlSessionTemplate.update("ProductDAO.updateStatus", product);

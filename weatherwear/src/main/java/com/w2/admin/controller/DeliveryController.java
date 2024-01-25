@@ -1,11 +1,5 @@
 package com.w2.admin.controller;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -17,8 +11,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.w2.delivery.DeliveryVO;
 import com.w2.delivery.service.DeliveryService;
-import com.w2.product.ProductVO;
-import com.w2.util.RandomString;
 import com.w2.util.ResponseDTO;
 import com.w2.util.Search;
 
@@ -60,15 +52,15 @@ public class DeliveryController {
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping("insertDeli.mdo")
-	public ResponseDTO<DeliveryVO> insertDeli(DeliveryVO deli) {
+	@RequestMapping("deliveryInsert.mdo")
+	public ResponseDTO<DeliveryVO> DeliveryInsert(DeliveryVO deli) {
 		Integer statusCode = HttpStatus.OK.value();
 		int code;
 		String resultCode;
 		String message;
 
 		try {
-			int result = deliveryService.insert(deli);
+			int result = deliveryService.insertDelivery(deli);
 			
 			if(result > 0) {
 				code = 1;
@@ -98,15 +90,15 @@ public class DeliveryController {
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping("modifyDeli.mdo")
-	public ResponseDTO<DeliveryVO> modifyDeli(DeliveryVO deli) {
+	@RequestMapping("deliveryUpdate.mdo")
+	public ResponseDTO<DeliveryVO> DeliveryUpdate(DeliveryVO deli) {
 		Integer statusCode = HttpStatus.OK.value();
 		int code;
 		String resultCode;
 		String message;
 
 		try {
-			int result = deliveryService.modify(deli);
+			int result = deliveryService.updateDelivery(deli);
 			
 			if(result > 0) {
 				code = 1;
@@ -132,7 +124,7 @@ public class DeliveryController {
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping("deleteDeli.mdo")
+	@RequestMapping("deliveryDelete.mdo")
 	public ResponseDTO<DeliveryVO> deleteDeli(DeliveryVO deli) {
 		Integer statusCode = HttpStatus.OK.value();
 		int code;
@@ -140,7 +132,7 @@ public class DeliveryController {
 		String message;
 
 		try {
-			int result = deliveryService.modify(deli.getDeliveryId());
+			int result = deliveryService.deleteDelivery(deli.getDeliveryId());
 			
 			if(result > 0) {
 				code = 1;

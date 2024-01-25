@@ -19,13 +19,13 @@
 							<a href="#" class="nav-link">통계</a>    				
 	    				</li>
 	    				<li class="nav-item">
-							<a href="#" class="nav-link">상품</a>    				
+							<a href="productList.mdo" class="nav-link">상품</a>    				
 	    				</li>
 	    				<li class="nav-item">
-							<a href="#" class="nav-link">주문</a>    				
+							<a href="orderList.mdo" class="nav-link">주문</a>    				
 	    				</li>
 	    				<li class="nav-item">
-							<a href="#" class="nav-link">배송</a>    				
+							<a href="deliveryList.mdo" class="nav-link">배송</a>    				
 	    				</li>
 	    				<li class="nav-item">
 							<a href="qnaList.mdo" class="nav-link">문의</a>    				

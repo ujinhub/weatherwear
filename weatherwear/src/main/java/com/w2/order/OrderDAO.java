@@ -24,20 +24,18 @@ public class OrderDAO {
 		return sqlSessionTemplate.selectOne("OrderDAO.getOrderListCnt", search);
 	}
 
-	public int modifyOrderStatus(List<Map<String, String>> checkList) {
-		System.err.println("DAO modifyOrderStatus");
+	public int updateOrderStatus(List<Map<String, String>> checkList) {
 		int result = -1;
 		for(Map<String, String> order : checkList) {
-			result = sqlSessionTemplate.update("OrderDAO.modifyOrderStatus", order);
+			result = sqlSessionTemplate.update("OrderDAO.updateOrderStatus", order);
 		}
 		return result;
 	}
 
-	public int modifyDeliverNum(List<Map<String, String>> checkList) {
-		System.err.println("DAO modifyDeliverNum");
+	public int updateDeliverNum(List<Map<String, String>> checkList) {
 		int result = -1;
 		for(Map<String, String> order : checkList) {
-			result = sqlSessionTemplate.update("OrderDAO.modifyDeliverNum", order);
+			result = sqlSessionTemplate.update("OrderDAO.updateDeliverNum", order);
 		}
 		return result;
 	}

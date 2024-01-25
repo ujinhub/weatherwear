@@ -33,12 +33,12 @@ public class OrderController {
 	public String orderList(Model model, @RequestParam(required = false, defaultValue = "1") int page,
 			@RequestParam(required = false, defaultValue = "1") int range, @RequestParam(required = false, defaultValue = "orderName") String searchType,
 			@RequestParam(required = false) String keyword, @RequestParam(required = false, defaultValue = "orderDate") String orderby, @ModelAttribute("search") SearchOrderby search) {
-		
+
 		// 검색
-		model.addAttribute("search", search);
 		search.setSearchType(searchType);
 		search.setKeyword(keyword);
 		search.setOrderby(orderby);
+		model.addAttribute("search", search);
 		
 		// 전체 게시글 개수
 		int listCnt = orderService.getOrderListCnt(search);
@@ -58,8 +58,8 @@ public class OrderController {
 	 * @param model
 	 * @return
 	 */
-	@PostMapping("modifyOrder.mdo")
-	public void modifyOrder(Model model, HttpServletResponse response, 
+	@PostMapping("orderUpdate.mdo")
+	public void orderUpdate(Model model, HttpServletResponse response, 
 					@RequestBody List<Map<String, String>> checkList, @RequestParam("modifyType")String modifyType) throws IOException {
 		
 		Integer statusCode = HttpStatus.OK.value();
@@ -68,9 +68,9 @@ public class OrderController {
 		String message = "오류가 발생했습니다. 다시 시도해주세요";
 		
 		if(modifyType.equals("orderStatus")) {
-			orderService.modifyOrderStatus(checkList);
+			orderService.updateOrderStatus(checkList);
 		} else if(modifyType.equals("deliverNum")) {
-			orderService.modifyDeliverNum(checkList);
+			orderService.updateDeliverNum(checkList);
 		}
 		
 		if(code == 1) {

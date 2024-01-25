@@ -31,15 +31,12 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public int insert(Map<String, Object> pro) {
+	public int insertProduct(Map<String, Object> pro) {
 		int result = -1;
 		try {
 			result = productDAO.insertProduct((ProductVO)pro.get("product"));
-			System.err.println("insert product : " + result);
 			result = productDAO.insertPrice(pro);
-			System.err.println("insert price : " + result);
 			result = productDAO.insertOption(pro);
-			System.err.println("insert option : " + result);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -52,15 +49,12 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public int modify(Map<String, Object> pro) {
+	public int updateProduct(Map<String, Object> pro) {
 		int result=-1;
 		try {
-			result = productDAO.modifyProduct((ProductVO)pro.get("product"));
-			System.err.println("modify product : " + result);
-			result = productDAO.modifyPrice(pro);
-			System.err.println("modify price : " + result);
+			result = productDAO.updateProduct((ProductVO)pro.get("product"));
+			result = productDAO.updatePrice(pro);
 			result = productDAO.deleteOption((String)pro.get("productId"));
-			System.err.println("delete option : " + result);
 			if(result > 0) {
 				result = productDAO.insertOption(pro);
 				System.err.println("insert option : " + result);
@@ -72,20 +66,17 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public int delete(String productId) {
+	public int deleteProduct(String productId) {
 		int result = -1;
 		result = productDAO.deletePrice(productId);
-		System.err.println("delete price : " + result);
 		result = productDAO.deleteOption(productId);
-		System.err.println("delete option : " + result);
 		result = productDAO.deleteProduct(productId);
-		System.err.println("delete product : " + result);
 		
 		return result;
 	}
 
 	@Override
-	public int modifyProductStatus(List<Map<String, String>> checkList) {
-		return productDAO.modifyProductStatus(checkList);
+	public int updateProductStatus(List<Map<String, String>> checkList) {
+		return productDAO.updateProductStatus(checkList);
 	}
 }

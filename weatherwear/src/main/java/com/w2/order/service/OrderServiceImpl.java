@@ -27,13 +27,13 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	@Override
-	public int modifyOrderStatus(List<Map<String, String>> checkList) {
-		return orderDAO.modifyOrderStatus(checkList);
+	public int updateOrderStatus(List<Map<String, String>> checkList) {
+		return orderDAO.updateOrderStatus(checkList);
 	}
 
 	@Override
-	public int modifyDeliverNum(List<Map<String, String>> checkList) {
-		return orderDAO.modifyDeliverNum(checkList);
+	public int updateDeliverNum(List<Map<String, String>> checkList) {
+		return orderDAO.updateDeliverNum(checkList);
 	}
 
 }

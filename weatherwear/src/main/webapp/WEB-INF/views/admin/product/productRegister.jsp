@@ -147,7 +147,9 @@
 						</div>
 						<!-- /.card-header -->
 						<div class="card-body">
-							<div id="summernote"></div>
+							<div class="col-sm-10">
+								<textarea class="form-control" id="summernote" name="termContent"></textarea>
+							</div>
 						</div>
 						<!-- /.card-body -->
 			        </div>
@@ -166,9 +168,8 @@
 <!-- Bootstrap 4 -->
 <script src="resources/admin/AdminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- Summernote -->
-<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
+<script src="resources/util/plugins/summernote/summernote-lite.js"></script>
 
 <script src="resources/admin/js/manageProduct.js"></script>
-<script src="resources/admin/js/uploadImage_registerProduct.js"></script>
 </body>
 </html>

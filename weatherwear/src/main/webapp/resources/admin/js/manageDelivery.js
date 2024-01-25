@@ -37,7 +37,7 @@ function deleteDeli(target){
 	if(confirm("택배사 정보를 삭제하시겠습니까?")){
 		$.ajax({
 			type: "post",
-			url: "deleteDeli.mdo",
+			url: "deliveryDelete.mdo",
 			dataType: "json",
 			data: {
 				deliveryId: deliveryId,
@@ -81,9 +81,9 @@ function deleteDeli(target){
 function deli(num){
 	let url_type = '';
 	if(num == 1){
-		url_type = 'modifyDeli.mdo';
+		url_type = 'deliveryUpdate.mdo';
 	} else if(num == 2){
-		url_type = 'insertDeli.mdo';
+		url_type = 'deliveryInsert.mdo';
 	} else {
 		alert("오류가 발생했습니다. 다시 시도해주세요");
 		return;

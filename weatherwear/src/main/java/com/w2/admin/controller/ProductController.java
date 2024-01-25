@@ -40,7 +40,6 @@ public class ProductController {
 	public String productList(Model model, @RequestParam(required = false, defaultValue = "1") int page,
 			@RequestParam(required = false, defaultValue = "1") int range, @RequestParam(required = false, defaultValue = "productName") String searchType,
 			@RequestParam(required = false) String keyword, @RequestParam(required = false, defaultValue = "productRegDate") String orderby, @ModelAttribute("search") SearchOrderby search) {
-
 		// 검색
 		model.addAttribute("search", search);
 		search.setSearchType(searchType);
@@ -64,9 +63,9 @@ public class ProductController {
 	 * 상품 등록 화면 호출
 	 * @return
 	 */
-	@RequestMapping("registerProduct.mdo")
-	public String registerProduct() {
-		return "product/registerProduct";
+	@RequestMapping("productRegister.mdo")
+	public String productRegister() {
+		return "product/productRegister";
 	}
 
 	/**
@@ -74,10 +73,8 @@ public class ProductController {
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping("registerProductProc.mdo")
-	public ResponseDTO<ProductVO> registerProductProc(ProductVO product, String colorList, String sizeList, String cntList, String productPrimeCost) {
-		System.err.println("registerProductProc");
-		
+	@RequestMapping("productRegisterProc.mdo")
+	public ResponseDTO<ProductVO> productRegisterProc(ProductVO product, String colorList, String sizeList, String cntList, String productPrimeCost) {
 		String[] color = colorList.split(",");
 		String[] size = sizeList.split(",");
 		String[] stock = cntList.split(",");
@@ -105,7 +102,7 @@ public class ProductController {
 		String msg;
 
 		try {
-			int result = productService.insert(pro);
+			int result = productService.insertProduct(pro);
 			
 			if(result > 0) {
 				code = 1;
@@ -145,8 +142,8 @@ public class ProductController {
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping("modifyProductProc.mdo")
-	public ResponseDTO<ProductVO> modifyProductProc(ProductVO product, String colorList, String sizeList, String cntList, String productPrimeCost) {
+	@RequestMapping("productUpdateProc.mdo")
+	public ResponseDTO<ProductVO> productUpdateProc(ProductVO product, String colorList, String sizeList, String cntList, String productPrimeCost) {
 		String[] color = colorList.split(",");
 		String[] size = sizeList.split(",");
 		String[] stock = cntList.split(",");
@@ -172,7 +169,7 @@ public class ProductController {
 		String msg;
 
 		try {
-			int result = productService.modify(pro);
+			int result = productService.updateProduct(pro);
 			
 			if(result > 0) {
 				code = 1;
@@ -198,17 +195,15 @@ public class ProductController {
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping("deleteProduct.mdo")
-	public ResponseDTO<String> deleteProduct(String productId) {
-		System.err.println("modifyProductProc");
-		
+	@RequestMapping("productDelete.mdo")
+	public ResponseDTO<String> productDelete(String productId) {
 		Integer statusCode = HttpStatus.OK.value();
 		int code;
 		String resultCode;
 		String msg;
 		
 		try {
-			int result = productService.delete(productId);
+			int result = productService.deleteProduct(productId);
 			
 			if(result > 0) {
 				code = 1;
@@ -234,15 +229,15 @@ public class ProductController {
 	 * @param model
 	 * @return
 	 */
-	@PostMapping("modifyProductStatus.mdo")
-	public void modifyProductStatus(Model model, HttpServletResponse response, @RequestBody List<Map<String, String>> checkList) throws IOException {
+	@PostMapping("ProductUpdateStatus.mdo")
+	public void ProductUpdateStatus(Model model, HttpServletResponse response, @RequestBody List<Map<String, String>> checkList) throws IOException {
 		
 		Integer statusCode = HttpStatus.OK.value();
 		int code = -1;
 		String resultCode = "fail";
 		String message = "오류가 발생했습니다. 다시 시도해주세요";
 		
-		code = productService.modifyProductStatus(checkList);
+		code = productService.updateProductStatus(checkList);
 
 		response.setContentType("application/json");
 		response.getWriter().write(String.valueOf(code));

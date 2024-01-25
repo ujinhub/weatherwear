@@ -13,9 +13,9 @@ public interface ProductService {
 
 	List<ProductVO> getProductList(SearchOrderby search);	// 상품 목록 가져오기
 	int getProductListCnt(SearchOrderby search);			// 상품 목록 개수 가져오기
-	int insert(Map<String, Object> pro);			// 상품 등록
+	int insertProduct(Map<String, Object> pro);			// 상품 등록
 	HashMap<String, Object> getProduct(String productId, Model model);			// 상품 상세
-	int modify(Map<String, Object> pro);			// 상품 수정
-	int delete(String productId);					// 상품 삭제
-	int modifyProductStatus(List<Map<String, String>> checkList);	// 상품 상태 변경
+	int updateProduct(Map<String, Object> pro);			// 상품 수정
+	int updateProductStatus(List<Map<String, String>> checkList);	// 상품 상태 변경
+	int deleteProduct(String productId);					// 상품 삭제
 }

@@ -22,20 +22,20 @@ public class DeliveryDAO {
 		return sqlSessionTemplate.selectOne("DeliveryDAO.getDeliveryListCnt", search);
 	}
 
-	public int insert(DeliveryVO deli) {
-		return sqlSessionTemplate.insert("DeliveryDAO.insert", deli);
+	public int insertDelivery(DeliveryVO deli) {
+		return sqlSessionTemplate.insert("DeliveryDAO.insertDelivery", deli);
 	}
 
-	public int modify(DeliveryVO deli) { 
-		return sqlSessionTemplate.update("DeliveryDAO.update", deli);
+	public int updateDelivery(DeliveryVO deli) { 
+		return sqlSessionTemplate.update("DeliveryDAO.updateDelivery", deli);
 	}
 
-	public int delete(String deliveryId) {
-		return sqlSessionTemplate.delete("DeliveryDAO.delete", deliveryId);
+	public int deleteDelivery(String deliveryId) {
+		return sqlSessionTemplate.delete("DeliveryDAO.deleteDelivery", deliveryId);
 	}
 	
-	public int check(String deliveryId) {
-		return sqlSessionTemplate.selectOne("DeliveryDAO.check", deliveryId);
+	public int checkDelivery(String deliveryId) {
+		return sqlSessionTemplate.selectOne("DeliveryDAO.checkDelivery", deliveryId);
 	}
 	
 }

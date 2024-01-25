@@ -19,7 +19,6 @@
 	<typeAlias type="com.w2.product.ProductVO" alias="product"/>
 	<typeAlias type="com.w2.product.ProductPriceVO" alias="productPrice"/>
 	<typeAlias type="com.w2.product.OptionVO" alias="option"/>
-	<typeAlias type="com.w2.image.ImageVO" alias="image"/>
 	<typeAlias type="com.w2.order.OrderVO" alias="order"/>
 	<typeAlias type="com.w2.delivery.DeliveryVO" alias="delivery"/>
 </typeAliases>

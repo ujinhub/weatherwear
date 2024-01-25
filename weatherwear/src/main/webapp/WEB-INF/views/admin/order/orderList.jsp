@@ -6,7 +6,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>WeatherWear 관리자</title>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -16,9 +16,10 @@
 <!-- Theme style -->
 <link href="resources/admin/AdminLTE/dist/css/adminlte.min.css" rel="stylesheet">
 <style>
-.orderStatus_select {width: 130px !important;}
-.option_select {width: 100px !important;}
-.deliveryNum_select {display: none;}
+	.orderStatus_select {width: 130px !important;}
+	.option_select {width: 100px !important;}
+	.deliveryNum_select {display: none;}
+	.check {width:20px; height:20px;}
 </style>
 </head>
 <body class="hold-transition sidebar-collapse layout-top-nav">
@@ -52,8 +53,8 @@
 											<button id="orderDate" type="button" class="orderbyBtn btn btn-sm btn-outline-light <c:if test="${search.orderby == 'orderDate'}">active</c:if>">최신순</button>
 											<button id="clientId" type="button" class="orderbyBtn btn btn-sm btn-outline-light <c:if test="${search.orderby == 'clientId'}">active</c:if>">아이디순</button>
 											<button id="orderStatus" type="button" class="orderbyBtn btn btn-sm btn-outline-light <c:if test="${search.orderby == 'orderStatus'}">active</c:if>">주문상태순</button>
-											<button class="btn btn-sm btn-secondary buttons-pdf buttons-html5" tabindex="0" aria-controls="example1" type="button">
-												<span>PDF로 저장</span>
+											<button class="btn btn-sm btn-secondary buttons-pdf buttons-html5 download" tabindex="0" aria-controls="example1" type="button" id="excelDownload">
+												<span>Excel 저장</span>
 											</button>
 										</div>
 									</div>
@@ -108,7 +109,7 @@
 								</div>
 								<div class="card-body table-responsive p-0">
 									<form id="listForm" name="clientForm" method="post">
-										<table class="table table-hover text-nowrap" style="table-layout: fixed;">
+										<table class="table table-hover text-nowrap" style="table-layout: fixed;" id="tableData">
 											<colgroup>
 												<col width="80px"/><!-- # -->
 												<col width="280px"/><!-- 주문번호 -->
@@ -230,9 +231,13 @@
 <script src="resources/admin/AdminLTE/plugins/jquery/jquery.min.js"></script>
 <!-- Bootstrap 4 -->
 <script src="resources/admin/AdminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- Sheet JS (Excel)-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.14.3/xlsx.full.min.js"></script>
+<!--FileSaver savaAs 이용 (Excel)-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.min.js"></script>
 
 <script src="resources/util/js/orderbypaging.js"></script>
 <script src="resources/util/js/checkbox.js"></script>
-<script src="resources/admin/js/modify_orderList.js"></script>
+<script src="resources/admin/js/manageOrderList.js"></script>
 </body>
 </html>

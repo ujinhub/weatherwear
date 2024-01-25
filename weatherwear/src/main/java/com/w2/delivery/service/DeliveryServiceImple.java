@@ -27,21 +27,21 @@ public class DeliveryServiceImple implements DeliveryService {
 	}
 
 	@Override
-	public int insert(DeliveryVO deli) {
-		if(deliveryDAO.check(deli.getDeliveryId()) > 0) {
+	public int insertDelivery(DeliveryVO deli) {
+		if(deliveryDAO.checkDelivery(deli.getDeliveryId()) > 0) {
 			return -2;
 		}
-		return deliveryDAO.insert(deli);
+		return deliveryDAO.insertDelivery(deli);
 	}
 
 	@Override
-	public int modify(DeliveryVO deli) {
-		return deliveryDAO.modify(deli);
+	public int updateDelivery(DeliveryVO deli) {
+		return deliveryDAO.updateDelivery(deli);
 	}
 
 	@Override
-	public int modify(String deliveryId) {
-		return deliveryDAO.delete(deliveryId);
+	public int deleteDelivery(String deliveryId) {
+		return deliveryDAO.deleteDelivery(deliveryId);
 	}
 
 }

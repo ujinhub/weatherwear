@@ -34,12 +34,12 @@
 		</trim>
 	</select>
 	
-	<insert id="insert">
+	<insert id="insertDelivery">
 		INSERT delivery
 		VALUES(#{ deliveryId }, #{ deliveryComName }, #{ deliveryComNum }, #{ deliveryPrice }, #{ deliveryName }, #{ deliveryNum })
 	</insert>
 	
-	<update id="update">
+	<update id="updateDelivery">
 		UPDATE delivery
 		SET deliveryComName=#{ deliveryComName }, 
 			deliveryComNum=#{ deliveryComNum }, 
@@ -49,12 +49,12 @@
 		WHERE deliveryId=#{ deliveryId }
 	</update>
 	
-	<delete id="delete">
+	<delete id="deleteDelivery">
 		DELETE FROM delivery
 		WHERE deliveryId=#{ deliveryId }
 	</delete>
 	
-	<select id="check" resultType="int">
+	<select id="checkDelivery" resultType="int">
 		SELECT count(*) FROM delivery WHERE deliveryId=#{ deliveryId }
 	</select>
 </mapper>

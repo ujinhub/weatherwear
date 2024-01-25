@@ -51,7 +51,7 @@
 											<button id="productRegDate" type="button" class="orderbyBtn btn btn-sm btn-outline-light <c:if test="${search.orderby == 'productRegDate'}">active</c:if>">최신등록순</button>
 											<button id="productName" type="button" class="orderbyBtn btn btn-sm btn-outline-light <c:if test="${search.orderby == 'productName'}">active</c:if>">상품명순</button>
 											<button id="productId" type="button" class="orderbyBtn btn btn-sm btn-outline-light <c:if test="${search.orderby == 'productId'}">active</c:if>">상품번호순</button>
-											<button type="button" class="btn btn-sm btn-outline-primary" onclick="location.href='registerProduct.mdo'">+등록</button>
+											<button type="button" class="btn btn-sm btn-outline-primary" onclick="location.href='productRegister.mdo'">+등록</button>
 										</div>
 									</div>
 									<div class="card-tools">
@@ -89,7 +89,7 @@
 													<input type="text" name="productPrice_value" class="form-control float-right" placeholder="판매가">
 												</div>
 												<div class="input-group-append">
-													<button id="add-new-event" type="button" class="btn btn-sm btn-outline-primary" onclick="modify()">수정하기</button>
+													<button id="add-new-event" type="button" class="btn btn-sm btn-outline-primary" onclick="update()">수정하기</button>
 												</div>
 											</div>
 										</div>
@@ -180,6 +180,6 @@
 
 <script src="resources/util/js/orderbypaging.js"></script>
 <script src="resources/util/js/checkbox.js"></script>
-<script src="resources/admin/js/modify_productList.js"></script>
+<script src="resources/admin/js/manageProduct.js"></script>
 </body>
 </html>
