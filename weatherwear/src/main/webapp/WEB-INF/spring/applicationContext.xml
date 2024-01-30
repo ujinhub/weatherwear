@@ -46,8 +46,21 @@
 	</bean>
 
 <!-- Transaction 관리자 설정 -->
-	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager" p:dataSource-ref="dataSource" />
+	<bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager" p:dataSource-ref="dataSource" />
 
+<!-- Transaction aop 설정 -->
+	<tx:advice id="txAdvice" transaction-manager="txManager">
+		<tx:attributes>
+			<tx:method name="insert*" rollback-for="Exception"/> 
+			<tx:method name="update*" rollback-for="Exception"/> 
+			<tx:method name="delete*" rollback-for="Exception"/> 
+		</tx:attributes>
+	</tx:advice>
+   <!-- aop -->
+   <aop:config>
+      <aop:pointcut expression="execution(* com.w2..*(..))" id="txPointcut"/>
+      <aop:advisor advice-ref="txAdvice" pointcut-ref="txPointcut"/>
+   </aop:config>
 </beans>
 
 

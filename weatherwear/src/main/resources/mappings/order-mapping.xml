@@ -80,13 +80,17 @@
 		, od.orderId
 	</select>
 	
-	<update id="updateOrderStatus" parameterType="map">
-		UPDATE orders_info SET orderStatus=#{ changeValue }
-		WHERE orderId=#{ orderId } AND optionId LIKE CONCAT(#{ productId }, '%')
+	<update id="updateOrderStatus" parameterType="java.util.List">
+		<foreach collection="list" item="order" index="index">
+			UPDATE orders_info SET orderStatus=#{ order.changeValue }
+			WHERE orderId=#{ order.orderId } AND optionId LIKE CONCAT(#{ order.productId }, '%');
+		</foreach>
 	</update>
 	
-	<update id="updateDeliverNum" parameterType="map">
-		UPDATE deliver_info SET deliverNum=#{ changeValue }
-		WHERE orderId=#{ orderId }
+	<update id="updateDeliverNum" parameterType="java.util.List">
+		<foreach collection="list" item="order" index="index">
+			UPDATE deliver_info SET deliverNum=#{ order.changeValue }
+			WHERE orderId=#{ order.orderId };
+		</foreach>
 	</update>
 </mapper>

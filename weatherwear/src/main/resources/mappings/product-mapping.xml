@@ -26,6 +26,23 @@
 					AND productId like CONCAT('%', #{keyword}, '%')
 				</if>
 			</if>
+			<if test="keyword == null or keyword == ''">
+				<if test="searchType == 'outer'">
+					AND p.productCate Like '11%'
+				</if>
+				<if test="searchType == 'tops'">
+					AND p.productCate Like '12%'
+				</if>
+				<if test="searchType == 'pants'">
+					AND p.productCate Like '13%'
+				</if>
+				<if test="searchType == 'skirts'">
+					AND p.productCate Like '14%'
+				</if>
+				<if test="searchType == 'dress'">
+					AND p.productCate Like '15%'
+				</if>
+			</if>
 		</trim>
 		ORDER BY ${ orderby }
 		LIMIT #{startList}, #{listSize};
@@ -41,6 +58,23 @@
 				</if>
 				<if test="searchType == 'productId'">
 					AND productId like CONCAT('%', #{keyword}, '%')
+				</if>
+			</if>
+			<if test="keyword == null or keyword == ''">
+				<if test="searchType == 'outer'">
+					AND productCate Like '11%'
+				</if>
+				<if test="searchType == 'tops'">
+					AND productCate Like '12%'
+				</if>
+				<if test="searchType == 'pants'">
+					AND productCate Like '13%'
+				</if>
+				<if test="searchType == 'skirts'">
+					AND productCate Like '14%'
+				</if>
+				<if test="searchType == 'dress'">
+					AND productCate Like '15%'
 				</if>
 			</if>
 		</trim>
@@ -161,4 +195,49 @@
 <!-- 			(#{ imvo.imageId }, #{ imvo.imageName }, #{ imvo.imageDir }, #{ imvo.imageStatus }, #{ imvo.imageBy }, ) -->
 <!-- 		</foreach> -->
 <!-- 	</update> -->
+
+	<select id="getMainProductList" parameterType="String" resultType="product">
+		SELECT p.*, CONCAT(pm.imageDir, pm.imageName) as mainImage, pr.productPrice
+		FROM product p
+		LEFT JOIN product_image pm ON (p.productId = pm.imageBy AND pm.imageStatus = '대표')
+		LEFT JOIN product_price pr ON (p.productId = pr.productId)
+		ORDER BY 
+		<choose>
+			<when test="type == 'best'">p.productCnt DESC, p.productView DESC</when>
+			<when test="type == 'new'">p.productRegDate DESC</when>
+		</choose>
+		LIMIT 0,8;
+	</select>
+	
+	<select id="checkWishList" parameterType="hashmap" resultType="String">
+		SELECT clientMarkList FROM client
+		WHERE  clientId=#{ clientId } AND clientMarkList LIKE CONCAT('%', 
+			<foreach collection="productList" item="product" index="index">
+			#{ product }, 
+			</foreach>
+			'%');
+	</select>
+	
+<!-- 위시리스트 추가 -->
+	<update id="insertWishList" parameterType="hashmap">
+		<foreach collection="productList" item="product" index="index">
+			UPDATE client
+			SET clientMarkList = CONCAT(clientMarkList, ',', #{ product })
+			WHERE FIND_IN_SET(#{ product }, clientMarkList) = 0
+			AND clientId=#{ clientId };
+		</foreach>
+	</update>
+	
+<!-- 위시리스트 삭제 -->
+	<update id="deleteWishList" parameterType="hashmap">
+		<foreach collection="productList" item="product" index="index">
+		UPDATE client
+		SET clientMarkList = TRIM(BOTH ',' FROM 
+									REPLACE(CONCAT(',', clientMarkList, ','), 
+									CONCAT(',', 
+										#{ productId }, 
+								','), ','))
+		WHERE CONCAT(',', clientMarkList, ',') LIKE CONCAT('%,', #{ productId }, ',%') AND clientId=#{ clientId };
+		</foreach>
+	</update>
 </mapper>

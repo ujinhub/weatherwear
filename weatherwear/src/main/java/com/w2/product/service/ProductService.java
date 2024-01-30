@@ -11,6 +11,7 @@ import com.w2.util.SearchOrderby;
 
 public interface ProductService {
 
+	// 관리자
 	List<ProductVO> getProductList(SearchOrderby search);	// 상품 목록 가져오기
 	int getProductListCnt(SearchOrderby search);			// 상품 목록 개수 가져오기
 	int insertProduct(Map<String, Object> pro);			// 상품 등록
@@ -18,4 +19,10 @@ public interface ProductService {
 	int updateProduct(Map<String, Object> pro);			// 상품 수정
 	int updateProductStatus(List<Map<String, String>> checkList);	// 상품 상태 변경
 	int deleteProduct(String productId);					// 상품 삭제
+	
+	// 사용자
+	List<ProductVO> getMainProductList(String string);		// 메인페이지 상품 리스트 가져오기
+	int insertWishList(Map<String, Object> client);			// 위시리스트에 상품 추가
+	int deleteWishList(Map<String, Object> client);			// 위시리스트 상품 삭제
+	
 }

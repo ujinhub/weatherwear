@@ -93,4 +93,22 @@ public class ProductDAO {
 		}
 		return result;
 	}
+
+	public List<ProductVO> getMainProductList(String type) {
+		return sqlSessionTemplate.selectList("ProductDAO.getMainProductList", type);
+	}
+
+	public int insertWishList(Map<String, Object> client) {
+		String result = sqlSessionTemplate.selectOne("ProductDAO.checkWishList", client);
+		
+		if(result != null) {
+			return -3;
+		}
+		
+		return sqlSessionTemplate.update("ProductDAO.insertWishList", client);
+	}
+
+	public int deleteWishList(Map<String, Object> client) {
+		return sqlSessionTemplate.update("ProductDAO.deleteWishList", client);
+	}
 }

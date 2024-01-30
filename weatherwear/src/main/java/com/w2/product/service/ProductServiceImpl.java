@@ -79,4 +79,19 @@ public class ProductServiceImpl implements ProductService {
 	public int updateProductStatus(List<Map<String, String>> checkList) {
 		return productDAO.updateProductStatus(checkList);
 	}
+
+	@Override
+	public List<ProductVO> getMainProductList(String type) {
+		return productDAO.getMainProductList(type);
+	}
+
+	@Override
+	public int insertWishList(Map<String, Object> client) {
+		return productDAO.insertWishList(client);
+	}
+
+	@Override
+	public int deleteWishList(Map<String, Object> client) {
+		return productDAO.deleteWishList(client);
+	}
 }

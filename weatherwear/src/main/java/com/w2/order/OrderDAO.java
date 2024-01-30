@@ -26,18 +26,13 @@ public class OrderDAO {
 
 	public int updateOrderStatus(List<Map<String, String>> checkList) {
 		int result = -1;
-		for(Map<String, String> order : checkList) {
-			result = sqlSessionTemplate.update("OrderDAO.updateOrderStatus", order);
-		}
+		result = sqlSessionTemplate.update("OrderDAO.updateOrderStatus", checkList);
 		return result;
 	}
 
 	public int updateDeliverNum(List<Map<String, String>> checkList) {
 		int result = -1;
-		for(Map<String, String> order : checkList) {
-			result = sqlSessionTemplate.update("OrderDAO.updateDeliverNum", order);
-		}
+		result = sqlSessionTemplate.update("OrderDAO.updateDeliverNum", checkList);
 		return result;
 	}
-
 }

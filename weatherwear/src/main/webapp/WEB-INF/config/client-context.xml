@@ -11,7 +11,7 @@
 
 	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
 	<!-- 의존성 주입을 위해 빈 등록 대신 -->
-	<context:component-scan base-package="com.w2.client" />
+	<context:component-scan base-package="com.w2" />
 	
 	<!-- Annotation을 활용할 때 기본적인 Default 방식을 설정 -->
 	<annotation-driven />
