@@ -1,8 +1,6 @@
 /**
  * 
  */
- 
- 
 $(document).on('click', '.orderbyBtn', function(e) {
 	e.preventDefault();
 	var url = window.location.pathname;
@@ -11,11 +9,11 @@ $(document).on('click', '.orderbyBtn', function(e) {
 	url += "&keyword=" + $('#keyword').val();
 	url += "&listSize=" + $('#listSize').val();
 	url += "&orderby=" + this.id;
-	
+
 	location.href = url;
 });
  
- $(document).on('click', '#btnSearch', function(e) {
+$(document).on('click', '#btnSearch', function(e) {
 	e.preventDefault();
 	var url = window.location.pathname;
 	var orderby = document.querySelector("button.active").id;

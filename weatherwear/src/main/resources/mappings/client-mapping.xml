@@ -45,4 +45,33 @@
 		FROM client
 		WHERE clientId = #{clientId}
 	</select>
+	
+	<select id="getClientEmail" resultType="client">
+		SELECT clientEmail, clientEmailCheck
+		FROM client
+		WHERE clientId = #{clientId}
+	</select>
+	
+	<select id="getClientEmailList" resultType="client">
+		SELECT *
+		FROM client
+		WHERE clientEmailCheck = 'Y'
+	</select>
+	
+	<select id="getClientFindInfo" parameterType="map" resultType="client">
+		SELECT *
+		FROM client
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="keyType == 'clientEmail'">
+				AND clientEmail = #{clientEmail}
+			</if>
+			<if test="keyType == 'clientNum'">
+				AND clientNum = #{clientNum}
+			</if>
+			<if test="searchType == 'clientPwd'">
+				AND clientId = #{clientId}
+			</if>
+		</trim>
+		AND clientName = #{clientName}
+	</select>
 </mapper>

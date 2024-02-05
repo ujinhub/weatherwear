@@ -154,11 +154,11 @@ $(function() {
 			},
 			adminPwd: {
 				required: "비밀번호를 입력해주세요.",
-				minlength: "비밀번호는 8자리 이상이어야 합니다."
+				minlength: "비밀번호는 8자 이상이어야 합니다."
 			},
 			adminPwdChk: {
 				required: "비밀번호 확인을 입력해주세요.",
-				minlength: "비밀번호는 8자리 이상이어야 합니다.",
+				minlength: "비밀번호는 8자 이상이어야 합니다.",
 				equalTo: "비밀번호가 일치하지 않습니다."
 			},
 			adminNum: {

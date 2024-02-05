@@ -1,6 +1,7 @@
 package com.w2.client.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,6 +29,21 @@ public class ClientServiceImpl implements ClientService {
 	@Override
 	public ClientVO getClient(ClientVO vo) {
 		return clientDao.getClient(vo);
+	}
+
+	@Override
+	public ClientVO getClientEmail(ClientVO vo) {
+		return clientDao.getClientEmail(vo);
+	}
+
+	@Override
+	public List<ClientVO> getClientEmailList() {
+		return clientDao.getClientEmailList();
+	}
+
+	@Override
+	public ClientVO getClientFindInfo(Map<String, Object> param) {
+		return clientDao.getClientFindInfo(param);
 	}
 
 }

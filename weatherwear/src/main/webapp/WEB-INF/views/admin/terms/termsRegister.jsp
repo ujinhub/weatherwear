@@ -60,15 +60,17 @@
 											</div>
 										</div>
 										<div class="form-group row">
-											<label for="termApplyDate" class="col-sm-1 col-form-control">적용일자</label>
+											<label for="inputApplyDate" class="col-sm-1 col-form-control">적용일자</label>
 											<div class="col-sm-10">
-												<input type="date" class="form-control" id="termApplyDate" name="termApplyDate">
+												<input type="hidden" id="termApplyDate" name="termApplyDate">
+												<input type="date" class="form-control" id="inputApplyDate" name="inputApplyDate">
 											</div>
 										</div>
 										<div class="form-group row">
-											<label for="termEndDate" class="col-sm-1 col-form-control">만료일자</label>
+											<label for="inputEndDate" class="col-sm-1 col-form-control">만료일자</label>
 											<div class="col-sm-10">
-												<input type="date" class="form-control" id="termEndDate" name="termEndDate">
+												<input type="hidden" id="termEndDate" name="termEndDate">
+												<input type="date" class="form-control" id="inputEndDate" name="inputEndDate">
 											</div>
 										</div>
 										<div class="form-group row">
@@ -116,13 +118,25 @@
 	$(function() {
 		$('#termsRegForm').validate({
 			rules: {
-				termsTitle: {
+				termTitle: {
 					required: true,
 				},
+				inputApplyDate: {
+					convertType: true,
+				},
+				inputEndDate: {
+					convertType: true,
+				}
 			},
 			messages: {
-				noticeTitle: {
+				termTitle: {
 					required: "제목을 입력해주세요.",
+				},
+				inputApplyDate: {
+					convertType: "적용일자를 입력해주세요.",
+				},
+				inputEndDate: {
+					convertType: "만료일자를 입력해주세요.",
 				},
 			},
 			errorElement: 'span',
@@ -136,6 +150,22 @@
 			unhighlight: function(element, errorClass, validClass) {
 				$(element).removeClass('is-invalid');
 			}
+		});
+		
+		$.validator.addMethod("convertType", function(value, element) {
+			var date = new Date(value);
+			
+			var year = date.getFullYear().toString();
+			var month = ("0" + (date.getMonth() + 1)).slice(-2);
+			var day = ("0" + date.getDate()).slice(-2);
+			var hour = ("0" + date.getHours()).slice(-2);
+			var minute = ("0" + date.getMinutes()).slice(-2);
+			var second = ("0" + date.getSeconds()).slice(-2);
+			
+			var timestamp = year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second;
+			$(element).prev().val(timestamp);
+			
+			return true;
 		});
 	});
 </script>

@@ -6,6 +6,25 @@
 		SELECT row_number() over(ORDER BY qnaDate) as qnaIdx, q.*
 		FROM qna q
 		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="typeby == 1">
+				AND qnaType = '주문/결제'
+			</if>
+			<if test="typeby == 2">
+				AND qnaType = '배송'
+			</if>
+			<if test="typeby == 3">
+				AND qnaType = '상품확인'
+			</if>
+			<if test="typeby == 4">
+				AND qnaType = '교환/취소(반품)'
+			</if>
+			<if test="typeby == 5">
+				AND qnaType = '회원정보'
+			</if>
+			<if test="typeby == 6">
+				AND qnaType = '서비스'
+			</if>
+			
 			<if test="keyword != null and keyword != ''">
 				<if test="searchType == 'qnaTitle'">
 					AND qnaTitle like CONCAT('%', #{keyword}, '%')
@@ -29,6 +48,25 @@
 		SELECT count(*)
 		FROM qna
 		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="typeby == 1">
+				AND qnaType = '주문/결제'
+			</if>
+			<if test="typeby == 2">
+				AND qnaType = '배송'
+			</if>
+			<if test="typeby == 3">
+				AND qnaType = '상품확인'
+			</if>
+			<if test="typeby == 4">
+				AND qnaType = '교환/취소(반품)'
+			</if>
+			<if test="typeby == 5">
+				AND qnaType = '회원정보'
+			</if>
+			<if test="typeby == 6">
+				AND qnaType = '서비스'
+			</if>
+			
 			<if test="keyword != null and keyword != ''">
 				<if test="searchType == 'qnaTitle'">
 					AND qnaTitle like CONCAT('%', #{keyword}, '%')
@@ -63,4 +101,5 @@
 		SET qnaStatus = #{qnaStatus}, qnaAnswer = #{qnaAnswer}, qnaAnswerDate = #{qnaAnswerDate}
 		WHERE qnaId = #{qnaId}
 	</update>
+	
 </mapper>

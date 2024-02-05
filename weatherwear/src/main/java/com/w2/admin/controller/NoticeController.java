@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.w2.board.NoticeVO;
 import com.w2.board.service.NoticeService;
-import com.w2.util.CommonUtil;
+import com.w2.util.RandomString;
 import com.w2.util.Search;
 
 @Controller
@@ -73,7 +73,7 @@ public class NoticeController {
 	 */
 	@RequestMapping("noticeRegProc.mdo")
 	public String noticeRegProc(NoticeVO vo) {
-		vo.setNoticeId("NO" + CommonUtil.createFileName());
+		vo.setNoticeId("NO" + RandomString.createFileName());
 		noticeService.insertNotice(vo);
 		return "redirect:noticeList.mdo";
 	}

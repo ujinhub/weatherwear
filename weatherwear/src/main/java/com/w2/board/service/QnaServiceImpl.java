@@ -40,4 +40,5 @@ public class QnaServiceImpl implements QnaService {
 		return qnaDao.deleteQnaAnswer(vo);
 	}
 
+
 }

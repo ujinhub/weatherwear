@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	 			
+<mapper namespace="ReviewDAO">
+	<select id="getReviewList" resultType="review">
+		SELECT row_number() over(ORDER BY reviewDate) as reviewIdx, r.*
+		FROM review r
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="keyword != null and keyword != ''">
+<!-- 				<if test="searchType == 'noticeTitle'"> -->
+<!-- 					AND noticeTitle like CONCAT('%', #{keyword}, '%') -->
+<!-- 				</if> -->
+<!-- 				<if test="searchType == 'noticeContent'"> -->
+<!-- 					AND noticeContent like CONCAT('%', #{keyword}, '%') -->
+<!-- 				</if> -->
+<!-- 				<if test="searchType == 'noticeWriter'"> -->
+<!-- 					AND noticeWriter like CONCAT('%', #{keyword}, '%') -->
+<!-- 				</if> -->
+			</if>
+		</trim>
+		ORDER BY reviewIdx DESC
+		LIMIT #{startList}, #{listSize};
+	</select>
+	
+	<select id="getReviewListCnt" resultType="int">
+		SELECT count(*)
+		FROM review
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+<!-- 			<if test="keyword != null and keyword != ''"> -->
+<!-- 				<if test="searchType == 'noticeTitle'"> -->
+<!-- 					AND noticeTitle like CONCAT('%', #{keyword}, '%') -->
+<!-- 				</if> -->
+<!-- 				<if test="searchType == 'noticeContent'"> -->
+<!-- 					AND noticeContent like CONCAT('%', #{keyword}, '%') -->
+<!-- 				</if> -->
+<!-- 				<if test="searchType == 'noticeWriter'"> -->
+<!-- 					AND noticeWriter like CONCAT('%', #{keyword}, '%') -->
+<!-- 				</if> -->
+<!-- 			</if> -->
+		</trim>
+	</select>
+	
+	<select id="getReview" resultType="review">
+		SELECT *
+		FROM review
+		WHERE reviewId = #{reviewId}
+	</select>
+	
+	<insert id="insertReview">
+<!-- 		INSERT INTO review -->
+<!-- 		VALUES(#{noticeId}, #{noticeWriter}, default, #{noticeTitle}, #{noticeContent}, null, default) -->
+	</insert>
+	
+</mapper>

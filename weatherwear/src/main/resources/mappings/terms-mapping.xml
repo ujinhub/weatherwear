@@ -14,11 +14,21 @@
 					AND termContent like CONCAT('%', #{keyword}, '%')
 				</if>
 				<if test="searchType == 'termNecessary'">
-					AND termNecessary = #{termNecessary}
+					AND termNecessary = #{keyword}
+				</if>
+				<if test="searchType == 'termDate'">
+					<![CDATA[
+						AND DATE_FORMAT(termApplyDate, '%Y-%m-%d') <= #{keyword}
+						AND DATE_FORMAT(termEndDate, '%Y-%m-%d') >= #{keyword}
+					]]> 
 				</if>
 			</if>
 		</trim>
-		ORDER BY termIdx DESC
+		ORDER BY 
+		<if test="searchType == 'termDate'">
+			termNecessary DESC, 
+		</if>
+		termIdx DESC
 		LIMIT #{startList}, #{listSize};
 	</select>
 	

@@ -12,7 +12,7 @@ import lombok.ToString;
 public class ClientVO {
 	private int clientIdx;				// 회원 리스트 번호 (rownum)
 	private String clientId;			// 회원 아이디
-	private String clienPwd;			// 회원 비밀번호
+	private String clientPwd;			// 회원 비밀번호
 	private Timestamp changePwdDate;	// 회원 비밀번호 변경 날짜
 	private String clientName;			// 회원 이름
 	private String clientNum;			// 회원 전화번호

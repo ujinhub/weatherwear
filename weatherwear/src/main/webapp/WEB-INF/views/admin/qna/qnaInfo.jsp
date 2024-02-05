@@ -47,6 +47,7 @@
 								</div>
 								<form class="form-horizontal" id="qnaUpdateForm" action="qnaUpdateProc.mdo" method="post">
 									<input type="hidden" id="qnaId" name="qnaId" value="${info.qnaId}">
+									<input type="hidden" name="qnaStatus" value="${info.qnaStatus}">
 									<div class="card-body">
 										<div class="form-group row">
 											<label for="qnaType" class="col-sm-1 col-form-control">문의타입</label>
@@ -148,22 +149,6 @@
 		$('#btnDelete').on('click', function() {
 			if(confirm('삭제하시겠습니까?')) {
 				location.href = "qnaDeleteProc.mdo?qnaId=" + $('#qnaId').val();
-				/*
-				$.ajax({
-					url: "noticeDeleteProc.mdo",
-					type: "post",
-					dataType: "json",
-					data: {
-						noticeId: $('#noticeId').val(),
-					},
-					success: function(data) {
-					
-					},
-					error: function(request, status, error) {
-						console.log("code: " + request.status + "\n" + "message: " + request.responseText + "\n" + "error: " + error);
-					}
-				});
-				*/
 			}
 		});
 	});

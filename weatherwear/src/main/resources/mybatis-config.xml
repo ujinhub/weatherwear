@@ -16,12 +16,12 @@
 	<typeAlias type="com.w2.board.NoticeVO" alias="notice"/>
 	<typeAlias type="com.w2.board.QnaVO" alias="qna"/>
 	<typeAlias type="com.w2.board.TermsVO" alias="terms"/>
+	<typeAlias type="com.w2.board.ReviewVO" alias="review"/>
 	<typeAlias type="com.w2.product.ProductVO" alias="product"/>
 	<typeAlias type="com.w2.product.ProductPriceVO" alias="productPrice"/>
 	<typeAlias type="com.w2.product.OptionVO" alias="option"/>
 	<typeAlias type="com.w2.order.OrderVO" alias="order"/>
 	<typeAlias type="com.w2.delivery.DeliveryVO" alias="delivery"/>
-	
 	<typeAlias type="com.w2.cart.CartVO" alias="cart"/>
 </typeAliases>
 
@@ -32,10 +32,10 @@
 	<mapper resource="mappings/client-mapping.xml"/>
 	<mapper resource="mappings/qna-mapping.xml"/>
 	<mapper resource="mappings/terms-mapping.xml"/>
+	<mapper resource="mappings/review-mapping.xml"/>
 	<mapper resource="mappings/product-mapping.xml"/>
 	<mapper resource="mappings/order-mapping.xml"/>
 	<mapper resource="mappings/delivery-mapping.xml"/>
-	
 	<mapper resource="mappings/cart-mapping.xml"/>
 </mappers>
 </configuration>

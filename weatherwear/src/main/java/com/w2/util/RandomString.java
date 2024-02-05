@@ -1,5 +1,8 @@
 package com.w2.util;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 import org.springframework.stereotype.Component;
 
 @Component
@@ -26,5 +29,12 @@ public class RandomString {
 		}
 		
 		return builder.toString();
+	}
+	
+	// 년월일시분초 문자열 생성
+	public static String createFileName() {
+		Calendar cal = Calendar.getInstance();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmSS");
+		return sdf.format(cal.getTime());
 	}
 }

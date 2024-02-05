@@ -149,7 +149,7 @@
 						<div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
 							<span class="dropdown-header"> <b>${userInfo.adminName}</b>님 (${userInfo.gradeId}) </span>
 							<div class="dropdown-divider"></div>
-							<a href="#" class="dropdown-item">
+							<a href="adminInfo.mdo?adminId=${userInfo.adminId}" class="dropdown-item">
 								<i class="fas fa-address-card mr-2"></i> My Profile
 							</a>
 							<div class="dropdown-divider"></div>

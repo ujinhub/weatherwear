@@ -23,7 +23,7 @@ import com.w2.util.SearchOrderby;
 public class OrderController {
 	@Autowired
 	private OrderService orderService;
-	
+
 	/**
 	 * 주문 목록 가져오기
 	 * @param model
