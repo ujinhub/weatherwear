@@ -48,13 +48,14 @@ public class CartDAO {
 			
 			CartVO checkCart = sqlSessionTemplate.selectOne("CartDAO.checkCart", cartvo);
 
+			// 같은 쿠키값 가진 상품 만료시간 업데이트
+			if(cartvo.getCookieId() != null) {
+				System.out.println(">> 다른 상품 만료시간 업데이트");
+				sqlSessionTemplate.update("CartDAO.updateCookie", cartvo);
+			}
+			
 			// 이미 장바구니에 있는 상품인 경우
 			if (checkCart != null) {
-				// 같은 쿠키값 가진 상품 만료시간 업데이트
-				if(cartvo.getCookieId() != null) {
-					System.out.println(">> 다른 상품 만료시간 업데이트");
-					sqlSessionTemplate.update("CartDAO.updateCookie", cartvo);
-				}
 				
 				cartvo.setCartId(checkCart.getCartId());
 				cartvo.setCartCnt(checkCart.getCartCnt()+cartvo.getCartCnt());

@@ -44,7 +44,8 @@
 				</if>
 			</if>
 		</trim>
-		ORDER BY ${ orderby }
+		ORDER BY ${ orderby } 
+			<if test="orderby == 'productRegDate'">DESC</if>
 		LIMIT #{startList}, #{listSize};
 	</select>
 	
@@ -128,15 +129,6 @@
 			(#{ option.productId }, #{ option.optionColor }, #{ option.optionSize }, #{ option.stockCnt })
 		</foreach>
 	</insert>
-	
-<!-- 이미지 등록 -->
-<!-- 	<insert id="insertImage" parameterType="list"> -->
-<!-- 		INSERT INTO product_image(imageId, imageName, imageDir, imageStatus, imageBy) -->
-<!-- 		VALUES -->
-<!-- 		<foreach collection="list" item="imvo" separator=","> -->
-<!-- 			(#{ imvo.imageId }, #{ imvo.imageName }, #{ imvo.imageDir }, #{ imvo.imageStatus }, #{ imvo.imageBy }, ) -->
-<!-- 		</foreach> -->
-<!-- 	</insert> -->
 
 <!-- 상품 수정 -->
 	<update id="updateProduct" parameterType="product">
@@ -184,17 +176,6 @@
 	<delete id="deleteProduct">
 		DELETE FROM product WHERE productId=#{ productId }
 	</delete>
-	
-<!-- 이미지 수정 -->
-<!-- 	<update id="updateImage" parameterType="list"> -->
-<!-- 		UPDATE product_image
-			SET 
-			(imageId, imageName, imageDir, imageStatus, imageBy) -->
-<!-- 		VALUES -->
-<!-- 		<foreach collection="list" item="imvo" separator=","> -->
-<!-- 			(#{ imvo.imageId }, #{ imvo.imageName }, #{ imvo.imageDir }, #{ imvo.imageStatus }, #{ imvo.imageBy }, ) -->
-<!-- 		</foreach> -->
-<!-- 	</update> -->
 
 	<select id="getMainProductList" parameterType="String" resultType="product">
 		SELECT p.*, CONCAT(pm.imageDir, pm.imageName) as mainImage, pr.productPrice
@@ -230,13 +211,11 @@
 	
 <!-- 위시리스트 삭제 -->
 	<update id="deleteWishList" parameterType="hashmap">
-		<foreach collection="productList" item="product" index="index">
+		<foreach collection="productList" item="productId" index="index">
 		UPDATE client
 		SET clientMarkList = TRIM(BOTH ',' FROM 
 									REPLACE(CONCAT(',', clientMarkList, ','), 
-									CONCAT(',', 
-										#{ productId }, 
-								','), ','))
+									CONCAT(',', #{ productId },','), ','))
 		WHERE CONCAT(',', clientMarkList, ',') LIKE CONCAT('%,', #{ productId }, ',%') AND clientId=#{ clientId };
 		</foreach>
 	</update>

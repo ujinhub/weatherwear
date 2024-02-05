@@ -3,7 +3,15 @@
  */
  $(document).ready(function() {
  	var key = $('#key').val();
- 
+ 	let list = [];
+ 	
+ 	// 이미지 테이블 등록
+ 	$("#checkBtn").click(function(){
+ 		let imageStatus = $("#imageStatus").val();
+ 		let imageBy = $("#imageBy").val();
+ 		imageInsert(key, list, imageBy, imageStatus);
+ 	});
+ 	
  	$('#summernote').summernote({
  		height: 500,
  		minHeight: null,
@@ -52,6 +60,7 @@
  			processData: false,
  			success: function(imagePath) {
  				$(el).summernote('editor.insertImage', imagePath);
+ 				list.push(imagePath);
  			}
  		});
  	}
@@ -72,5 +81,45 @@
  	
  	var reset = function() {
  		$('#summernote').reset();
+ 	}
+ 	
+ 	function imageInsert(key, list, imageBy, imageStatus){
+ 		let imList = [];
+ 		list.forEach(function(imagePath){
+	 		let image = {};
+	 		
+	 		if(imageStatus == null || imageStatus == ''){
+	 			switch(key){
+	 			case 'product': image.imageStatus = '상세'; break;
+	 			case 'notice': image.imageStatus = '공지'; break;
+	 			case 'main': image.imageStatus = '메인'; break;
+	 			case 'review': image.imageStatus = '리뷰'; break;
+	 			case 'qna': image.imageStatus = '문의'; break;
+	 			case 'refund': image.imageStatus = '환불'; break;
+	 			default: image.imageStatus = '기타'; break;
+	 			}
+	 		}else {
+	 			image.imageStatus = imageStatus;
+	 		}
+	 		image.imageBy = imageBy;
+	 		image.imageDir = imagePath.split("_image/")[0]+"_image/";
+	 		image.imageName = imagePath.split("_image/")[1];
+	 		image.imageId = (imagePath.split("_image/")[1]).split(".")[0];
+ 			imList.push(image);
+ 		});
+ 		
+		$.ajax({
+			url: "/w2/imageInsert.mdo?key=" + key,
+			type: "POST",
+			async: true,
+			data: JSON.stringify(imList),
+			contentType: "application/json",
+			success: function(res){
+				alert("success imageInsert");
+			},
+			error : function(error){
+				alert("fail imageInsert");
+			}
+		});
  	}
  });

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	 			
+<mapper namespace="CouponDAO">
+	<select id="getCouponList" parameterType="String" resultType="coupon">
+		SELECT *
+		FROM coupon_info ci
+		LEFT JOIN coupon_list cl ON (ci.couponId = cl.couponId AND cl.couponStatus='사용가능')
+		WHERE cl.clientId=#{ clientId }
+	</select>
+</mapper>

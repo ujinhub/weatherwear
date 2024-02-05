@@ -31,12 +31,12 @@ pageEncoding="UTF-8"%>
 			<c:if test="${userInfo == null}">
 				<a href="login.do">Login</a>&nbsp;
 				<a href="clientRegister.do">Join</a>&nbsp;
-				<a href="#">Cart</a>&nbsp;
+				<a href="cart.do">Cart</a>&nbsp;
 			</c:if>
 			<c:if test="${userInfo != null}">
 				<a href="logoutProc.do">Logout</a>&nbsp;
 				<a href="mypage.do">Mypage</a>&nbsp;
-				<a href="#">Cart</a>&nbsp;
+				<a href="cart.do">Cart</a>&nbsp;
 			</c:if>
 			<i class="bi bi-list mobile-nav-toggle"></i>
 			<!-- ======= Search Form ======= -->

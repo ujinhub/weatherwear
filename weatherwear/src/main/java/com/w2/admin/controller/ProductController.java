@@ -64,7 +64,8 @@ public class ProductController {
 	 * @return
 	 */
 	@RequestMapping("productRegister.mdo")
-	public String productRegister() {
+	public String productRegister(Model model) {
+		model.addAttribute("productId", RandomString.setRandomString(5, "number"));
 		return "product/productRegister";
 	}
 
@@ -74,7 +75,7 @@ public class ProductController {
 	 */
 	@ResponseBody
 	@RequestMapping("productRegisterProc.mdo")
-	public ResponseDTO<ProductVO> productRegisterProc(ProductVO product, String colorList, String sizeList, String cntList, String productPrimeCost) {
+	public ResponseDTO<String> productRegisterProc(ProductVO product, String productId, String colorList, String sizeList, String cntList, String productPrimeCost) {
 		String[] color = colorList.split(",");
 		String[] size = sizeList.split(",");
 		String[] stock = cntList.split(",");
@@ -85,9 +86,6 @@ public class ProductController {
 		for(String s: stock) {
 			stockCntList.add(Integer.parseInt(s));
 		}
-		
-		String productId = product.getProductId() + RandomString.setRandomString(5, "num");
-		product.setProductId(productId);
 		
 		Map<String, Object> pro = new HashMap<String, Object>();
 		pro.put("product", product);
@@ -100,14 +98,16 @@ public class ProductController {
 		int code;
 		String resultCode;
 		String msg;
-
+		String data=null;
+		
 		try {
 			int result = productService.insertProduct(pro);
 			
 			if(result > 0) {
 				code = 1;
 				resultCode = "success";
-				msg = "상품 등록이 완료되었습니다. \n상품 상세페이지로 이동하시겠습니까?";
+				msg = "상품이 등록되었습니다.";
+				data = "상품 상세페이지로 이동하시겠습니까?";
 			} else {
 				code = -1;
 				resultCode = "fail";
@@ -120,7 +120,7 @@ public class ProductController {
 			msg = "오류가 발생했습니다. 다시 시도해주세요";
 		}
 		
-		return new ResponseDTO<ProductVO>(statusCode, code, resultCode, msg, product);
+		return new ResponseDTO<String>(statusCode, code, resultCode, msg, data);
 	}
 	
 	/**
@@ -143,7 +143,7 @@ public class ProductController {
 	 */
 	@ResponseBody
 	@RequestMapping("productUpdateProc.mdo")
-	public ResponseDTO<ProductVO> productUpdateProc(ProductVO product, String colorList, String sizeList, String cntList, String productPrimeCost) {
+	public ResponseDTO<String> productUpdateProc(ProductVO product, String colorList, String sizeList, String cntList, String productPrimeCost) {
 		String[] color = colorList.split(",");
 		String[] size = sizeList.split(",");
 		String[] stock = cntList.split(",");
@@ -167,14 +167,16 @@ public class ProductController {
 		int code;
 		String resultCode;
 		String msg;
-
+		String data=null;
+		
 		try {
 			int result = productService.updateProduct(pro);
 			
 			if(result > 0) {
 				code = 1;
 				resultCode = "success";
-				msg = "상품 수정이 완료되었습니다. \n상품 상세페이지로 이동하시겠습니까?";
+				msg = "상품 수정되었습니다";
+				data = "상품 상세페이지로 이동하시겠습니까?";
 			} else {
 				code = -1;
 				resultCode = "fail";
@@ -187,7 +189,7 @@ public class ProductController {
 			msg = "오류가 발생했습니다. 다시 시도해주세요";
 		}
 		
-		return new ResponseDTO<ProductVO>(statusCode, code, resultCode, msg, product);
+		return new ResponseDTO<String>(statusCode, code, resultCode, msg, data);
 	}
 
 	/**

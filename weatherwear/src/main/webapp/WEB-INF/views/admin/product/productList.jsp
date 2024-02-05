@@ -175,8 +175,12 @@
 
 <!-- jQuery -->
 <script src="resources/admin/AdminLTE/plugins/jquery/jquery.min.js"></script>
+<script	src="resources/util/plugins/sweetalert/jquery-lates.min.js"></script>
+<script src="resources/util/plugins/sweetalert/sweetalert2.js"></script>
 <!-- Bootstrap 4 -->
 <script src="resources/admin/AdminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- sweetAlert (alert/confirm/toast) -->
+<script src="resources/util/js/sweetalert.js"></script>
 
 <script src="resources/util/js/orderbypaging.js"></script>
 <script src="resources/util/js/checkbox.js"></script>

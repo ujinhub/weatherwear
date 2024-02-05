@@ -5,8 +5,8 @@
 	<select id="getOrderList" resultType="hashMap">
 		SELECT od.orderId, od.orderDate, od.clientId, 
 			cl.clientName, cl.clientNum, di.deliverNum,
-	        ad.addressName, ad.addressNum, ad.addressPostNum, ad.address1, ad.address2, ad.addressMemo, SUBSTRING(oi.optionId, 1,9) as '옵션값',
-	        pr.productName, pr.productId, SUBSTRING(oi.optionId, 10, LENGTH(oi.optionId)) as optionName, oi.orderProCnt, oi.orderTotal, oi.orderStatus, 
+	        ad.addressName, ad.addressNum, ad.addressPostNum, ad.address1, ad.address2, ad.addressMemo,
+	        pr.productName, pr.productId, SUBSTRING(oi.optionId, LENGTH(pr.productId)+1) as optionName, oi.orderProCnt, oi.orderTotal, oi.orderStatus, 
 	        od.orderPrice, od.usedPoint, ci.couponPrice, pi.paymentMethod, pi.paymentDate, pi.paymentStatus
 		FROM orders od
 		LEFT JOIN orders_info oi ON (od.orderId=oi.orderId)
@@ -15,7 +15,7 @@
 		LEFT JOIN payment_info pi ON (od.orderId=pi.orderId)
 		LEFT JOIN deliver_info di ON (od.orderId=di.orderId)
 		LEFT JOIN coupon_info ci ON (od.couponId=ci.couponId)
-		LEFT JOIN product pr ON (SUBSTRING(oi.optionId, 1, 9)=pr.productId)
+		LEFT JOIN product pr ON (SUBSTRING(oi.optionId, 1, LENGTH(pr.productId))=pr.productId)
 		<trim prefix="WHERE" prefixOverrides="AND|OR">
 			<if test="keyword != null and keyword != ''">
 				<if test="searchType == 'orderId'">
@@ -92,5 +92,90 @@
 			UPDATE deliver_info SET deliverNum=#{ order.changeValue }
 			WHERE orderId=#{ order.orderId };
 		</foreach>
+	</update>
+	
+	<insert id="insertAddress" parameterType="hashMap">
+		INSERT INTO client_address (addressId, clientId, addressTitle, addressName, addressNum, addressPostNum, address1, address2, addressMemo, addressBase)
+		VALUES(#{ addressInfo.addressId }, #{ addressInfo.clientId }, #{ addressInfo.addressTitle }, #{ addressInfo.addressName }, #{ addressInfo.addressNum  }, 
+				#{ addressInfo.addressPostNum }, #{ addressInfo.address1 }, #{ addressInfo.address2 }, #{ addressInfo.addressMemo }, #{ addressInfo.addressBase })
+		ON DUPLICATE KEY UPDATE
+			addressTitle=#{ addressInfo.addressTitle }, 
+			addressName=#{ addressInfo.addressName }, 
+			addressNum=#{ addressInfo.addressNum }, 
+			addressPostNum=#{ addressInfo.addressPostNum }, 
+			address1=#{ addressInfo.address1 }, 
+			address2=#{ addressInfo.address2 }, 
+			addressMemo=#{ addressInfo.addressMemo },
+			addressBase=#{ addressInfo.addressBase };
+	</insert>
+	
+	<update id="updateBaseAddress" parameterType="hashMap">
+		UPDATE client_address SET addressBase='N' WHERE clientId=#{ addressInfo.clientId } AND addressId != #{ addressInfo.addressId }
+	</update>
+	
+	<insert id="insertOrder" parameterType="hashMap" useGeneratedKeys="true" keyProperty="orderId" keyColumn="orderId">				
+		INSERT INTO orders(orderId, clientId, addressId, optionIdList, orderEmail, orderPrice, usedPoint, couponId, cookieId, cookiePwd)
+		VALUES(#{ orderId }, #{ orderInfo.clientId }, #{ addressInfo.addressId }, #{ orderInfo.optionIdList }, #{ orderInfo.orderEmail },
+				#{ orderInfo.orderPrice }, #{ orderInfo.usedPoint }, #{ orderInfo.couponId }, #{ orderInfo.cookieId }, #{ orderInfo.cookiePwd });
+	</insert>
+	
+	<delete id="deleteCart" parameterType="hashMap">
+		DELETE FROM cart WHERE clientId=#{ orderInfo.clientId } AND cartId IN 
+			<foreach collection="cartIdList" item="cartId" open="(" separator="," close=")">
+				#{ cartId }
+			</foreach>
+	</delete>
+	
+	<insert id="insertOrderInfo" parameterType="hashMap">
+		INSERT INTO orders_info(orderId, optionId, orderProCnt, orderTotal, orderStatus)
+		VALUES
+			<foreach collection="orderInfoList" item="order" open="(" separator="), (" close=")">
+				#{ orderId }, #{ order.optionId }, #{ order.orderProCnt }, #{ order.orderTotal }, '상품준비중'
+			</foreach>
+	</insert>
+	
+	<update id="updateClientPoint" parameterType="hashMap">
+		UPDATE client
+		SET clientPoint = clientPoint - #{ orderInfo.usedPoint }
+		WHERE clientId = #{ orderInfo.clientId }
+	</update>
+	
+	<update id="updateCouponList" parameterType="hashMap">
+		UPDATE coupon_list 
+		SET couponStatus="사용완료"
+		WHERE clientId=#{ usedCouponInfo.clientId } AND couponId=#{ usedCouponInfo.couponId };
+	</update>
+	
+	<insert id="insertPayment" parameterType="hashMap">
+		INSERT INTO payment_info(paymentId, orderId, paymentMethod, paymentStatus)
+		VALUES(#{ paymentInfo.paymentId }, #{ orderId }, #{ paymentInfo.paymentMethod }, #{ paymentInfo.paymentStatus })
+	</insert>
+	
+	<select id="getOrderInfo" parameterType="hashMap" resultType="hashMap">
+		SELECT od.*, ad.*, pi.*, cl.*, cp.*
+		FROM orders od
+		LEFT JOIN client_address ad ON (ad.addressId = od.addressId )
+		LEFT JOIN payment_info pi ON (od.orderId = pi.orderId)
+		LEFT JOIN client cl ON (cl.clientId = od.clientId)
+		LEFT JOIN coupon_info cp ON(od.couponId = cp.couponId)
+		WHERE od.orderId = #{ orderId }
+	</select>
+	
+	<select id="getOrderInfoList" parameterType="hashMap" resultType="hashMap">
+		SELECT oi.*, pro.productName, pro.productId, pri.productPrice, CONCAT(pm.imageDir, pm.imageName) AS mainImage, op.*
+		FROM orders_info oi
+		LEFT JOIN product pro ON (SUBSTRING(oi.optionId, 1, 9)=pro.productId)
+		LEFT JOIN product_price pri ON (pro.productId = pri.productId)
+		LEFT JOIN product_image pm ON (pro.productId = pm.imageBy AND pm.imageStatus="대표")
+		LEFT JOIN option_info op ON (oi.optionId = op.optionId)
+		WHERE oi.orderId=#{ orderId }
+	</select>
+	
+	<update id="updateProductStock" parameterType="hashMap">
+		<foreach collection="orderInfoList" item="order" separator=";">
+		UPDATE option_info
+		SET stockCnt= stockCnt - #{ order.orderProCnt }
+		WHERE optionId = #{ order.optionId }
+		</foreach> 
 	</update>
 </mapper>

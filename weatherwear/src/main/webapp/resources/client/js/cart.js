@@ -27,7 +27,12 @@ function orderSelect(){
 		playToast("주문할 상품을 선택해주세요", 'warning');
 		return;
 	}
-	location.href="order.do?cartList=" + deleteList;
+	location.href="orderRegister.do?cartList=" + deleteList;
+}
+
+// 전체 상품 주문
+function orderAll(){
+	location.href="orderRegister.do?cartList=" + checkList;
 }
 
 // ajax_상품 삭제

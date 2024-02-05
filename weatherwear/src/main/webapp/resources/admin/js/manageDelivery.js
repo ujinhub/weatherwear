@@ -44,12 +44,12 @@ function deleteDeli(target){
 			},
 			success: function(res) {
 				if(res.code == -1) {
-					alert(res.message);
+					playToast(res.message, 'error');
 					return;
 				} 
 				
 				if(res.code == 1) {
-					alert(res.message);
+					playToast(res.message, 'success');
 					window.location.reload();
 				}
 			},
@@ -85,7 +85,7 @@ function deli(num){
 	} else if(num == 2){
 		url_type = 'deliveryInsert.mdo';
 	} else {
-		alert("오류가 발생했습니다. 다시 시도해주세요");
+		playToast("오류가 발생했습니다. \n다시 시도해주세요", 'error');
 		return;
 	}
 	getInfo();
@@ -103,17 +103,17 @@ function deli(num){
 		},
 		success: function(res) {
 			if(res.code == -1) {
-				alert(res.message);
+				playToast(res.message, 'error');
 				return;
 			} 
 			
 			if(res.code == 1) {
-				alert(res.message);
+				playToast(res.message, 'success');
 				window.location.reload();
 			}
 			
 			if(res.code == -2) {
-				alert(res.message);
+				playToast(res.message, 'warning');
 				$("input[name='deliveryId']").val("");
 				$("input[name='deliveryId']").focus();
 				return;

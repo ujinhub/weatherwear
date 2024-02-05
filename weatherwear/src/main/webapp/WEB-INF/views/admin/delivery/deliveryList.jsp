@@ -149,11 +149,15 @@
 	<div class="modal-backdrop fade" style="display:none"></div>
 <!-- jQuery -->
 <script src="resources/admin/AdminLTE/plugins/jquery/jquery.min.js"></script>
+<script	src="resources/util/plugins/sweetalert/jquery-lates.min.js"></script>
+<script src="resources/util/plugins/sweetalert/sweetalert2.js"></script>
 <!-- Bootstrap 4 -->
 <script src="resources/admin/AdminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- Modal -->
 <script src="resources/admin/AdminLTE/plugins/sweetalert2/sweetalert2.min.js"></script>
 <script src="resources/admin/AdminLTE/dist/js/adminlte.min.js?v=3.2.0"></script>
+<!-- sweetAlert (alert/confirm/toast) -->
+<script src="resources/util/js/sweetalert.js"></script>
 
 <script src="resources/util/js/paging.js"></script>
 <script src="resources/util/js/modal.js"></script>

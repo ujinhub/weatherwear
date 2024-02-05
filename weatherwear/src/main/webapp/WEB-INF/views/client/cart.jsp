@@ -139,7 +139,7 @@
 			<!-- 주문 버튼 -->
 								<div class="cart_btn_div order_btn">
 									<input type="button" id="orderSelected" class="cart_btn" value="선택 상품 주문" onclick="orderSelect()">
-									<input type="button" id="orderAll" class="cart_btn" value="전체 상품 주문">
+									<input type="button" id="orderAll" class="cart_btn" value="전체 상품 주문" onclick="orderAll()">
 								</div>
 							</div>
 						</div>	

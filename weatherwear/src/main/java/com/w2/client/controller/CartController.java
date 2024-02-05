@@ -21,6 +21,7 @@ import org.springframework.web.util.WebUtils;
 
 import com.w2.cart.CartVO;
 import com.w2.cart.service.CartService;
+import com.w2.client.ClientVO;
 import com.w2.util.ClientCookie;
 import com.w2.util.ResponseDTO;
 
@@ -36,14 +37,16 @@ public class CartController {
 	 */
 	@RequestMapping("cart.do")
 	public String cart(HttpServletRequest request, HttpSession session, Model model, CartVO cartvo) {
+		
 		// 비로그인 상태인 경우
-		if((String)session.getAttribute("session") == null) {
+		if(session.getAttribute("userInfo") == null) {
 			Cookie cookie = WebUtils.getCookie(request, "clientCookie");
 			if (cookie != null) {
 				cartvo.setCookieId((String)cookie.getValue());
 			}
 		} else {
-			cartvo.setClientId((String)session.getAttribute("session"));
+			ClientVO client = (ClientVO) session.getAttribute("userInfo");
+			cartvo.setClientId(client.getClientId());
 		}
 		
 		model.addAttribute("cartList", cartService.getCartList(cartvo));
@@ -53,12 +56,16 @@ public class CartController {
 	/** 장바구니에 상품 추가 */
 	@PostMapping("cartInsert.do")
 	public void cartInsert(@RequestBody List<CartVO> productList, HttpSession session, HttpServletRequest request, HttpServletResponse response) throws IOException {
+		
 		// 비로그인 상태인 경우
-		if(session.getAttribute("session") == null) {
+		if(session.getAttribute("userInfo") == null) {
 			String ckId = ClientCookie.setCookie(request, response);
 			productList.get(0).setCookieId(ckId);
+			System.err.println("ckId : " + ckId);
+			System.err.println("productList : " + productList);
 		} else { // 로그인 상태인 경우
-			productList.get(0).setClientId((String)session.getAttribute("session"));
+			ClientVO client = (ClientVO) session.getAttribute("userInfo");
+			productList.get(0).setClientId(client.getClientId());
 		}
 		
 		int result = cartService.insertCart(productList);
@@ -70,7 +77,6 @@ public class CartController {
 	/** 장바구니 수량 변경 */
 	@PostMapping("cartUpdate.do")
 	public void cartUpdate(@RequestBody Map<String, String> data, HttpSession session, CartVO cartvo, HttpServletRequest request, HttpServletResponse response) throws IOException {
-		
 		setUser(session, request, response, cartvo);
 		cartvo.setCartId((String)data.get("cartId"));
 		cartvo.setCartCnt(Integer.parseInt(data.get("cnt")));
@@ -112,12 +118,13 @@ public class CartController {
 	// 사용자 확인(회원/비회원)
 	public CartVO setUser(HttpSession session, HttpServletRequest request, HttpServletResponse response, CartVO cartvo) {
 		// 비로그인 상태인 경우
-		if(session.getAttribute("session") == null) {
+		if(session.getAttribute("userInfo") == null) {
 			String ckId = ClientCookie.setCookie(request, response);
 			
 			cartvo.setCookieId(ckId);
 		} else { // 로그인 상태인 경우
-			cartvo.setClientId((String)session.getAttribute("session"));
+			ClientVO client = (ClientVO) session.getAttribute("userInfo");
+			cartvo.setClientId(client.getClientId());
 		}
 		return cartvo;
 	}

@@ -29,7 +29,7 @@ function modify(){
 	}
 	
 	if(selectedList.length < 1){
-		alert("변경할 데이터를 선택해주세요");
+		playToast("변경할 데이터를 선택해주세요", 'warning');
 		return;
 	}
 	
@@ -52,7 +52,7 @@ function modify(){
 		dataType: "json",
 		contentType: "application/json",
 		success: function(){
-			alert("수정되었습니다.");
+			playToast("수정되었습니다", 'success');
 			window.location.reload();
 		},
 		error: function(){

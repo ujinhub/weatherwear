@@ -19,9 +19,9 @@
 <!-- Theme style -->
 <link href="resources/admin/AdminLTE/dist/css/adminlte.min.css" rel="stylesheet">
 <!-- dropZone -->
-<link rel="stylesheet" href="https://rawgit.com/enyo/dropzone/master/dist/dropzone.css"/>
-<link rel="stylesheet" href="resources/util/css/dropzone.css"/>
-<script src="https://rawgit.com/enyo/dropzone/master/dist/dropzone.js"></script>
+<link rel="stylesheet" href="resources/util/plugins/dropzone/dist/dropzone.min.css"/>
+<link rel="stylesheet" href="resources/util/plugins/dropzone/custom.css">
+<link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" type="text/css" />
 <!-- include summernote css/js -->
 <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.css" rel="stylesheet">
 </head>
@@ -60,16 +60,41 @@
 							<!-- /.card-header -->
 							<div class="card-body">
 								<h4>Information</h4>
-								<div class="form-group" id="dropzone">
-									<form action="https://httpbin.org/post" class="dropzone needsclick" id="demo-upload">
-										<div class="dz-message needsclick">
-											<img src="${ product.mainImage }" style="width: 150px;">
+								<div id="dropzone">
+										<input type="hidden" id="key" name="key" value="product">
+										<input type="hidden" id="imageStatus" name="imageStatus" value="대표">
+										<input type="hidden" id="imageBy" name="imageBy" value="${ product.productId }">
+										<div id="mainImage" class="dz-message needsclick">
+											<img src="${ product.mainImage }" style="width: 150px;"><br>
 											<span class="text">
-												메인 이미지를 수정하려면 클릭하세요 <br><code>DROPZONE 사용하고 싶다</code>
+												 <code>메인 이미지를 수정하려면 클릭하세요</code><br>
 											</span>
-											<span class="plus">+</span>
 										</div>
-									</form>
+								<!-- 포스팅 - 이미지/동영상 dropzone 영역 -->
+									<div id="dropzone-preview" style="display:none;">
+										<div class="dropzone-preview-list">
+											<!-- This is used as the file preview template -->
+											<div class="border rounded-3">
+												<div class="d-flex align-items-center p-2">
+													<div class="flex-shrink-0 me-3">
+														<div class="width-8 h-auto rounded-3">
+															<img data-dz-thumbnail="data-dz-thumbnail" class="w-full h-auto rounded-3 block" src="#" alt="Dropzone-Image" style="width: 120px;"/>
+														</div>
+													</div>
+													<div class="flex-grow-1" style="width: 300px; padding-left:10px;">
+														<div class="pt-1">
+															<h6 class="font-semibold mb-1" data-dz-name="data-dz-name">&nbsp;</h6>
+															<p class="text-sm text-muted fw-normal" data-dz-size="data-dz-size"></p>
+															<strong class="error text-danger" data-dz-errormessage="data-dz-errormessage"></strong>
+														</div>
+													</div>
+													<div class="shrink-0 ms-3">
+														<button data-dz-remove="data-dz-remove" class="btn btn-sm btn-danger">삭제</button>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
 								</div>
 								<div class="form-group">
 									<label for="exampleSelectBorder">카테고리</label>
@@ -165,7 +190,7 @@
 						<!-- /.card-body -->
 		          	</div>
 					<div class="input-group-prepend">
-						<button type="button" class="btn btn-primary" onclick="submit('modify')">수정하기</button>&nbsp;&nbsp;&nbsp;
+						<button type="button" class="btn btn-primary insertBtn" onclick="submit('modify')">수정하기</button>&nbsp;&nbsp;&nbsp;
 						<button type="button" class="btn btn-outline-warning" onclick="location.href='productList.mdo'">취소하기</button>&nbsp;&nbsp;&nbsp;
 						<button type="button" class="btn btn-outline-danger" onclick="deleteProduct()">삭제하기</button>
 						<script>
@@ -182,14 +207,19 @@
 </script>
 <!-- jQuery -->
 <script src="resources/admin/AdminLTE/plugins/jquery/jquery.min.js"></script>
+<script	src="resources/util/plugins/sweetalert/jquery-lates.min.js"></script>
+<script src="resources/util/plugins/sweetalert/sweetalert2.js"></script>
 <!-- jQuery UI 1.11.4 -->
 <script src="resources/admin/AdminLTE/plugins/jquery-ui/jquery-ui.min.js"></script>
 <!-- Bootstrap 4 -->
 <script src="resources/admin/AdminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- Summernote -->
 <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
+<!-- dropzone -->
+<script src="resources/util/plugins/dropzone/dist/dropzone.min.js"></script>
+<!-- sweetAlert (alert/confirm/toast) -->
+<script src="resources/util/js/sweetalert.js"></script>
 
 <script src="resources/admin/js/manageProduct.js"></script>
-<script src="resources/admin/js/uploadImage_registerProduct.js"></script>
 </body>
 </html>
