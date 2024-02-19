@@ -12,4 +12,8 @@ public interface TermsService {
 	int insertTerms(TermsVO vo);				// 약관 등록
 	int updateTerms(TermsVO vo);				// 약관 수정
 	int deleteTerms(TermsVO vo);				// 약관 삭제
+	
+	// 약관 동의
+	int insertTermsAgree(List<TermsVO> termsList);
+	List<TermsVO> getTermsAgree(String clientId);
 }

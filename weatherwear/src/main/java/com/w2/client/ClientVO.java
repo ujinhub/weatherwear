@@ -26,4 +26,8 @@ public class ClientVO {
 	private String clientMarkList;		// 관심 상품 리스트
 	private Timestamp clientLogDate;	// 최근 로그인한 날짜
 	private int clientBuyCnt;			// 누적 구매 금액
+	
+	// 탈퇴 회원 정보
+	private String withdrawId;
+	private Timestamp withdrawDate;
 }

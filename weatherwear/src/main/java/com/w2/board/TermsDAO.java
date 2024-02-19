@@ -36,4 +36,13 @@ public class TermsDAO {
 	public int deleteTerms(TermsVO vo) {
 		return sqlSessionTemplate.delete("TermsDAO.deleteTerms", vo);
 	}
+	
+	// 약관 동의
+	public int insertTermsAgree(List<TermsVO> termsList) {
+		return sqlSessionTemplate.insert("TermsDAO.insertTermsAgree", termsList);
+	}
+	
+	public List<TermsVO> getTermsAgree(String clientId) {
+		return sqlSessionTemplate.selectList("TermsDAO.getTermsAgree", clientId);
+	}
 }

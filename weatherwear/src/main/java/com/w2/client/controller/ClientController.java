@@ -2,6 +2,7 @@ package com.w2.client.controller;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -139,7 +140,6 @@ public class ClientController {
 	@RequestMapping("logoutProc.do")
 	public String logoutProc(HttpServletRequest request) {
 		HttpSession session = request.getSession(false);
-		
 		session.invalidate();
 
 		return "redirect:main.do";
@@ -170,12 +170,54 @@ public class ClientController {
 		return "clientInfo/clientRegister";
 	}
 	
-	@RequestMapping("clientRegProc.do")
-	public String clientRegProc(ClientVO client, TermsVO terms) {
-		System.err.println(client);
-		System.err.println(terms);
+	/** 회원가입 */
+	@RequestMapping("clientRegProc.do") 
+	public String clientRegProc(ClientVO client, TermsVO terms, Model model) {
+		String emailCheck = "N"; String clientId = client.getClientId();
+		List<TermsVO> termsList = new ArrayList<TermsVO>();
+  
+		String[] tmpId = terms.getTermId().split(","); 
+		String[] tmpSt = terms.getTermAgreeStatus().split(",");
+  
+		for(int i = 0; i < tmpId.length; i++) { 
+			TermsVO tmpVO = new TermsVO();
+			tmpVO.setTermId(tmpId[i]); tmpVO.setTermAgreeStatus(tmpSt[i]);
+			tmpVO.setClientId(clientId);
+			
+			termsList.add(tmpVO);
+  
+			// 이메일 수신정보 동의 여부 // 일단... 
+			if(tmpId[i].equals("TM0008") && tmpSt[i].equals("Y")) { 
+				emailCheck = "Y"; 
+			} 
+		}
+  
+		client.setClientEmailCheck(emailCheck);
+		client.setClientPwd(passwordEncoder.encode(client.getClientPwd()));
+		client.setClientPoint(2000); // 신규 회원가입 포인트
+
+		clientService.insertClient(client); 
+		termsService.insertTermsAgree(termsList);
+  
+		sendRegisterMail(client);
 		
+		model.addAttribute("regMsg", "회원가입이 완료되었습니다.\\n회원 가입 축하 기념 포인트 2000원 적립되었습니다.\\n로그인 후 이용하시기 바랍니다.");
+  
 		return "login";
+	}
+	 
+	
+	/**
+	 * 회원 탈퇴
+	 */
+	@RequestMapping("clientWithdraw.do")
+	public String clientWithdraw(ClientVO vo, Model model) {
+		
+		clientService.insertWithdraw(vo);
+		clientService.deleteWithdrawQna(vo);
+		model.addAttribute("withdrawMsg", "회원 탈퇴가 완료되었습니다.\\nWeatherWear를 이용해주셔서 감사합니다.");
+	
+		return "main";
 	}
 	
 	/**
@@ -188,9 +230,7 @@ public class ClientController {
 	@RequestMapping("clientCheck.do")
 	public boolean clientCheck(ClientVO vo, String chkType) {
 
-		System.err.println(vo + " " + chkType);
-		
-		ClientVO client = clientService.getClient(vo);
+		ClientVO client = clientService.checkClient(vo);
 		if(chkType.equals("clientId")) {
 			// 아이디 중복 확인
 			if(client != null) {
@@ -378,7 +418,53 @@ public class ClientController {
 		return new ResponseDTO<String>(statusCode, code, resultCode, msg, null);
 	}
 	
+	/**
+	 * 회원가입 축하 : 이메일 
+	 */
+	private void sendRegisterMail(ClientVO vo) {
+
+		MimeMessagePreparator preparator = new MimeMessagePreparator() {
+
+			StringBuffer content = new StringBuffer()
+					.append("<p><img src='https://hyeongabucket.s3.ap-northeast-2.amazonaws.com/main/logo.png' width='237px'</p><p>&nbsp;</p>")
+					.append("<h1><span style=\"font-family: 'Nanum Gothic';\"><b>회원가입을 축하드립니다.</b></span></h1><hr>")
+					.append("<p><span style=\"font-family: 'Nanum Gothic';\">")
+					.append(vo.getClientName())
+					.append("님 가입해주셔서 감사합니다.</span></p><p>&nbsp;</p>")
+					.append("<p><span style=\"font-family: 'Nanum Gothic'; color: #9d9d9d;\">")
+					.append(vo.getClientName())
+					.append(" 고객님 안녕하세요?</span></p>")
+					.append("<p><span style=\"font-family: 'Nanum Gothic'; color: #9d9d9d;\">웨더웨어의 회원이 되신 것을 축하드립니다.</span></p>")
+					.append("<p><span style=\"font-family: 'Nanum Gothic'; color: #9d9d9d;\">회원님의 가입정보는 다음과 같습니다.</span></p>")
+					.append("<p><span style=\"font-family: 'Nanum Gothic';\"></span>●&nbsp;가입 정보</p>")
+					.append("<table style=\"border-collapse: collapse; width: 60.2326%; height: 32px;\" border=\"0\">")
+					.append("<tbody><tr><td style=\"width: 25.0277%;\" colspan=\"4\">아이디</td><td style=\"width: 52.1696%;\"><b>")
+					.append(vo.getClientId())
+					.append("</b></td></tr></tbody></table>")
+					.append("<p><span style=\"font-family: 'Nanum Gothic'; color: #9d9d9d;\">고객님께 좋은 쇼핑과 서비스를 제공하기 위해 최선을 다하겠습니다.</span></p>")
+					.append("<p><span style=\"font-family: 'Nanum Gothic'; color: #9d9d9d;\">앞으로도 많은 관심 부탁드립니다.</span></p>")
+					.append("<p><span style=\"font-family: 'Nanum Gothic'; color: #9d9d9d;\">감사합니다.</span></p>");
+			
+			@Override
+			public void prepare(MimeMessage mimeMessage) throws Exception {
+				mimeMessage.setFrom(new InternetAddress("weatherwear493@gmail.com", "WeatherWear", "UTF-8"));
+				mimeMessage.setSubject("[웨더웨어] 가입 축하 메일입니다.");
+				mimeMessage.setRecipients(Message.RecipientType.TO, InternetAddress.parse(vo.getClientEmail()));
+				mimeMessage.setContent(content.toString(), "text/html;charset=UTF-8");
+				mimeMessage.setReplyTo(InternetAddress.parse(vo.getClientEmail()));
+			}
+		};
+		
+		try {
+			mailSender.send(preparator);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
 	
+	/** 
+	 * 임시 비밀번호 발급 : 이메일 
+	 */
 	private void sendTempMail(String receiveMail, String tempPwd) {
 		
 		MimeMessagePreparator preparator = new MimeMessagePreparator() {

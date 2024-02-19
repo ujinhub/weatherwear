@@ -20,4 +20,10 @@ public interface ClientService {
 	String getWishList(ClientVO vo);
 	public void changeCookieSetId(String cookieId, String clientId);	// 쿠키 해제(장바구니)
 	void setLogDate(String clientId);						// 최근 로그인일자 변경
+	
+	int insertClient(ClientVO vo);		// 회원가입
+	int insertWithdraw(ClientVO vo);	// 회원탈퇴
+	ClientVO checkClient(ClientVO vo);
+	
+	int deleteWithdrawQna(ClientVO vo);
 }

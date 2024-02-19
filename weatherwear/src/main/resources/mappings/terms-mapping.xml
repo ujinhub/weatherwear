@@ -71,4 +71,19 @@
 		DELETE FROM terms
 		WHERE termId = #{termId}
 	</delete>
+	
+	<insert id="insertTermsAgree" parameterType="list">
+		INSERT INTO tm_agree(termId, clientId, termAgreeStatus, tmermAgreeDate)
+		VALUES 
+		<foreach collection="list" item="terms" separator=",">
+			(#{terms.termId}, #{terms.clientId}, #{terms.termAgreeStatus}, default)
+		</foreach>
+	</insert>
+	
+	<select id="getTermsAgree" resultType="terms">
+		SELECT ta.*, t.*
+		FROM tm_agree ta
+		JOIN terms t ON ta.termId = t.termId
+		WHERE clientId = #{clientId}
+	</select>
 </mapper>

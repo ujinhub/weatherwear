@@ -31,6 +31,12 @@ $(document).ready(function() {
 	image = '';
 	
 	selectWeather(weatherId);
+	
+	<c:if test="${withdrawMsg != null && withdrawMsg != ''}">
+		location.href = "logoutProc.do"
+		alert("${withdrawMsg}");
+	</c:if>
+	
 });
 </script>
 <style>
@@ -43,7 +49,6 @@ $(document).ready(function() {
 	<div class="wrapper">
 		<%@ include file="header.jsp" %>
 		<main id="main">
-			
 			<section id="hero-slider" class="hero-slider">
 				<div id="weather">
 					<article id="province">

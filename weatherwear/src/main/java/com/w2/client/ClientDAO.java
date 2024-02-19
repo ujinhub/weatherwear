@@ -62,4 +62,21 @@ public class ClientDAO {
 	public void setLogDate(String clientId) {
 		sqlSessionTemplate.update("ClientDAO.setLogDate", clientId);
 	}
+	
+	// 회원가입 / 탈퇴
+	public int insertClient(ClientVO vo) {
+		return sqlSessionTemplate.insert("ClientDAO.insertClient", vo);
+	}
+	
+	public int insertWithdraw(ClientVO vo) {
+		return sqlSessionTemplate.insert("ClientDAO.insertWithdraw", vo);
+	}
+	
+	public ClientVO checkClient(ClientVO vo) {
+		return sqlSessionTemplate.selectOne("ClientDAO.checkClient", vo);
+	}
+	
+	public int deleteWithdrawQna(ClientVO vo) {
+		return sqlSessionTemplate.delete("ClientDAO.deleteWithdrawQna", vo);
+	}
 }

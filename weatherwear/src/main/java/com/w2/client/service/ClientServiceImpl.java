@@ -70,4 +70,24 @@ public class ClientServiceImpl implements ClientService {
 	public void setLogDate(String clientId) {
 		clientDao.setLogDate(clientId);		
 	}
+	
+	@Override
+	public int insertClient(ClientVO vo) {
+		return clientDao.insertClient(vo);
+	}
+
+	@Override
+	public int insertWithdraw(ClientVO vo) {
+		return clientDao.insertWithdraw(vo);
+	}
+
+	@Override
+	public ClientVO checkClient(ClientVO vo) {
+		return clientDao.checkClient(vo);
+	}
+
+	@Override
+	public int deleteWithdrawQna(ClientVO vo) {
+		return clientDao.deleteWithdrawQna(vo);
+	}
 }

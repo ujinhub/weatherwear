@@ -128,7 +128,7 @@
 <!-- 												<div class="col-sm-7"> -->
 <!-- 													<input type="date" class="form-control" name="clientBirth"> -->
 <!-- 												</div> -->
-												<input type="hidden" name="clientBirth">
+												<input type="hidden" id="clientBirth" name="clientBirth">
 												<div class="col-sm-2">
 													<input type="text" class="form-control" id="clientYear" name="clientYear" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
 												</div>
@@ -165,7 +165,9 @@
 										
 										<div class="card-body">
 											<div id="accordion">
-												<c:forEach var="item" items="${termList}">
+												<c:forEach var="item" items="${termList}" varStatus="status">
+													<input type="hidden" name="termId" value="${item.termId}">
+													<input type="hidden" id="${item.termId}" name="termAgreeStatus">
 													<c:if test="${item.termNecessary == 'Y'}">
 														<div class="card card-danger card-outline">
 															<div class="card-header">
@@ -175,7 +177,7 @@
 																	</a>
 																</h5>
 																<div class="card-tools">
-																	<input type="checkbox" class="form-check-input" name="${item.termId}" id="chk${item.termId}" required="required"><label for="chk${item.termId}" class="form-check-label">동의함</label>
+																	<input type="checkbox" class="form-check-input" name="${item.termId}" id="chk${item.termId}" value="${item.termId}" required="required"><label for="chk${item.termId}" class="form-check-label">동의함</label>
 																</div>
 															</div>
 															
@@ -196,7 +198,7 @@
 																	</a>
 																</h5>
 																<div class="card-tools">
-																	<input type="checkbox" class="form-check-input" name="${item.termId}" id="chk${item.termId}"><label for="chk${item.termId}" class="form-check-label">동의함</label>
+																	<input type="checkbox" class="form-check-input" name="${item.termId}" id="chk${item.termId}" value="${item.termId}" ><label for="chk${item.termId}" class="form-check-label">동의함</label>
 																</div>
 															</div>
 															
@@ -235,7 +237,6 @@
 
 <!-- AdminLTE App -->
 <script src="resources/admin/AdminLTE/dist/js/adminlte.js"></script>
-
 
 <!-- jQuery-validation -->
 <script src="resources/admin/AdminLTE/plugins/jquery-validation/jquery.validate.min.js"></script>
@@ -277,12 +278,6 @@ $(function() {
 				required: true,
 				minlength: 4
 			},
-			clientNum: {
-				required: function() {
-					$('#clientNum').val($('#clientNum1').val() + $('#clientNum2').val() + $('#clientNum3').val());
-					if($('#clientNum').val().length == 11) { true; }
-				}
-			},
 		},
 		messages: {
 			clientId: {
@@ -317,9 +312,6 @@ $(function() {
 				required: "",
                 minlength: "휴대폰번호는 4자 입력해주세요.",
 			},
-			clientNum: {
-				required: "휴대폰번호를 입력해주세요."
-			},
 		},
 		errorElement: 'span',
 		errorPlacement: function(error, element) {
@@ -333,25 +325,17 @@ $(function() {
 			$(element).removeClass('is-invalid');
 		},
 		submitHandler: function(form) {
-			
+
+			$('#clientNum').val($('#clientNum1').val() + $('#clientNum2').val() + $('#clientNum3').val());
 			$('#clientBirth').val($('#clientYear').val() + $('#clientMonth').val() + $('#clientDay').val());
 			
-			var array = new Array();
-			
 			$('input:checkbox[id^="chk"]').each(function() {
-				var map = new Map();
-				
-				map.set('termId', $(this).attr('name'));
-				map.set('value', $(this).prop('checked'));
-				
-				array.push(map);
+				$('#' + $(this).val()).val($(this).prop('checked') ? "Y":"N");
 			});
 			
-			
-			console.log(array);
+			form.submit();
 		}
 	}); 
-	
 	
 	// 아이디 중복 체크
 	$.validator.addMethod("isEqualId", function(value, element) {

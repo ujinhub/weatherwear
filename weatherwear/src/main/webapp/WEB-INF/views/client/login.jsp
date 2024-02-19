@@ -104,8 +104,12 @@
 $(function() {
 	<c:if test="${msg != '' && msg != null}">
 		playToast('${msg}', 'error');
-	</c:if>	
+	</c:if>
 	
+	<c:if test="${regMsg != null && regMsg != ''}">
+		alert("${regMsg}");
+	</c:if>
+
 	$('#loginForm').validate({
 		rules: {
 			clientId: {

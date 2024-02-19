@@ -66,9 +66,11 @@
 												<col width="15%" />
 												<col width="15%" />
 												<col width="15%" />
-												<col width="20%" />
+												<col width="25%" />
 												<col width="5%" />
-												<col width="20%" />
+												<col width="15" />
+<%-- 												<col width="15%" /> --%>
+<%-- 												<col width="15%" /> --%>
 											</colgroup>
 											<thead>
 												<tr>
@@ -78,7 +80,9 @@
 													<th>전화번호</th>
 													<th>이메일</th>
 													<th>등급</th>
-													<th>가입일자</th>
+													<th>상태</th>
+<!-- 													<th>가입일자</th> -->
+<!-- 													<th>탈퇴일자</th> -->
 												</tr>
 											</thead>
 											<tbody>
@@ -91,7 +95,13 @@
 														<td>${fn:substring(clientNum,0,3)}-${fn:substring(clientNum,3,7)}-${fn:substring(clientNum,7,12)}</td>
 														<td>${item.clientEmail}</td>
 														<td>${item.gradeId}</td>
-														<td>${item.clientRegDate}</td>
+														<td>
+															<c:if test="${item.withdrawId != null && item.withdrawId != ''}">
+																탈퇴
+															</c:if>
+														</td>
+<%-- 														<td>${item.clientRegDate}</td> --%>
+<%-- 														<td>${item.withdrawDate}</td> --%>
 													</tr>
 												</c:forEach>
 											</tbody>
@@ -148,7 +158,12 @@
 <script src="resources/admin/js/common.js"></script>
 <script src="resources/util/js/pagingNoOrderBy.js"></script>
 <script>
-	$(function() {
+	$(document).ready(function() {
+		// 한번 생각해보기
+		<c:if test="${msg != null && msg != ''}">
+			alert("${msg}");
+		</c:if>
+		
 		$('#searchType').change(function() {
 			$('#keyword').remove();
 			

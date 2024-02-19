@@ -3,8 +3,10 @@
 	 			
 <mapper namespace="ClientDAO">
 	<select id="getClientList" resultType="client">
-		SELECT row_number() over(ORDER BY clientRegDate) as clientIdx, c.*
+		SELECT row_number() over(ORDER BY clientRegDate) as clientIdx, c.*, w.*
 		FROM client c
+		LEFT JOIN withdraw_info w
+		ON c.clientId = w.withdrawId
 		<trim prefix="WHERE" prefixOverrides="AND|OR">
 			<if test="keyword != null and keyword != ''">
 				<if test="searchType == 'clientId'">
@@ -40,10 +42,17 @@
 		</trim>
 	</select>
 	
+	<select id="checkClient" resultType="client">
+		SELECT *
+		FROM client
+		WHERE clientId = #{clientId}
+	</select>
+	
 	<select id="getClient" resultType="client">
 		SELECT *
 		FROM client
 		WHERE clientId = #{clientId}
+		AND clientId NOT IN (SELECT withdrawId FROM withdraw_info)
 	</select>
 	
 	<select id="getClientEmail" resultType="client">
@@ -110,4 +119,20 @@
 		SET cookieId = null, cookieLimit = null, clientId = #{ clientId }
 		WHERE cookieId = #{ cookieId }
 	</update>
+	
+<!-- 회원가입/탈퇴 - 권유진 추가 -->
+	<insert id="insertClient">
+		INSERT INTO client(clientId, clientPwd, clientName, clientNum, clientEmail, clientEmailCheck, clientPoint, clientBirth)
+		VALUES(#{clientId}, #{clientPwd}, #{clientName}, #{clientNum}, #{clientEmail}, #{clientEmailCheck}, #{clientPoint}, #{clientBirth})
+	</insert>
+	
+	<insert id="insertWithdraw">
+		INSERT INTO withdraw_info(withdrawId)
+		VALUES(#{clientId})
+	</insert>
+	
+	<delete id="deleteWithdrawQna">
+		DELETE FROM qna
+		WHERE clientId = #{clientId}
+	</delete>
 </mapper>

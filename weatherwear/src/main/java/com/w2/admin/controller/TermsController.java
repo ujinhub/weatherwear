@@ -111,7 +111,9 @@ public class TermsController {
 		for(int i = 0; i < emailList.size(); i++) {
 			String receiveMail = emailList.get(i).getClientEmail();
 			
+			// 테스트
 			//if(receiveMail.equals("yeogiogae@gmail.com")) {
+			
 			MimeMessagePreparator preparator = new MimeMessagePreparator() {
 				
 				StringBuffer content = new StringBuffer()
@@ -149,6 +151,7 @@ public class TermsController {
 			} catch(Exception e) {
 				e.printStackTrace();
 			}
+			
 			//}
 		}
 	}

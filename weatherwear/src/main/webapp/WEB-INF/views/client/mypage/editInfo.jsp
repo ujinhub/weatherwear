@@ -216,8 +216,8 @@ $(document).ready(function() {
 	</c:if>	
 	
 	$('#btnWithdraw').on('click', function() {
-		if(confirm('회원탈퇴를 하시겠습니까?')) {
-			
+		if(confirm('탈퇴할 경우 회원관련 데이터가 복구되지 않습니다.\n정말로 탈퇴를 하시겠습니까?')) {
+			location.href = "clientWithdraw.do?clientId=" + $('#clientId').val();
 		}
 	});
 	
@@ -236,12 +236,6 @@ $(document).ready(function() {
 			clientNum3: {
 				required: true,
 				minlength: 4
-			},
-			clientNum: {
-				required: function() {
-					$('#clientNum').val($('#clientNum1').val() + $('#clientNum2').val() + $('#clientNum3').val());
-					if($('#clientNum').val().length == 11) { true; }
-				}
 			},
 		},
 		messages: {
@@ -262,9 +256,6 @@ $(document).ready(function() {
 				required: "",
                 minlength: "휴대폰번호는 4자 입력해주세요.",
 			},
-			clientNum: {
-				required: "휴대폰번호를 입력해주세요."
-			},
 		},
 		errorElement: 'span',
 		errorPlacement: function(error, element) {
@@ -280,7 +271,7 @@ $(document).ready(function() {
 		submitHandler: function(form) {
 			$('#clientNum').val($('#clientNum1').val() + $('#clientNum2').val() + $('#clientNum3').val());
 			$('#clientBirth').val($('#clientYear').val() + $('#clientMonth').val().padStart(2, "0") + $('#clientDay').val().padStart(2, "0"));
-			alert($('#clientBirth').val());
+
 			form.submit();
 		}
 	}); 

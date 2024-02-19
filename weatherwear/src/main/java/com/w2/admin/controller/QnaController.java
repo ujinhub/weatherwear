@@ -91,11 +91,11 @@ public class QnaController {
 			client.setClientId(vo.getClientId());
 			
 			client = clientService.getClientEmail(client);
-			System.err.println(client);
-			if(client.getClientEmailCheck().equals("Y")) {
-				System.err.println("메일전송");
+//			System.err.println(client);
+//			if(client.getClientEmailCheck().equals("Y")) {
+//				System.err.println("메일전송");
 				sendAnswerMail(vo, client.getClientEmail());
-			}
+//			}
 		}
 		qnaService.updateQnaAnswer(vo);
 		return "forward:qnaInfo.mdo";
@@ -118,7 +118,6 @@ public class QnaController {
 	}
 	
 	private void sendAnswerMail(QnaVO vo, String receiveMail) {
-		System.err.println("============================sendAnswerMail: " + receiveMail);
 		
 		MimeMessagePreparator preparator = new MimeMessagePreparator() {
 			
