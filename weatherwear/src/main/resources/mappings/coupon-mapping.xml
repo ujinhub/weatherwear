@@ -112,11 +112,4 @@
 	<delete id="deleteCouponList" parameterType="String">
 		DELETE FROM coupon_list WHERE couponId=#{ couponId }
 	</delete>
-
-	<select id="getCouponList" parameterType="String" resultType="coupon">
-		SELECT *
-		FROM coupon_info ci
-		LEFT JOIN coupon_list cl ON (ci.couponId = cl.couponId AND cl.couponStatus='사용가능')
-		WHERE cl.clientId=#{ clientId }
-	</select>
 </mapper>
