@@ -36,4 +36,8 @@ public class NoticeDAO {
 	public int deleteNotice(NoticeVO vo) {
 		return sqlSessionTemplate.delete("NoticeDAO.deleteNotice", vo);
 	}
+	
+	public int updateViewCnt(NoticeVO vo) {
+		return sqlSessionTemplate.update("NoticeDAO.updateViewCnt", vo);
+	}
 }

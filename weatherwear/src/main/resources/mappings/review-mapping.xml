@@ -51,4 +51,17 @@
 <!-- 		VALUES(#{noticeId}, #{noticeWriter}, default, #{noticeTitle}, #{noticeContent}, null, default) -->
 	</insert>
 	
+<!-- 나의 리뷰 목록 (페이징) - 권유진 추가 -->
+	<select id="getMyReviewList" parameterType="hashmap" resultType="review">
+		SELECT *
+		FROM review
+		WHERE clientId = #{clientId}
+		LIMIT #{search.startList}, #{search.listSize}
+	</select>
+	
+	<select id="getMyReviewListCnt" parameterType="String" resultType="int">
+		SELECT COUNT(*)
+		FROM review
+		WHERE clientId = #{clientId}
+	</select>
 </mapper>

@@ -1,5 +1,6 @@
 package com.w2.board.service;
 
+import java.util.HashMap;
 import java.util.List;
 
 import com.w2.board.QnaVO;
@@ -11,4 +12,11 @@ public interface QnaService {
 	QnaVO getQna(QnaVO vo);							// 문의 정보 가져오기
 	int updateQnaAnswer(QnaVO vo);					// 문의 답글 등록/수정하기
 	int deleteQnaAnswer(QnaVO vo);					// 문의 답글 삭제하기
+	
+	List<QnaVO> getMyQnaList(HashMap<String, Object> param);
+	int getMyQnaListCnt(String clientId);
+	
+	int insertQna(QnaVO vo);
+	int deleteQna(QnaVO vo);
+	int updateQna(QnaVO vo);
 }

@@ -34,4 +34,9 @@ public class CartServiceImpl implements CartService {
 		return cartDAO.insertCart(productList);
 	}
 
+	@Override
+	public int getCartListCnt(String clientId) {
+		return cartDAO.getCartListCnt(clientId);
+	}
+
 }

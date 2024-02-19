@@ -44,6 +44,14 @@
 	content: "*";
 	color: red;
 }
+.security:before {
+	content: url(resources/client/images/lock-16.png);
+	margin-right: 10px;
+}
+.reply:before {
+	content: url(resources/client/images/reply.png);
+	margin-right: 10px;
+}
 </style>
 </head>
 <body class="hold-transition sidebar-collapse layout-top-nav">
@@ -81,11 +89,11 @@
 						<div class="card-title">
 							<div>
 								<button id="0" type="button" class="typebyBtn btn btn-sm btn-outline-dark <c:if test="${search.typeby == '0'}">active</c:if>">전체보기</button>
-								<button id="1" type="button" class="typebyBtn btn btn-sm btn-outline-dark <c:if test="${search.typeby == '1'}">active</c:if>">주문/결제</button>
-								<button id="2" type="button" class="typebyBtn btn btn-sm btn-outline-dark <c:if test="${search.typeby == '2'}">active</c:if>">배송</button>
-								<button id="3" type="button" class="typebyBtn btn btn-sm btn-outline-dark <c:if test="${search.typeby == '3'}">active</c:if>">상품확인</button>
-								<button id="4" type="button" class="typebyBtn btn btn-sm btn-outline-dark <c:if test="${search.typeby == '4'}">active</c:if>">교환/취소(반품)</button>
-								<button id="5" type="button" class="typebyBtn btn btn-sm btn-outline-dark <c:if test="${search.typeby == '5'}">active</c:if>">회원정보</button>
+								<button id="1" type="button" class="typebyBtn btn btn-sm btn-outline-dark <c:if test="${search.typeby == '1'}">active</c:if>">회원정보</button>
+								<button id="2" type="button" class="typebyBtn btn btn-sm btn-outline-dark <c:if test="${search.typeby == '2'}">active</c:if>">상품확인</button>
+								<button id="3" type="button" class="typebyBtn btn btn-sm btn-outline-dark <c:if test="${search.typeby == '3'}">active</c:if>">주문/결제</button>
+								<button id="4" type="button" class="typebyBtn btn btn-sm btn-outline-dark <c:if test="${search.typeby == '4'}">active</c:if>">배송</button>
+								<button id="5" type="button" class="typebyBtn btn btn-sm btn-outline-dark <c:if test="${search.typeby == '5'}">active</c:if>">교환/취소(반품)</button>
 								<button id="6" type="button" class="typebyBtn btn btn-sm btn-outline-dark <c:if test="${search.typeby == '6'}">active</c:if>">서비스</button>
 							</div>
 						</div>
@@ -130,13 +138,22 @@
 									<tr onclick="location.href='qnaInfo.do?qnaId=${item.qnaId}'">
 										<td>${item.qnaIdx}</td>
 										<td>${item.qnaType}</td>
-										<td style="text-align: left;">${item.qnaTitle}</td>
+										<td class="text-left <c:if test="${item.qnaSecCheck == 'Y'}">security</c:if>">${item.qnaTitle}</td>
 										<td>
 											${fn:substring(item.clientId, 0, 2)}
 											<c:forEach begin="2" end="${fn:length(item.clientId)}" step="1">*</c:forEach>
 										</td>
 										<td><fmt:formatDate value="${item.qnaDate}" pattern="yyyy-MM-dd"/></td>
 									</tr>
+<%-- 									<c:if test="${item.qnaStatus == '답변완료'}"> --%>
+<!-- 										<tr> -->
+<!-- 											<td></td> -->
+<!-- 											<td></td> -->
+<%-- 											<td class="reply text-left">${item.qnaTitle}</td> --%>
+<!-- 											<td></td> -->
+<!-- 											<td></td> -->
+<!-- 										</tr> -->
+<%-- 									</c:if> --%>
 								</c:forEach>
 							</tbody>
 						</table>
@@ -170,7 +187,7 @@
 	</div>
 
 <script src="resources/client/ZenBlog/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script  src="resources/util/plugins/sweetalert/jquery-lates.min.js"></script>
+<script src="resources/util/plugins/sweetalert/jquery-lates.min.js"></script>
 <script src="resources/util/plugins/sweetalert/sweetalert2.js"></script>
 
 <!-- Template Main JS File -->

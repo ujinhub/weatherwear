@@ -94,4 +94,9 @@ public class ProductServiceImpl implements ProductService {
 	public int deleteWishList(Map<String, Object> client) {
 		return productDAO.deleteWishList(client);
 	}
+
+	@Override
+	public HashMap<String, Object> getProductInfo(String productId) {
+		return productDAO.getProductInfo(productId);
+	}
 }

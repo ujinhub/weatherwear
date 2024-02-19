@@ -1,11 +1,15 @@
 package com.w2.client.controller;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.w2.board.NoticeVO;
 import com.w2.board.QnaVO;
@@ -13,6 +17,7 @@ import com.w2.board.ReviewVO;
 import com.w2.board.service.NoticeService;
 import com.w2.board.service.QnaService;
 import com.w2.board.service.ReviewService;
+import com.w2.util.ResponseDTO;
 import com.w2.util.Search;
 
 @Controller
@@ -71,6 +76,7 @@ public class CommunityController {
 	 */
 	@RequestMapping("noticeInfo.do")
 	public String noticeInfo(Model model, NoticeVO vo) {
+		noticeService.updateViewCnt(vo);
 		model.addAttribute("info", noticeService.getNotice(vo));
 		return "community/noticeInfo";
 	}
@@ -111,6 +117,35 @@ public class CommunityController {
 	}
 	
 	/**
+	 * 문의글 비밀번호 체크
+	 */
+	@ResponseBody
+	@RequestMapping("checkQnaPwd.do")
+	public ResponseDTO<Boolean> checkQnaPwd(QnaVO vo) {
+		System.err.println(vo);
+		
+		Integer statusCode = HttpStatus.OK.value();
+		int code = 0;
+		String resultCode = null;
+		String msg = null;
+		boolean data = false;
+		
+		QnaVO qna = qnaService.getQna(vo);
+		
+		if(qna.getQnaSecPwd().equals(vo.getQnaSecPwd())) {
+			code = 1;
+			resultCode = "success";
+			data = true;
+		} else {
+			code = -1;
+			resultCode = "fail";
+			msg = "비밀글 비밀번호가 일치하지 않습니다.";
+		}
+
+		return new ResponseDTO<Boolean>(statusCode, code, resultCode, msg, data);
+	}
+	
+	/**
 	 * 문의 상세 정보
 	 * @param model
 	 * @param vo
@@ -119,7 +154,6 @@ public class CommunityController {
 	@RequestMapping("qnaInfo.do")
 	public String qnaInfo(Model model, QnaVO vo) {
 		model.addAttribute("info", qnaService.getQna(vo));
-		System.err.println(qnaService.getQna(vo));
 		return "community/qnaInfo";
 	}
 	

@@ -83,7 +83,7 @@
 		</where>
 	</select>
 
-<!-- 장바구니에 상품 추가 -->
+<!-- 나의 장바구니에 상품 추가 -->
 	<insert id="insertCart" parameterType="cart">
 		INSERT INTO cart (productId, optionId, cartCnt, 
 			<include refid="checkClient"/>
@@ -120,4 +120,10 @@
 		WHERE cookieLimit <![CDATA[< CURRENT_TIMESTAMP ]]>
 	</delete>
 	
+<!-- 장바구니에 담긴 상품 개수 - 권유진 추가 -->
+	<select id="getCartListCnt" parameterType="String" resultType="int">
+		SELECT COUNT(*)
+		FROM cart
+		WHERE clientId = #{clientId}
+	</select>
 </mapper>

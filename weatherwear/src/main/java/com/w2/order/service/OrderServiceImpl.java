@@ -79,5 +79,15 @@ public class OrderServiceImpl implements OrderService {
 		return orderDAO.getOrderInfoList(orderId);
 	}
 
+	@Override
+	public List<Map<String, Object>> getMyOrderList(HashMap<String, Object> param) {
+		return orderDAO.getMyOrderList(param);
+	}
 
+	@Override
+	public int getMyOrderListCnt(HashMap<String, Object> param) {
+		return orderDAO.getMyOrderListCnt(param);
+	}
+
+	
 }

@@ -1,5 +1,6 @@
 package com.w2.coupon;
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 import lombok.Getter;
@@ -13,8 +14,8 @@ public class CouponVO {
 	private String couponId;
 	private String couponName;
 	private int couponPrice;
-	private Date couponStDate;
-	private Date couponEndDate;
+	private Timestamp couponStDate;
+	private Timestamp couponEndDate;
 	private int minPrice;
 	private String gradeList;
 

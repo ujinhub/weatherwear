@@ -1,5 +1,6 @@
 package com.w2.board.service;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,16 @@ public class ReviewServiceImpl implements ReviewService {
 	@Override
 	public int insertReview(ReviewVO vo) {
 		return reviewDao.insertReview(vo);
+	}
+
+	@Override
+	public List<ReviewVO> getMyReviewList(HashMap<String, Object> param) {
+		return reviewDao.getMyReviewList(param);
+	}
+
+	@Override
+	public int getMyReviewListCnt(String clientId) {
+		return reviewDao.getMyReviewListCnt(clientId);
 	}
 
 }

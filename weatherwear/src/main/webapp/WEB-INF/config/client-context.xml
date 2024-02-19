@@ -24,5 +24,9 @@
 		<beans:property name="prefix" value="/WEB-INF/views/client/" />
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
-	
+	<!--  파일 업로드  -->
+	<beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<beans:property name="maxUploadSize" value="20971520"/>
+		<beans:property name="defaultEncoding" value="utf-8"/>
+	</beans:bean>
 </beans:beans>

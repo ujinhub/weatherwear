@@ -19,7 +19,7 @@ public class ClientVO {
 	private String clientEmail;			// 회원 이메일
 	private String clientEmailCheck;	// 이메일 발송 체크 여부
 	private Timestamp clientRegDate;	// 회원 등록일자
-	private Timestamp clientBirth;		// 생년월일
+	private String clientBirth;			// 생년월일
 	private String gradeId;				// 회원 등급 (S, G, B)
 	private int clientPoint;			// 포인트
 	private String recentList;			// 최근 본 상품 리스트

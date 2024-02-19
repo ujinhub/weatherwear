@@ -12,6 +12,10 @@ public interface ClientService {
 	ClientVO getClient(ClientVO vo);				// 회원 정보 가져오기
 	ClientVO getClientEmail(ClientVO vo);			// 회원 이메일 정보 가져오기
 	List<ClientVO> getClientEmailList();			// 회원 이메일 리스트 가져오기
-	
+
+	int updateClient(ClientVO vo);							// 회원 정보수정
 	ClientVO getClientFindInfo(Map<String, Object> param);	// 아이디/비밀번호 찾기
+	int updateClientPwd(ClientVO vo);						// 비밀번호 변경
+	
+	String getWishList(ClientVO vo);
 }

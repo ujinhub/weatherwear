@@ -1,5 +1,6 @@
 package com.w2.board;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.mybatis.spring.SqlSessionTemplate;
@@ -31,5 +32,25 @@ public class QnaDAO {
 	
 	public int deleteQnaAnswer(QnaVO vo) {
 		return sqlSessionTemplate.update("QnaDAO.deleteQnaAnswer", vo);
+	}
+	
+	public List<QnaVO> getMyQnaList(HashMap<String, Object> param) {
+		return sqlSessionTemplate.selectList("QnaDAO.getMyQnaList", param);
+	}
+	
+	public int getMyQnaListCnt(String clientId) {
+		return sqlSessionTemplate.selectOne("QnaDAO.getMyQnaListCnt", clientId);
+	}
+	
+	public int insertQna(QnaVO vo) {
+		return sqlSessionTemplate.insert("QnaDAO.insertQna", vo);
+	}
+	
+	public int deleteQna(QnaVO vo) {
+		return sqlSessionTemplate.delete("QnaDAO.deleteQna", vo);
+	}
+	
+	public int updateQna(QnaVO vo) {
+		return sqlSessionTemplate.update("QnaDAO.updateQna", vo);
 	}
 }

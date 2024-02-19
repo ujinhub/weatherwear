@@ -46,4 +46,19 @@ public class ClientServiceImpl implements ClientService {
 		return clientDao.getClientFindInfo(param);
 	}
 
+	@Override
+	public int updateClientPwd(ClientVO vo) {
+		return clientDao.updateClientPwd(vo);
+	}
+
+	@Override
+	public int updateClient(ClientVO vo) {
+		return clientDao.updateClient(vo);
+	}
+
+	@Override
+	public String getWishList(ClientVO vo) {
+		return clientDao.getWishList(vo);
+	}
+
 }

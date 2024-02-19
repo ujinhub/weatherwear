@@ -74,4 +74,29 @@
 		</trim>
 		AND clientName = #{clientName}
 	</select>
+	
+	<update id="updateClientPwd" parameterType="client">
+		UPDATE client
+		SET clientPwd = #{clientPwd}
+		WHERE clientId = #{clientId}
+	</update>
+	
+	<update id="updateClient">
+		UPDATE client
+		SET clientEmail = #{clientEmail}, clientNum = #{clientNum}
+		<if test="clientPwd != null and clientPwd != ''">
+			, clientPwd = #{clientPwd}
+		</if>
+		<if test="clientBirth != null and clientBirth != ''">
+			, clientBirth = #{clientBirth}
+		</if>
+		WHERE clientId = #{clientId}
+	</update>
+	
+	<select id="getWishList" parameterType="hashmap" resultType="String">
+		SELECT clientMarkList
+		FROM client
+		WHERE clientId = #{clientId}
+	</select>
+	
 </mapper>

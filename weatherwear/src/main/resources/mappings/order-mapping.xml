@@ -178,4 +178,33 @@
 		WHERE optionId = #{ order.optionId }
 		</foreach> 
 	</update>
+	
+<!-- 나의 주문 내역 -->
+	<select id="getMyOrderList" parameterType="hashMap" resultType="hashMap">
+		SELECT oi.orderId, oi.orderProCnt, oi.orderStatus, oi.orderTotal, op.optionColor, op.optionSize, oi.optionId, o.orderDate, p.productId, p.productName, CONCAT(pi.ImageDir, pi.ImageName) as image
+		FROM orders_info oi 
+		JOIN orders o ON oi.orderId = o.orderId
+		JOIN option_info op ON oi.optionId = op.optionId
+		JOIN product_image pi ON pi.ImageBy = op.productId
+		JOIN product p ON p.productId = op.productId
+		WHERE o.clientId = #{clientId} AND pi.ImageStatus = '대표'
+		<if test="search.keyword != null and search.keyword != ''">
+			<if test="search.searchType == 'orderDate'">
+				AND od.orderDate like CONCAT('%', #{keyword}, '%')
+			</if>
+		</if>
+		ORDER BY o.orderDate
+		LIMIT #{search.startList}, #{search.listSize};
+	</select>
+	
+	<select id="getMyOrderListCnt" parameterType="hashMap" resultType="int">
+		SELECT count(*)
+		FROM orders
+		WHERE clientId = #{clientId}
+		<if test="search.keyword != null and search.keyword != ''">
+			<if test="search.searchType == 'orderDate'">
+				AND od.orderDate like CONCAT('%', #{keyword}, '%')
+			</if>
+		</if>
+	</select>
 </mapper>

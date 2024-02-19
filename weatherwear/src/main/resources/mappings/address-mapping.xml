@@ -21,4 +21,33 @@
 		DELETE FROM client_address
 		WHERE  addressId=#{ addressId }
 	</delete>
+	
+<!-- 나의 배송지 목록 (페이징) - 권유진 추가 -->
+<!-- 	<select id="getMyAddressList" parameterType="hashmap" resultType="address"> -->
+<!-- 		SELECT * -->
+<!-- 		FROM client_address -->
+<!-- 		WHERE clientId = #{clientId} -->
+<!-- 		LIMIT #{search.startList}, #{search.listSize} -->
+<!-- 	</select> -->
+	
+<!-- 	<select id="getMyAddressListCnt" parameterType="String" resultType="int"> -->
+<!-- 		SELECT COUNT(*) -->
+<!-- 		FROM client_address -->
+<!-- 		WHERE clientId = #{clientId} -->
+<!-- 	</select> -->
+	
+<!-- 	<insert id="insertAddress"> -->
+<!-- 		INSERT INTO client_address (addressId, clientId, addressTitle, addressName, addressNum, addressPostNum, address1, address2, addressMemo, addressBase) -->
+<!-- 		VALUES(#{ addressId }, #{ clientId }, #{ addressTitle }, #{ addressName }, #{ addressNum  },  -->
+<!-- 				#{ addressPostNum }, #{ address1 }, #{ address2 }, #{ addressMemo }, #{ addressBase }) -->
+<!-- 		ON DUPLICATE KEY UPDATE -->
+<!-- 			addressTitle=#{ addressTitle },  -->
+<!-- 			addressName=#{ addressName },  -->
+<!-- 			addressNum=#{ addressNum },  -->
+<!-- 			addressPostNum=#{ addressPostNum },  -->
+<!-- 			address1=#{ address1 },  -->
+<!-- 			address2=#{ address2 },  -->
+<!-- 			addressMemo=#{ addressMemo }, -->
+<!-- 			addressBase=#{ addressBase }; -->
+<!-- 	</insert> -->
 </mapper>

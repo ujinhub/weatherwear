@@ -7,19 +7,19 @@
 		FROM qna q
 		<trim prefix="WHERE" prefixOverrides="AND|OR">
 			<if test="typeby == 1">
-				AND qnaType = '주문/결제'
+				AND qnaType = '회원정보'
 			</if>
 			<if test="typeby == 2">
-				AND qnaType = '배송'
-			</if>
-			<if test="typeby == 3">
 				AND qnaType = '상품확인'
 			</if>
+			<if test="typeby == 3">
+				AND qnaType = '주문/결제'
+			</if>
 			<if test="typeby == 4">
-				AND qnaType = '교환/취소(반품)'
+				AND qnaType = '배송'
 			</if>
 			<if test="typeby == 5">
-				AND qnaType = '회원정보'
+				AND qnaType = '교환/취소(반품)'
 			</if>
 			<if test="typeby == 6">
 				AND qnaType = '서비스'
@@ -49,19 +49,19 @@
 		FROM qna
 		<trim prefix="WHERE" prefixOverrides="AND|OR">
 			<if test="typeby == 1">
-				AND qnaType = '주문/결제'
+				AND qnaType = '회원정보'
 			</if>
 			<if test="typeby == 2">
-				AND qnaType = '배송'
-			</if>
-			<if test="typeby == 3">
 				AND qnaType = '상품확인'
 			</if>
+			<if test="typeby == 3">
+				AND qnaType = '주문/결제'
+			</if>
 			<if test="typeby == 4">
-				AND qnaType = '교환/취소(반품)'
+				AND qnaType = '배송'
 			</if>
 			<if test="typeby == 5">
-				AND qnaType = '회원정보'
+				AND qnaType = '교환/취소(반품)'
 			</if>
 			<if test="typeby == 6">
 				AND qnaType = '서비스'
@@ -102,4 +102,34 @@
 		WHERE qnaId = #{qnaId}
 	</update>
 	
+<!-- 나의 문의 목록 (페이징) - 권유진 추가 -->
+	<select id="getMyQnaList" parameterType="hashmap" resultType="qna">
+		SELECT *
+		FROM qna
+		WHERE clientId = #{clientId}
+		ORDER BY qnaDate DESC
+		LIMIT #{search.startList}, #{search.listSize}
+	</select>
+	
+	<select id="getMyQnaListCnt" parameterType="String" resultType="int">
+		SELECT COUNT(*)
+		FROM qna
+		WHERE clientId = #{clientId}
+	</select>
+	
+	<insert id="insertQna">
+		INSERT INTO qna(qnaId, clientId, qnaTitle, qnaContent, qnaSecCheck, qnaSecPwd, qnaStatus, qnaType)
+		VALUES(#{qnaId}, #{clientId}, #{qnaTitle}, #{qnaContent}, #{qnaSecCheck}, #{qnaSecPwd}, #{qnaStatus}, #{qnaType})
+	</insert>
+	
+	<delete id="deleteQna">
+		DELETE FROM qna
+		WHERE qnaId = #{qnaId}
+	</delete>
+	
+	<update id="updateQna">
+		UPDATE qna
+		SET qnaTitle = #{qnaTitle}, qnaContent = #{qnaContent}, qnaType = #{qnaType}
+		WHERE qnaId = #{qnaId}
+	</update>
 </mapper>

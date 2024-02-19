@@ -12,4 +12,5 @@ public interface NoticeService {
 	int insertNotice(NoticeVO vo);					// 공지사항 정보 등록
 	int updateNotice(NoticeVO vo);					// 공지사항 정보 수정
 	int deleteNotice(NoticeVO vo);					// 공지사항 정보 삭제
+	int updateViewCnt(NoticeVO vo);					// 공지사항 조회수 증가
 }

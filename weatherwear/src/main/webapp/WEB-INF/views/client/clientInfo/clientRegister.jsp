@@ -33,16 +33,11 @@
 <style>
 .mg-2 { margin: 20px 0; }
 .mg-3 { margin: 30px 0 0; }
+.pd-05 { padding: 5px; }
 .pd-1 { padding: 10px; }
-.description {
-    color: #6c757d;
-    font-size: 13px;
-    vertical-align: middle;
-}
-.required .col-form-label:after {
-	content: "*";
-	color: red;
-}
+.description { color: #6c757d; font-size: 13px; vertical-align: middle; }
+.required .col-form-label:after { content: "*"; color: red; }
+.form-check-input { padding: 15px; width: 15px; height: 15px; }
 </style>
 </head>
 <body class="hold-transition sidebar-collapse layout-top-nav">
@@ -57,7 +52,7 @@
 							<h1 class="page-title">JOIN</h1>
 						</div>
 						<div style="width: 70%; margin: 0 auto;">
-							<div >
+							<div>
 								<form class="form-horizontal" id="clientRegForm" action="clientRegProc.do" method="post">
 									<div class="card card-default">
 										<div class="card-header">
@@ -130,6 +125,9 @@
 											</div>
 											<div class="form-group row">
 												<label for="clientBirth" class="col-sm-2 col-form-label">생년월일</label>
+<!-- 												<div class="col-sm-7"> -->
+<!-- 													<input type="date" class="form-control" name="clientBirth"> -->
+<!-- 												</div> -->
 												<input type="hidden" name="clientBirth">
 												<div class="col-sm-2">
 													<input type="text" class="form-control" id="clientYear" name="clientYear" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
@@ -151,12 +149,6 @@
 													<span class="description">일</span>
 												</div>
 											</div>
-											<!-- div class="form-group row">
-												<label for="client" class="col-sm-2 col-form-label">주소</label>
-												<div class="col-sm-7">
-													<input type="email" class="form-control" id="clientEmail" name="clientEmail">
-												</div>
-											</div -->
 										</div>							
 									</div>
 									
@@ -183,7 +175,7 @@
 																	</a>
 																</h5>
 																<div class="card-tools">
-																	<input type="checkbox" class="form-check-input" name="checkTerms" id="chk${item.termId}" value="${item.termNecessary}"><label for="chk${item.termId}" class="form-check-label">동의함</label>
+																	<input type="checkbox" class="form-check-input" name="${item.termId}" id="chk${item.termId}" required="required"><label for="chk${item.termId}" class="form-check-label">동의함</label>
 																</div>
 															</div>
 															
@@ -204,7 +196,7 @@
 																	</a>
 																</h5>
 																<div class="card-tools">
-																	<input type="checkbox" class="form-check-input" name="checkTerms" id="chk${item.termId}" value="${item.termNecessary}"><label for="chk${item.termId}" class="form-check-label">동의함</label>
+																	<input type="checkbox" class="form-check-input" name="${item.termId}" id="chk${item.termId}"><label for="chk${item.termId}" class="form-check-label">동의함</label>
 																</div>
 															</div>
 															
@@ -291,20 +283,6 @@ $(function() {
 					if($('#clientNum').val().length == 11) { true; }
 				}
 			},
-			checkTerms: {
-				required: function() {
-					alert($('input:checkbox[name="checkTerms"]').length);
-						alert('a');
-						if($(this).val() == 'Y') {
-							alert('b');
-							true;
-						}
-						else {
-							alert('c');
-							false;
-						}
-				}
-			}
 		},
 		messages: {
 			clientId: {
@@ -342,9 +320,6 @@ $(function() {
 			clientNum: {
 				required: "휴대폰번호를 입력해주세요."
 			},
-			checkTerms: {
-				required: "필수 항목을 체크해주세요."
-			}
 		},
 		errorElement: 'span',
 		errorPlacement: function(error, element) {
@@ -356,9 +331,27 @@ $(function() {
 		},
 		unhighlight: function(element, errorClass, validClass) {
 			$(element).removeClass('is-invalid');
+		},
+		submitHandler: function(form) {
+			
+			$('#clientBirth').val($('#clientYear').val() + $('#clientMonth').val() + $('#clientDay').val());
+			
+			var array = new Array();
+			
+			$('input:checkbox[id^="chk"]').each(function() {
+				var map = new Map();
+				
+				map.set('termId', $(this).attr('name'));
+				map.set('value', $(this).prop('checked'));
+				
+				array.push(map);
+			});
+			
+			
+			console.log(array);
 		}
-		
-	});
+	}); 
+	
 	
 	// 아이디 중복 체크
 	$.validator.addMethod("isEqualId", function(value, element) {
@@ -380,13 +373,13 @@ $(function() {
 	});
 	
 	$('#checkAll').on('click', function() {
-		if($("#checkAll").is(":checked")) $("input[name=checkTerms]").prop("checked", true);
-		else $("input[name=checkTerms]").prop("checked", false);
+		if($("#checkAll").is(":checked")) $("input[id^='chk']").prop("checked", true);
+		else $("input[id^='chk']").prop("checked", false);		
 	});
 	
 	$("input[type=checkbox]").click(function() {
-		var total = $("input[name=checkTerms]").length;
-		var checked = $("input[name=checkTerms]:checked").length;
+		var total = $("input[id^='chk']").length;
+		var checked = $("input[id^='chk']:checked").length;
 		
 		if(total != checked) $("#checkAll").prop("checked", false);
 		else $("#checkAll").prop("checked", true); 

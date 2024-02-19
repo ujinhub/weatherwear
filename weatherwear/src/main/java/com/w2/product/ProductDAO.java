@@ -111,4 +111,12 @@ public class ProductDAO {
 	public int deleteWishList(Map<String, Object> client) {
 		return sqlSessionTemplate.update("ProductDAO.deleteWishList", client);
 	}
+	
+	/**
+	 * 나의 관심 상품, 최근본 상품 - 권유진 추가
+	 */
+	public HashMap<String, Object> getProductInfo(String productId) {
+		return sqlSessionTemplate.selectOne("ProductDAO.getProductInfo", productId);
+	}
+	
 }

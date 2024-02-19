@@ -1,5 +1,6 @@
 package com.w2.board.service;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,5 +41,28 @@ public class QnaServiceImpl implements QnaService {
 		return qnaDao.deleteQnaAnswer(vo);
 	}
 
+	@Override
+	public List<QnaVO> getMyQnaList(HashMap<String, Object> param) {
+		return qnaDao.getMyQnaList(param);
+	}
 
+	@Override
+	public int getMyQnaListCnt(String clientId) {
+		return qnaDao.getMyQnaListCnt(clientId);
+	}
+
+	@Override
+	public int insertQna(QnaVO vo) {
+		return qnaDao.insertQna(vo);
+	}
+
+	@Override
+	public int deleteQna(QnaVO vo) {
+		return qnaDao.deleteQna(vo);
+	}
+
+	@Override
+	public int updateQna(QnaVO vo) {
+		return qnaDao.updateQna(vo);
+	}
 }

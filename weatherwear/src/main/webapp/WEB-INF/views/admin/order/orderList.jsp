@@ -53,7 +53,7 @@
 											<button id="orderDate" type="button" class="orderbyBtn btn btn-sm btn-outline-light <c:if test="${search.orderby == 'orderDate'}">active</c:if>">최신순</button>
 											<button id="clientId" type="button" class="orderbyBtn btn btn-sm btn-outline-light <c:if test="${search.orderby == 'clientId'}">active</c:if>">아이디순</button>
 											<button id="orderStatus" type="button" class="orderbyBtn btn btn-sm btn-outline-light <c:if test="${search.orderby == 'orderStatus'}">active</c:if>">주문상태순</button>
-											<button class="btn btn-sm btn-secondary buttons-pdf buttons-html5 download" tabindex="0" aria-controls="example1" type="button" id="excelDownload" onclick="exportExcel('주문내역')">
+											<button class="btn btn-sm btn-secondary buttons-pdf buttons-html5 download" tabindex="0" aria-controls="example1" type="button" id="excelDownload" onclick="exportExcel('주문조회')">
 												<span>Excel 저장</span>
 											</button>
 										</div>

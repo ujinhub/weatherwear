@@ -219,4 +219,14 @@
 		WHERE CONCAT(',', clientMarkList, ',') LIKE CONCAT('%,', #{ productId }, ',%') AND clientId=#{ clientId };
 		</foreach>
 	</update>
+	
+<!-- 상품 정보 가져오기 (위시리스트, 최근본상품) - 권유진 추가 -->
+	<select id="getProductInfo" parameterType="String" resultType="hashmap">
+		SELECT p.productId, p.productName, p.productSell, r.productPrice, CONCAT(i.ImageDir, i.ImageName) as image
+		FROM product p
+		JOIN product_price r ON (p.productId = r.productId)
+		JOIN product_image i ON (p.productId = i.ImageBy AND i.ImageStatus = '대표')
+		WHERE p.productId = #{productId};
+	</select>
+	
 </mapper>

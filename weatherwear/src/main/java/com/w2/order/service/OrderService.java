@@ -23,4 +23,8 @@ public interface OrderService {
 	int insertOrder(Map<String, Object> data);							// 주문 등록
 	Map<String, Object> getOrderInfo(String orderId);					// 주문 상세
 	List<Map<String, Object>> getOrderInfoList(String orderId);			// 주문 상품 목록
+	
+	/** 나의 주문 내역 */
+	List<Map<String, Object>> getMyOrderList(HashMap<String, Object> param);
+	int getMyOrderListCnt(HashMap<String, Object> param);
 }

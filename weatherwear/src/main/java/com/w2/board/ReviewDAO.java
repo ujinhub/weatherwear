@@ -1,5 +1,6 @@
 package com.w2.board;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.mybatis.spring.SqlSessionTemplate;
@@ -29,4 +30,13 @@ public class ReviewDAO {
 		return sqlSessionTemplate.insert("ReviewDAO.insertReview", vo);
 	}
 	
+	/**
+	 * 나의 리뷰 목록 (페이징) - 권유진 추가
+	 */
+	public List<ReviewVO> getMyReviewList(HashMap<String, Object> param) {
+		return sqlSessionTemplate.selectList("ReviewDAO.getMyReviewList", param);
+	}
+	public int getMyReviewListCnt(String clientId) {
+		return sqlSessionTemplate.selectOne("ReviewDAO.getMyReviewListCnt", clientId);
+	}
 }

@@ -61,7 +61,8 @@ public class AdminController {
 			} else {
 				// 로그인 성공
 				session.removeAttribute("msg");
-				session.setAttribute("userInfo", admin);
+//				session.setAttribute("userInfo", admin);
+				session.setAttribute("adminInfo", admin);
 				return "main";
 			}
 		} else {
@@ -84,7 +85,8 @@ public class AdminController {
 			return null;
 		}
 		
-		if(session.getAttribute("userInfo") == null) {
+//		if(session.getAttribute("userInfo") == null) {
+		if(session.getAttribute("adminInfo") == null) {
 			return null;
 		}
 		
@@ -117,11 +119,13 @@ public class AdminController {
 			return "login";
 		}
 		
-		if(session.getAttribute("userInfo") == null) {
+//		if(session.getAttribute("userInfo") == null) {
+		if(session.getAttribute("adminInfo") == null) {
 			return "login";
 		}
 		
-		model.addAttribute("userInfo", session.getAttribute("userInfo"));
+//		model.addAttribute("userInfo", session.getAttribute("userInfo"));
+		model.addAttribute("adminInfo", session.getAttribute("adminInfo"));
 		return "main";
 	}
 

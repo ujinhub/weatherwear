@@ -92,4 +92,13 @@ public class OrderDAO {
 	public List<Map<String, Object>> getOrderInfoList(String orderId) {
 		return sqlSessionTemplate.selectList("OrderDAO.getOrderInfoList", orderId);
 	}
+	
+	/** 나의 주문 내역 */
+	public List<Map<String, Object>> getMyOrderList(HashMap<String, Object> param) {
+		return sqlSessionTemplate.selectList("OrderDAO.getMyOrderList", param);
+	}
+	
+	public int getMyOrderListCnt(HashMap<String, Object> param) {
+		return sqlSessionTemplate.selectOne("OrderDAO.getMyOrderListCnt", param);
+	}
 }

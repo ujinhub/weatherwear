@@ -8,11 +8,13 @@
 
 */
 
-function playAlert(message, iconType, text){
+function playAlert(message, iconType, text, url){
     Swal.fire({
       icon: iconType,
       title: message,
       text: text,
+    }).then(function() {
+    	location.href = url;
     });
 }
 

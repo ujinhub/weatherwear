@@ -46,6 +46,9 @@
 .division::after {
 
 }
+.table td {
+	vertical-align: middle;
+}
 </style>
 </head>
 <body class="hold-transition sidebar-collapse layout-top-nav">
@@ -53,7 +56,7 @@
 		<%@ include file="../header.jsp" %>
 		
 		<main id="main">
-			<section id="contact" class="contact mb-5">
+			<section id="contact" class="contact">
 				<div class="container aos-init aos-animate" data-aos="fade-up">
 					<div class="row">
 						<div class="col-lg-12 text-center mb-5">
@@ -74,30 +77,38 @@
 												<div class="info-box-text text-muted float-left" style="font-weight: 700;">${userInfo.clientName}</div>
 												<div class="info-box-text text-muted float-left">님!&nbsp;&nbsp;</div>
 												<div class="info-box-text text-muted float-left">
-													<c:if test="${userInfo.gradeId == 'S'}">[Sliver 회원]</c:if>
+													<c:if test="${userInfo.gradeId == 'S'}">[Silver 회원]</c:if>
 													<c:if test="${userInfo.gradeId == 'G'}">[Gold 회원]</c:if>
 													<c:if test="${userInfo.gradeId == 'B'}">[Black 회원]</c:if>
 												</div>
 											</div>
 											<div class="info-box-text text-muted mg-3">전화: ${fn:substring(userInfo.clientNum,0,3)}-${fn:substring(userInfo.clientNum,3,7)}-${fn:substring(userInfo.clientNum,7,12)}</div>
 											<div class="info-box-text text-muted">이메일: ${userInfo.clientEmail}</div>
-											<button class="btn btn-block btn-flat btn-sm btn-outline-secondary mg-2">정보수정</button>
+											<button class="btn btn-block btn-flat btn-sm btn-outline-secondary mg-2" onclick="location.href='editInfo.do'">정보수정</button>
 										</div>
 										<div class="info-box-content division">
 											<div class="info-box-text text-center text-muted mg-2" style="font-size: 20px;">총 주문금액</div>
-											<div class="info-box-number text-center text-muted mg-3" style="font-size: 20px;">0원</div>
+											<div class="info-box-number text-center text-muted mg-3" style="font-size: 20px;">
+												<a href="myorderList.do"><fmt:formatNumber value="${totalPrice != null ? totalPrice : 0}" pattern="###,###"/></a>원
+											</div>
 										</div>
 										<div class="info-box-content division">
 											<div class="info-box-text text-center text-muted mg-2" style="font-size: 20px;">장바구니</div>
-											<div class="info-box-number text-center text-muted mg-3" style="font-size: 20px;">0개</div>
+											<div class="info-box-number text-center text-muted mg-3" style="font-size: 20px;">
+												<a href="cart.do"><c:out value="${cart != null ? cart : 0}" /></a>개
+											</div>
 										</div>
 										<div class="info-box-content division">
 											<div class="info-box-text text-center text-muted mg-2" style="font-size: 20px;">적립금</div>
-											<div class="info-box-number text-center text-muted mg-3" style="font-size: 20px;">0원</div>
+											<div class="info-box-number text-center text-muted mg-3" style="font-size: 20px;">
+												<a><fmt:formatNumber value="${point != null ? point : 0}" pattern="###,###"/></a>원
+											</div>
 										</div>
 										<div class="info-box-content division">
 											<div class="info-box-text text-center text-muted mg-2" style="font-size: 20px;">쿠폰</div>
-											<div class="info-box-number text-center text-muted mg-3" style="font-size: 20px;">0개</div>
+											<div class="info-box-number text-center text-muted mg-3" style="font-size: 20px;">
+												<a href="mycouponList.do"><c:out value="${coupon != null ? coupon : 0}" /></a>개
+											</div>
 										</div>
 									</div>
 								</div>
@@ -106,102 +117,150 @@
 					</div>
 				</div>
 				
-				<div class="text-center mg-3">
+				<div class="text-center">
 					<div class="btn-group btn-group-toggle col-sm-10" data-toggle="buttons">
 						<label class="btn btn-flat btn-outline-dark">
-							<input type="radio" name="options" id="notice" autocomplete="off" onclick="location.href='noticeList.do'">주문내역
+							<input type="radio" name="options" id="order" autocomplete="off" onclick="location.href='myorderList.do'">주문조회
+						</label>
+<!-- 						<label class="btn btn-flat btn-outline-dark"> -->
+<!-- 							<input type="radio" name="options" id="point" autocomplete="off" onclick="location.href='mypointList.do'">적립금 -->
+<!-- 						</label> -->
+						<label class="btn btn-flat btn-outline-dark">
+							<input type="radio" name="options" id="coupon" autocomplete="off" onclick="location.href='mycouponList.do'">쿠폰
 						</label>
 						<label class="btn btn-flat btn-outline-dark">
-							<input type="radio" name="options" id="qna" autocomplete="off" onclick="location.href='qnaList.do'">적립금
+							<input type="radio" name="options" id="wish" autocomplete="off" onclick="location.href='mywishList.do'">관심상품
 						</label>
 						<label class="btn btn-flat btn-outline-dark">
-							<input type="radio" name="options" id="review" autocomplete="off" onclick="location.href='reviewList.do'">쿠폰
+							<input type="radio" name="options" id="recent" autocomplete="off" onclick="location.href='myrecentList.do'">최근본상품
 						</label>
 						<label class="btn btn-flat btn-outline-dark">
-							<input type="radio" name="options" id="notice" autocomplete="off" onclick="location.href='noticeList.do'">관심상품
+							<input type="radio" name="options" id="qna" autocomplete="off" onclick="location.href='myqnaList.do'">1:1문의
 						</label>
 						<label class="btn btn-flat btn-outline-dark">
-							<input type="radio" name="options" id="qna" autocomplete="off" onclick="location.href='qnaList.do'">최근본상품
+							<input type="radio" name="options" id="review" autocomplete="off" onclick="location.href='myreviewList.do'">리뷰
 						</label>
-						<label class="btn btn-flat btn-outline-dark">
-							<input type="radio" name="options" id="review" autocomplete="off" onclick="location.href='reviewList.do'">1:1문의
-						</label>
-						<label class="btn btn-flat btn-outline-dark">
-							<input type="radio" name="options" id="review" autocomplete="off" onclick="location.href='reviewList.do'">리뷰
-						</label>
+<!-- 						<label class="btn btn-flat btn-outline-dark"> -->
+<!-- 							<input type="radio" name="options" id="address" autocomplete="off" onclick="location.href='myaddressList.do'">배송지 -->
+<!-- 						</label> -->
 					</div>
 				</div>
 			</section>
 			
-			<section>
-				<div style="width: 80%; margin: 0 auto;">
-				<div class="card-header">
-					<div class="card-tools">
-						<div class="input-group input-group-sm">
-							<select id="searchType" class="form-control">
-								<option value="noticeTitle">제목</option>
-								<option value="noticeContent">내용</option>
-								<option value="noticeWriter">작성자</option>
-							</select>
-							
-							<input type="text" id="keyword" class="form-control float-right" placeholder="Search">
-							<div class="input-group-append">
-								<button type="button" class="btn btn-default" id="btnSearch">
-									<i class="fas fa-search"></i>
-								</button>
-							</div>
+			<!-- 최근 주문 정보 3개월 최대 3개 -->
+			<section class="contact" style="width: 80%; margin: 0 auto;">
+				<div>
+					<div class="card-header">
+						<h3 class="card-title"><b>최근 주문 정보</b></h3>
+						<div class="card-tools">
+							<button type="button" class="btn btn-flat btn-sm btn-outline-dark" onclick="location.href='myorderList.do'">전체보기</button>
 						</div>
 					</div>
-				</div>
-				<div class="card-body table-responsive p-0">
-					<table class="table table-hover text-nowrap" style="table-layout: fixed;">
-						<colgroup>
-							<col width="10%" />
-							<col width="60%" />
-							<col width="20%" />
-							<col width="10%" />
-						</colgroup>
-						<thead>
-							<tr>
-								<th>번호</th>
-								<th>제목</th>
-								<th>등록일시</th>
-								<th>조회수</th>
-							</tr>
-						</thead>
-						<tbody>
-							<c:forEach var="item" items="${noticeList}" varStatus="status">
-								<input type="hidden" name="${notice.noticeId}">
-								<tr onclick="location.href='noticeInfo.do?noticeId=${item.noticeId}'">
-									<td>${item.noticeIdx}</td>
-									<td style="text-align: left;">${item.noticeTitle}</td>
-									<td>${item.noticeDate}</td>
-									<td>${item.noticeView}</td>
+					<div class="card-body table-responsive p-0">
+						<table class="table table-hover text-nowrap" style="table-layout: fixed;">
+							<colgroup>
+								<col width="15%" />
+								<col width="15%" />
+								<col width="40%" />
+								<col width="15%" />
+								<col width="15%" />
+							</colgroup>
+							<thead>
+								<tr>
+									<th>주문일자</th>
+									<th>사진</th>
+									<th>상품정보</th>
+									<th>결제금액</th>
+									<th>주문처리상태</th>
 								</tr>
-							</c:forEach>
-						</tbody>
-					</table>
+							</thead>
+							<tbody>
+								<c:if test="${fn:length(orderList) == 0}">
+									<tr>
+										<td colspan="5">주문 내역이 없습니다.</td>
+									</tr>  
+								</c:if>
+								<c:if test="${fn:length(orderList) > 0}">
+									<c:set var="endIndex" value="${fn:length(orderList) > 2 ? 1 : fn:length(orderList)}" />
+									<c:forEach var="item" items="${orderList}" end="${endIndex}">
+										<tr>
+											<td>
+												<fmt:formatDate value='${item.orderDate}' pattern='yyyy-MM-dd'/><br>
+												<a href="orderInfo.do?orderId=${item.orderId}">${item.orderId}</a>
+											</td>
+											<td><a href="productInfo.do?productId=${item.productId}"><img src="${item.image}" style="height: 100px;"></a></td>
+											<td>
+												${item.productName}<br>
+												[옵션: ${item.optionColor} / ${item.optionSize}]
+											</td>
+											<td><fmt:formatNumber value="${item.orderTotal}" pattern="###,###"/></td>
+											<td>${item.orderStatus}</td>
+										</tr>
+									</c:forEach>
+								</c:if>
+							</tbody>
+						</table>
+					</div>
 				</div>
-				<div class="card-footer mg-2">
-					<input type="hidden" id="listSize" value="10">
-					<ul class="pagination justify-content-center pagination-sm m-0">
-						<c:if test="${pagination.prev}">
-							<li class="page-item">
-								<a class="page-link" href="#" onclick="fn_prev('${pagination.page}', '${pagination.range}', '${pagination.rangeSize}', '${pagination.listSize}', '${search.searchType}', '${search.keyword}')">&laquo;</a>
-							</li>
-						</c:if>
-						<c:forEach begin="${pagination.startPage}" end="${pagination.endPage}" var="pageId">
-							<li class="page-item <c:out value="${pagination.page == pageId ? 'active':''}"/>">
-								<a class="page-link" href="#" onclick="fn_pagination('${pageId}', '${pagination.range}', '${pagination.rangeSize}', '${pagination.listSize}', '${search.searchType}', '${search.keyword}')">${pageId}</a>
-							</li>
-						</c:forEach>										
-						<c:if test="${pagination.next}">
-							<li class="page-item">
-								<a class="page-link" href="#" onclick="fn_next('${pagination.page}', '${pagination.range}', '${pagination.rangeSize}', '${pagination.listSize}', '${search.searchType}', '${search.keyword}')">&raquo;</a>
-							</li>
-						</c:if>
-					</ul>
+			</section>
+			
+			<section class="contact"  style="width: 80%; margin: 0 auto;">
+				<!-- 관심상품 최대 4개 -->
+				<div class="float-left" style="width: 47%;">
+					<div class="card-header">
+						<h3 class="card-title"><b>관심상품</b></h3>
+						<div class="card-tools">
+							<button type="button" class="btn btn-flat btn-sm btn-outline-dark" onclick="location.href='mywishList.do'">전체보기</button>
+						</div>
+					</div>
+					<div class="card-body table-responsive p-0">
+						<table class="table table-hover text-nowrap" style="table-layout: fixed;">
+							<colgroup>
+								<col width="25%" />
+								<col width="75%" />
+							</colgroup>
+							<tbody>
+								<c:if test="${fn:length(wishList) > 0}">
+									<c:set var="endIndex" value="${fn:length(wishList) > 4 ? 3 : fn:length(wishList)}" />
+									<c:forEach var="item" items="${wishList}" end="${endIndex}">
+										<tr class="text-left">
+											<td><a href="productInfo.do?productId=${ item.productId }"><img src="${item.image}" style="height: 100px;"></a></td>
+											<td>${item.productName}<br><b><fmt:formatNumber value="${item.productPrice}" pattern="###,###"/>원</b>
+										</tr>
+									</c:forEach>
+								</c:if>
+							</tbody>
+						</table>
+					</div>
 				</div>
+			
+				<!-- 최근본상품 최대 4개 -->
+				<div class="float-left" style="width: 47%; margin-left: 6%">
+					<div class="card-header">
+						<h3 class="card-title"><b>최근본상품</b></h3>
+						<div class="card-tools">
+							<button type="button" class="btn btn-flat btn-sm btn-outline-dark" onclick="location.href='myrecentList.do'">전체보기</button>
+						</div>
+					</div>
+					<div class="card-body table-responsive p-0">
+						<table class="table table-hover text-nowrap" style="table-layout: fixed;">
+							<colgroup>
+								<col width="25%" />
+								<col width="75%" />
+							</colgroup>
+							<tbody>
+								<c:if test="${fn:length(recentList) > 0}">
+									<c:set var="endIndex" value="${fn:length(recentList) > 4 ? 3 : fn:length(recentList)}" />
+									<c:forEach var="item" items="${recentList}" end="${endIndex}">
+										<tr class="text-left">
+											<td><a href="productInfo.do?productId=${ item.productId }"><img src="${item.image}" style="height: 100px;"></a></td>
+											<td>${item.productName}<br><b><fmt:formatNumber value="${item.productPrice}" pattern="###,###"/>원</b>
+										</tr>
+									</c:forEach>
+								</c:if>
+							</tbody>
+						</table>
+					</div>
 				</div>
 			</section>
 		</main>

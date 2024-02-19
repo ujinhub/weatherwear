@@ -83,7 +83,8 @@
 											<div class="col-sm-9">
 												<select class="form-control" id="gradeId" name="gradeId">
 													<option value="manager" <c:if test="${info.gradeId == 'manager'}">selected="selected"</c:if>>매니저</option>
-													<c:if test="${userInfo.gradeId == 'admin'}">
+<%-- 													<c:if test="${userInfo.gradeId == 'admin'}"> --%>
+													<c:if test="${adminInfo.gradeId == 'admin'}">
 														<option value="admin" <c:if test="${info.gradeId == 'admin'}">selected="selected"</c:if>>최고 관리자</option>
 													</c:if>
 												</select>
@@ -92,7 +93,8 @@
 									</div>
 									
 									<div class="card-footer">
-										<c:if test="${(userInfo.gradeId != 'admin' and userInfo.adminId == info.adminId) or (userInfo.gradeId == 'admin')}">
+<%-- 										<c:if test="${(userInfo.gradeId != 'admin' and userInfo.adminId == info.adminId) or (userInfo.gradeId == 'admin')}"> --%>
+										<c:if test="${(adminInfo.gradeId != 'admin' and adminInfo.adminId == info.adminId) or (adminInfo.gradeId == 'admin')}">
 											<button type="button" id="btnDelete" class="btn btn-danger float-left">삭제</button>
 											<button type="button" id="btnUpdate" class="btn btn-info float-right">수정</button>
 	                 						<button type="reset" class="btn btn-default float-right">취소</button>
@@ -131,7 +133,8 @@ $(function() {
 			},
 			adminPwd: {
 				required: function() {
-					if("${userInfo.gradeId}" != 'admin') {
+// 					if("${userInfo.gradeId}" != 'admin') {
+					if("${adminInfo.gradeId}" != 'admin') {
 						return true;
 					}
 					return false;
@@ -140,7 +143,8 @@ $(function() {
 			},
 			adminPwdChk: {
 				required: function() {
-					if("${userInfo.gradeId}" != 'admin') {
+// 					if("${userInfo.gradeId}" != 'admin') {
+					if("${adminInfo.gradeId}" != 'admin') {
 						return true;
 					}
 					return false;
@@ -187,7 +191,8 @@ $(function() {
 	
 	$('#btnDelete').on('click', function() {
 		if(confirm('삭제하시겠습니까?')) {
-			if('${userInfo.gradeId}' != 'admin') {
+// 			if('${userInfo.gradeId}' != 'admin') {
+			if('${adminInfo.gradeId}' != 'admin') {
 				if($('#adminUpdateForm').valid()) {
 					$.ajax({
 						url: "adminCheck.mdo",
@@ -220,7 +225,8 @@ $(function() {
 	$('#btnUpdate').on('click', function() {
 		if($('#adminUpdateForm').valid()) {
 			if(confirm('수정하시겠습니까?')) {
-				if('${userInfo.gradeId}' != 'admin') {
+// 				if('${userInfo.gradeId}' != 'admin') {
+				if('${adminInfo.gradeId}' != 'admin') {
 					$.ajax({
 						url: "adminCheck.mdo",
 						type: "post",

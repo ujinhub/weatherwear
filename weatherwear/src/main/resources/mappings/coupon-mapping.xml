@@ -8,4 +8,34 @@
 		LEFT JOIN coupon_list cl ON (ci.couponId = cl.couponId AND cl.couponStatus='사용가능')
 		WHERE cl.clientId=#{ clientId }
 	</select>
+	
+<!-- 나의 쿠폰 목록 (페이징) - 권유진 추가 -->
+	<select id="getMyCouponList" parameterType="hashmap" resultType="coupon">
+		SELECT *
+		FROM coupon_info ci
+		LEFT JOIN coupon_list cl ON (ci.couponId = cl.couponId AND cl.couponStatus='사용가능')
+		WHERE cl.clientId = #{clientId}
+		ORDER BY ci.couponEndDate
+		LIMIT #{search.startList}, #{search.listSize}
+	</select>
+	
+	<select id="getMyCouponListCnt" parameterType="String" resultType="int">
+		SELECT COUNT(*)
+		FROM coupon_info ci
+		LEFT JOIN coupon_list cl ON (ci.couponId = cl.couponId AND cl.couponStatus='사용가능')
+		WHERE cl.clientId=#{ clientId }
+	</select>
+	
+<!-- 쿠폰 등록 -->
+	<select id="getCouponInfo" resultType="coupon">
+		SELECT *
+		FROM coupon_info
+		WHERE couponId = #{couponId}
+	</select>
+	
+	<insert id="myCouponReg">
+		INSERT INTO coupon_list
+		VALUES(#{couponId}, #{clientId}, #{couponStatus})
+	</insert>
+
 </mapper>

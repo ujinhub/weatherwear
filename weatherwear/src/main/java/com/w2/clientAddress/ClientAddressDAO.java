@@ -1,5 +1,6 @@
 package com.w2.clientAddress;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.mybatis.spring.SqlSessionTemplate;
@@ -27,4 +28,21 @@ public class ClientAddressDAO {
 	public int deleteAddress(String addressId) {
 		return sqlSessionTemplate.delete("AddressDAO.deleteAddress", addressId);
 	}
+	
+
+//	/**
+//	 * 나의 배송지 목록 가져오기 (페이징) - 권유진 추가
+//	 */
+//	public List<ClientAddressVO> getMyAddressList(HashMap<String, Object> param) {
+//		return sqlSessionTemplate.selectList("AddressDAO.getMyAddressList", param);
+//	}
+//	
+//	public int getMyAddressListCnt(String clientId) {
+//		return sqlSessionTemplate.selectOne("AddressDAO.getMyAddressListCnt", clientId);
+//	}
+//	
+//	public int insertAddress(ClientAddressVO vo) {
+//		return sqlSessionTemplate.insert("AddressDAO.insertAddress", vo);
+//	}
+	
 }

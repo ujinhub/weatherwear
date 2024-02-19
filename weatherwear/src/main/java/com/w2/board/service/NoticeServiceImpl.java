@@ -43,4 +43,9 @@ public class NoticeServiceImpl implements NoticeService {
 	public int deleteNotice(NoticeVO vo) {
 		return noticeDao.deleteNotice(vo);
 	}
+
+	@Override
+	public int updateViewCnt(NoticeVO vo) {
+		return noticeDao.updateViewCnt(vo);
+	}
 }

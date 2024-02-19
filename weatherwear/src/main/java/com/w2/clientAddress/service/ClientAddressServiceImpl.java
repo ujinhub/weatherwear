@@ -1,5 +1,6 @@
 package com.w2.clientAddress.service;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,4 +34,19 @@ public class ClientAddressServiceImpl implements ClientAddressService {
 	public int deleteAddress(String addressId) {
 		return addressDAO.deleteAddress(addressId);
 	}
+
+//	@Override
+//	public List<ClientAddressVO> getMyAddressList(HashMap<String, Object> param) {
+//		return addressDAO.getMyAddressList(param);
+//	}
+//
+//	@Override
+//	public int getMyAddressListCnt(String clientId) {
+//		return addressDAO.getMyAddressListCnt(clientId);
+//	}
+//
+//	@Override
+//	public int insertAddress(ClientAddressVO vo) {
+//		return addressDAO.insertAddress(vo);
+//	}
 }

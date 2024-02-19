@@ -1,6 +1,8 @@
 package com.w2.client.controller;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +12,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.w2.client.service.ClientService;
 import com.w2.product.service.ProductService;
 import com.w2.util.SearchOrderby;
 
@@ -67,7 +68,17 @@ public class ClientProductController {
 	 * @return
 	 */
 	@RequestMapping("productInfo.do")
-	public String productInfo(@RequestParam(value = "productId", required = false)String productId, Model model, HttpServletRequest request) {
+	public String productInfo(@RequestParam(value = "productId", required = false)String productId, Model model, HttpServletRequest request, HttpServletResponse response) {
+		
+		// ============== 24.02.13 ==============
+		// 최근본 상품 구현 로직 추가 - 권유진
+		Cookie cookie = new Cookie("recent_" + productId, productId);
+		cookie.setPath("/");
+//		cookie.setMaxAge(60 * 60 * 1);	// 우선 한시간 저장
+		cookie.setMaxAge(60 * 60 * 24);	// 하루동안 저장
+		response.addCookie(cookie);
+		// ======================================
+		
 		model.addAttribute("product", productService.getProduct(productId, model));
 		return "product/productInfo";
 	}

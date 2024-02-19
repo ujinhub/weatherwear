@@ -12,6 +12,11 @@ public class CartDAO {
 	@Autowired
 	private SqlSessionTemplate sqlSessionTemplate;
 	
+	/** 장바구니에 담긴 상품 개수 가져오기 - 권유진 추가 */
+	public int getCartListCnt(String cilentId) {
+		return sqlSessionTemplate.selectOne("CartDAO.getCartListCnt", cilentId);
+	}
+	
 	public List<CartVO> getCartList(CartVO cartvo) {
 		return sqlSessionTemplate.selectList("CartDAO.getCartList", cartvo);
 	}
@@ -69,5 +74,5 @@ public class CartDAO {
 		}
 		return 1;
 	}
-
+	
 }

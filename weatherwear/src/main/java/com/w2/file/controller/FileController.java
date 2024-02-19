@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,7 +20,6 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import com.w2.file.AwsS3;
 import com.w2.file.ImageVO;
 import com.w2.file.service.ImageService;
-import com.w2.util.RandomString;
 import com.w2.util.ResponseDTO;
 
 import lombok.RequiredArgsConstructor;
@@ -101,7 +101,6 @@ public class FileController {
 	@ResponseBody
 	@RequestMapping("summernoteFileUpload.mdo")
 	public String summernoteFileUpload(MultipartFile file, String key) throws IOException {
-		System.err.println("summernoteFileUpload ================================ " + file + " / " + key);
 		
 		if(key.equals("notice")) {
 			key = "notice_image";
@@ -117,7 +116,6 @@ public class FileController {
 	@ResponseBody
 	@RequestMapping("summernoteFileDelete.mdo")
 	public void summernoteFileDelete(String file) {
-		System.err.println("summernoteFileDelete ================================ " + file);
 		awsS3.delete(file.substring(file.indexOf("/", 10) + 1));
 	}
 

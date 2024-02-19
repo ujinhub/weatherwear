@@ -90,7 +90,7 @@
 						</div>
 					</div>
 					<div class="card-footer float-right mg-2">
-						<button type="button" class="btn btn-flat btn-outline-dark" onclick="history.back()"><i class="fas fa-bars"></i>&nbsp;&nbsp;목록</button>
+						<button type="button" class="btn btn-flat btn-outline-dark" onclick="history.go(-1)"><i class="fas fa-bars"></i>&nbsp;&nbsp;목록</button>
 					</div>
 				</div>
 			</section>

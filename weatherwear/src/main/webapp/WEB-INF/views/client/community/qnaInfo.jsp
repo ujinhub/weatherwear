@@ -74,15 +74,44 @@
 					</div>
 				</div>
 			</section>
-			
-			<section>
-				<div style="width: 80%; margin: 0 auto;">
+							
+			<c:if test="${info.qnaSecCheck == 'Y'}">
+				<section id="checkSection" style="width: 50%; margin: 0 auto;">
+					<div class="card">
+						<div class="card-header" style="margin: 0 auto;">
+							<h3 class="card-title"><b>비밀글보기</b></h3>
+						</div>
+						<div class="card-body text-center">
+							<span>이 글은 비밀글입니다.</span><br>
+							<span><b>비밀번호를 입력해주세요.</b></span>
+							<input type="hidden" id="qnaId" name="qnaId" value="${info.qnaId}">
+							<div class="form-group row col-lg-10" style="margin: 5% 15%;">
+								<label for="qnaSecPwd" class="col-sm-3 col-form-label">비밀번호</label>
+								<div class="col-sm-6">
+									<input type="password" class="form-control" id="qnaSecPwd" name="qnaSecPwd">
+								</div>
+							</div>
+							<div class="form-group row col-lg-8" style="margin-left: 27%;">
+								<div class="col-sm-4">
+									<button type="button" class="btn btn-flat btn-block btn-outline-dark" onclick="history.go(-1)">목록</button>
+								</div>
+								<div class="col-sm-4">
+									<button type="button" id="btnCheckPwd" class="btn btn-flat btn-block btn-dark">확인</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>
+			</c:if>
+
+			<section id="contentSection" style="margin: 0 auto; width: 80%; display: none;">
+				<div>
 					<div class="card-header">
 						<b>${info.qnaTitle}</b>
 						<div class="card-tools">
 							작성자: ${fn:substring(info.clientId, 0, 2)}
 									<c:forEach begin="2" end="${fn:length(info.clientId)}" step="1">*</c:forEach>&nbsp;&nbsp;
-							등록일: <fmt:formatDate value="${info.qnaDate}" pattern="yyyy-MM-dd"/>
+							작성일: <fmt:formatDate value="${info.qnaDate}" pattern="yyyy-MM-dd"/>
 						</div>
 					</div>
 					<div class="card-header">
@@ -102,9 +131,14 @@
 								${info.qnaAnswer}
 							</div>
 						</c:if>
+						<c:if test="${info.qnaStatus == '답변대기'}">
+							<div class="card-body mg-2" style="width: 60%; margin-left: 30px;">
+								<span>등록된 답변이 없습니다.</span>
+							</div>
+						</c:if>
 					</div>
 					<div class="card-footer float-right mg-2">
-						<button type="button" class="btn btn-flat btn-outline-dark" onclick="history.back()"><i class="fas fa-bars"></i>&nbsp;&nbsp;목록</button>
+						<button type="button" class="btn btn-flat btn-outline-dark" onclick="history.go(-1)"><i class="fas fa-bars"></i>&nbsp;&nbsp;목록</button>
 					</div>
 				</div>
 			</section>
@@ -126,6 +160,43 @@
 <!-- AdminLTE App -->
 <script src="resources/admin/AdminLTE/dist/js/adminlte.js"></script>
 
-
+<script>
+$(document).ready(function() {
+	<c:if test="${info.qnaSecCheck == 'N'}">
+		$('#checkSection').hide();
+		$('#contentSection').show();
+	</c:if>
+	
+	$('#btnCheckPwd').on('click', function() {
+		$.ajax({
+			url: 'checkQnaPwd.do',
+			type: 'post',
+			async: false,
+			dataType: 'json',
+			data: 
+			{ 	
+				qnaId: $('#qnaId').val(),
+				qnaSecPwd: $('#qnaSecPwd').val(),
+			},
+			success: function(res){
+				if(res.code == -1) {
+					playToast(res.message, 'error');
+					return;
+				}
+				
+				if(res.code == 1) {
+					$('#checkSection').hide();
+					$('#contentSection').show();
+				} 
+				return;
+			},
+			error : function(error){
+				playToast(error.message, 'error');
+			}
+				
+		});
+	});
+})
+</script>
 </body>
 </html>

@@ -62,7 +62,7 @@ public class QnaController {
 		model.addAttribute("search", search);
 		search.setSearchType(searchType);
 		search.setKeyword(keyword);
-		search.setTypeby(typeby);
+		search.setTypeby("0");
 		
 		// 전체 게시글 개수
 		int listCnt = qnaService.getQnaListCnt(search);

@@ -37,4 +37,16 @@ public class ClientDAO {
 	public ClientVO getClientFindInfo(Map<String, Object> param) {
 		return sqlSessionTemplate.selectOne("ClientDAO.getClientFindInfo", param);
 	}
+	
+	public int updateClientPwd(ClientVO vo) {
+		return sqlSessionTemplate.update("ClientDAO.updateClientPwd", vo);
+	}
+	
+	public int updateClient(ClientVO vo) {
+		return sqlSessionTemplate.update("ClientDAO.updateClient", vo);
+	}
+	
+	public String getWishList(ClientVO vo) {
+		return sqlSessionTemplate.selectOne("ClientDAO.getWishList", vo);
+	}
 }

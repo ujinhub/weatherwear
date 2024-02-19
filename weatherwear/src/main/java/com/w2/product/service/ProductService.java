@@ -25,4 +25,9 @@ public interface ProductService {
 	int insertWishList(Map<String, Object> client);			// 위시리스트에 상품 추가
 	int deleteWishList(Map<String, Object> client);			// 위시리스트 상품 삭제
 	
+	
+	/**
+	 * 권유진 추가 작업
+	 */
+	HashMap<String, Object> getProductInfo(String productId);		// 관심 상품, 최근본상품 정보 가져오기
 }

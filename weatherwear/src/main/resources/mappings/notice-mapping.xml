@@ -61,4 +61,10 @@
 		DELETE FROM notice
 		WHERE noticeId = #{noticeId}
 	</delete>
+	
+	<update id="updateViewCnt">
+		 UPDATE notice
+		 SET noticeView = noticeView + 1
+		 WHERE noticeId = #{noticeId}
+	</update>
 </mapper>
