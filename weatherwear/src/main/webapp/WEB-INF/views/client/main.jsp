@@ -24,6 +24,15 @@
 <link href="resources/client/ZenBlog/assets/css/main.css" rel="stylesheet">
 <link href="resources/client/ZenBlog/assets/css/variables.css" rel="stylesheet">
 
+<link rel="stylesheet" href="/w2/resources/client/css/main.css">
+<script>
+$(document).ready(function() {
+	let weatherId = ${ weatherList.get('day3').get('weather_id') };
+	image = '';
+	
+	selectWeather(weatherId);
+});
+</script>
 <style>
 .mb-2 { width: 210px; height: 50px; overflow: hidden}
 .col-lg-3 { height: 440px; padding-left: 5%;}
@@ -36,37 +45,87 @@
 		<main id="main">
 			
 			<section id="hero-slider" class="hero-slider">
-				<div class="container-md aos-init aos-animate" data-aos="fade-in">
-					<div class="row">
-						<div class="col-12">
-							<div class="swiper sliderFeaturedPosts swiper-initialized swiper-horizontal swiper-pointer-events swiper-backface-hidden">
-							<div class="swiper-wrapper" id="swiper-wrapper-f11091073a160510f1f" aria-live="off" style="transition-duration: 0ms; transform: translate3d(-814px, 0px, 0px);">
-								<div class="swiper-slide swiper-slide-duplicate" data-swiper-slide-index="3" role="group" aria-label="4 / 4" style="width: 407px;">
-									<a href="#" class="img-bg d-flex align-items-end" style="background-image: url('resources/client/images/eventbanner.png');">
-									</a>
+				<div id="weather">
+					<article id="province">
+						<ul class="w_province">
+						<li><a id="prov" onClick="setProvince('seoul')">서울</a></li>
+						<li> | </li>
+						<li><a id="prov" onClick="setProvince('chuncheon')">춘천</a></li>
+						<li> | </li>
+						<li><a id="prov" onClick="setProvince('suwon')">수원</a></li>
+						<li> | </li>
+						<li><a id="prov" onClick="setProvince('incheon')">인천</a></li>
+						<li> | </li>
+						<li><a id="prov" onClick="setProvince('daegu')">대구</a></li>
+						<li> | </li>
+						<li><a id="prov" onClick="setProvince('busan')">부산</a></li>
+						<li> | </li>
+						<li><a id="prov" onClick="setProvince('jeju')">제주</a></li>
+						</ul>
+						<br>
+					</article>
+					<article id="today">
+						<span> </span><span> </span>
+						<span id="today_day">
+							<span id="provSelect">
+								<c:if test="${ param.province == 'seoul' || param.province == null }">서울</c:if> 
+								<c:if test="${ param.province == 'chuncheon' }">춘천</c:if> 
+								<c:if test="${ param.province == 'suwon' }">수원</c:if> 
+								<c:if test="${ param.province == 'incheon' }">인천</c:if> 
+								<c:if test="${ param.province == 'daegu' }">대구</c:if> 
+								<c:if test="${ param.province == 'busan' }">부산</c:if> 
+								<c:if test="${ param.province == 'jeju' }">제주</c:if> 
+								&nbsp;&nbsp;&nbsp;
+							</span>
+							${ weatherList.get('day3').get('weatherday') }
+						</span><br>
+						<span id="today_date"> ${ weatherList.get('day3').get('weatherdate') } </span>
+					</article>
+					<span id="today_temp"><strong> ${ weatherList.get('day3').get('temp_min') } °C / ${ weatherList.get('day3').get('temp_max') } °C</strong></span>
+					<article id="week">
+						<ul id = "weekTable">
+							<li class="weekTable_li">
+								<div class="weekTable_li_day">
+									${ weatherList.get('day1').get('weatherday') }
 								</div>
-								<div class="swiper-slide swiper-slide-prev" data-swiper-slide-index="0" role="group" aria-label="1 / 4" style="width: 407px;">
-									<a href="#" class="img-bg d-flex align-items-end" style="background-image: url('resources/client/images/eventbanner.png')">
-									</a>
+								<div class="weekTable_li_temp">
+									${ weatherList.get('day1').get('temp_min') } / ${ weatherList.get('day3').get('temp_max') }
 								</div>
-									
-								<div class="swiper-slide swiper-slide-active" data-swiper-slide-index="1" role="group" aria-label="2 / 4" style="width: 407px;">
-									<a href="#" class="img-bg d-flex align-items-end" style="background-image: url('resources/client/images/eventbanner2.png')">
-									</a>
+							</li>
+							<li class="weekTable_li">
+								<div class="weekTable_li_day">
+									${ weatherList.get('day2').get('weatherday') }
 								</div>
-							
-							</div>
-							<div class="custom-swiper-button-next" tabindex="0" role="button" aria-label="Next slide" aria-controls="swiper-wrapper-f11091073a160510f1f">
-								<span class="bi-chevron-right"></span>
-							</div>
-							<div class="custom-swiper-button-prev" tabindex="0" role="button" aria-label="Previous slide" aria-controls="swiper-wrapper-f11091073a160510f1f">
-								<span class="bi-chevron-left"></span>
-							</div>
-						
-							<div class="swiper-pagination swiper-pagination-clickable swiper-pagination-bullets swiper-pagination-horizontal"><span class="swiper-pagination-bullet" tabindex="0" role="button" aria-label="Go to slide 1"></span><span class="swiper-pagination-bullet swiper-pagination-bullet-active" tabindex="0" role="button" aria-label="Go to slide 2" aria-current="true"></span><span class="swiper-pagination-bullet" tabindex="0" role="button" aria-label="Go to slide 3"></span><span class="swiper-pagination-bullet" tabindex="0" role="button" aria-label="Go to slide 4"></span></div>
-							<span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span></div>
-						</div>
-					</div>
+								<div class="weekTable_li_temp">
+									${ weatherList.get('day2').get('temp_min') } / ${ weatherList.get('day3').get('temp_max') }
+								</div>
+							</li>
+							<li class="weekTable_li">
+								<div class="weekTable_li_day">
+									${ weatherList.get('day3').get('weatherday') }
+								</div>
+								<div class="weekTable_li_temp">
+									${ weatherList.get('day3').get('temp_min') } / ${ weatherList.get('day3').get('temp_max') }
+								</div>
+							</li>
+							<li class="weekTable_li">
+								<div class="weekTable_li_day">
+									${ weatherList.get('day4').get('weatherday') }
+								</div>
+								<div class="weekTable_li_temp">
+									${ weatherList.get('day4').get('temp_min') } / ${ weatherList.get('day3').get('temp_max') }
+								</div>
+							</li>
+							<li class="weekTable_li">
+								<div class="weekTable_li_day">
+									${ weatherList.get('day5').get('weatherday') }
+								</div>
+								<div class="weekTable_li_temp">
+									${ weatherList.get('day5').get('temp_min') } / ${ weatherList.get('day3').get('temp_max') }
+								</div>
+							</li>
+						</ul>
+					</article>
 				</div>
 			</section>
 			<section class="category-section">
@@ -179,6 +238,7 @@
 
 <!-- sweetAlert (alert/confirm/toast) -->
 <script src="resources/util/js/sweetalert.js"></script>
+<script src="resources/client/js/main.js"></script>
 
 </body>
 </html>

@@ -98,5 +98,16 @@
 		FROM client
 		WHERE clientId = #{clientId}
 	</select>
-	
+			
+<!-- 마지막 로그인 일자 업데이트 -이지형 추가 -->
+	<update id="setLogDate" parameterType="String">
+		UPDATE client SET clientLogDate = CURRENT_TIMESTAMP WHERE clientId = #{ clientId }
+	</update>
+
+<!-- 로그인 시 쿠키 정보 아이디로 변경하기 -이지형 추가 -->
+	<update id="changeCookieSetId" parameterType="Map">
+		UPDATE cart
+		SET cookieId = null, cookieLimit = null, clientId = #{ clientId }
+		WHERE cookieId = #{ cookieId }
+	</update>
 </mapper>

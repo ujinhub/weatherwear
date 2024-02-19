@@ -44,7 +44,7 @@
 	<select id="getCartList" parameterType="cart" resultMap="cart">
 		SELECT pro.productId, pro.productName, ca.optionId,
 				CONCAT(pm.imageDir, pm.imageName) as mainImage,
-				op.optionColor, op.optionSize, pri.productPrice, 
+				op.optionColor, op.optionSize, pri.productPrice, op.stockCnt, 
 				ca.cartCnt, ca.cartId,
 				<include refid="checkClient"/>
 		FROM cart ca
@@ -55,6 +55,14 @@
 		<where>
 			<include refid="setClient"/>
 		</where>
+	</select>	
+	
+	<!-- 수량 체크 -->
+	<select id="checkStock" parameterType="int" resultType="int">
+		SELECT oi.stockCnt
+		FROM cart ca
+		INNER JOIN option_info oi ON ca.optionId = oi.optionId
+		WHERE ca.cartId = #{ cartId };
 	</select>
 	
 	<select id="getOrderProductList" parameterType="hashMap" resultMap="cart">
@@ -72,6 +80,7 @@
 			<foreach collection="cartIdList" item="cartId" open="(" separator="," close=")">
 				#{ cartId }
 			</foreach>
+			AND <include refid="setClient"/>
 	</select>
 	
 <!-- 장바구니 중복 상품 확인 -->
@@ -104,7 +113,7 @@
 <!-- 장바구니 상품 삭제 -->
 	<delete id="deleteCart" parameterType="list">
 		<foreach collection="list" item="cartId">
-			DELETE FROM cart WHERE cartId=#{ cartId };
+			DELETE FROM cart WHERE cartId=${ cartId };
 		</foreach>
 	</delete>	
 	

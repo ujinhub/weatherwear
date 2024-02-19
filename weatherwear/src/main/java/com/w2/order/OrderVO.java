@@ -23,6 +23,7 @@ public class OrderVO {
 	private String couponId;		// 적용쿠폰
 	private String cookieId;		// 쿠키번호
 	private String cookiePwd;		// 비회원비밀번호
+	private String orderEmail;		// 이메일주소
 	
 	// join용
 	private List<OrderInfoVO> orderInfoList;

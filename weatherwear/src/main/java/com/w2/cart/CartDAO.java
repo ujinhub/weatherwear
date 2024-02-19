@@ -55,24 +55,28 @@ public class CartDAO {
 
 			// 같은 쿠키값 가진 상품 만료시간 업데이트
 			if(cartvo.getCookieId() != null) {
-				System.out.println(">> 다른 상품 만료시간 업데이트");
 				sqlSessionTemplate.update("CartDAO.updateCookie", cartvo);
 			}
 			
 			// 이미 장바구니에 있는 상품인 경우
 			if (checkCart != null) {
-				
 				cartvo.setCartId(checkCart.getCartId());
 				cartvo.setCartCnt(checkCart.getCartCnt()+cartvo.getCartCnt());
-				
-				System.out.println(">> 상품 수량 변경 > 입력 수량 : " + cartvo.getCartCnt());
 				sqlSessionTemplate.update("CartDAO.updateCart", cartvo);
 			}else {
-				System.out.println(">> 상품 추가");
 				sqlSessionTemplate.insert("CartDAO.insertCart", cartvo);
 			}
 		}
 		return 1;
 	}
 	
+	// 재고 확인
+	public int checkStock(int cartId) {
+		return sqlSessionTemplate.selectOne("CartDAO.checkStock", cartId);
+	}
+
+	// 만료된 쿠키 확인
+	public void checkCookieLimit() {
+		sqlSessionTemplate.delete("CartDAO.checkCookieLimit");
+	}
 }

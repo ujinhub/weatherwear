@@ -182,7 +182,7 @@
 <!-- sweetAlert (alert/confirm/toast) -->
 <script src="resources/util/js/sweetalert.js"></script>
 
-<script src="resources/util/js/orderbypaging.js"></script>
+<script src="resources/util/js/paging.js"></script>
 <script src="resources/util/js/checkbox.js"></script>
 <script src="resources/admin/js/manageProduct.js"></script>
 </body>

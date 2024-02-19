@@ -1,7 +1,10 @@
 package com.w2.util;
 
+import java.sql.Timestamp;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import org.springframework.stereotype.Component;
 
@@ -36,5 +39,13 @@ public class RandomString {
 		Calendar cal = Calendar.getInstance();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmSS");
 		return sdf.format(cal.getTime());
+	}
+	
+	// 날짜 변경 (date,time input 태그 > timestamp)
+	public static Timestamp setTime(String date) throws ParseException {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		String time = "00:00"; 
+		Date stringToDate = dateFormat.parse(date + " " + time);
+		return new Timestamp(stringToDate.getTime());
 	}
 }

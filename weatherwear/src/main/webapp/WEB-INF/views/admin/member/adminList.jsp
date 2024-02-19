@@ -144,7 +144,7 @@
 <script src="resources/admin/AdminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 
 <script src="resources/admin/js/common.js"></script>
-<script src="resources/util/js/paging.js"></script>
+<script src="resources/util/js/pagingNoOrderBy.js"></script>
 <script>
 	$(function() {
 		$('#searchType').change(function() {

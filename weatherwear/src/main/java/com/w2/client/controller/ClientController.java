@@ -1,7 +1,6 @@
 package com.w2.client.controller;
 
 import java.io.IOException;
-import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
@@ -11,6 +10,7 @@ import javax.mail.Message;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,20 +20,20 @@ import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.util.WebUtils;
 
-import com.w2.board.QnaVO;
 import com.w2.board.TermsVO;
 import com.w2.board.service.TermsService;
 import com.w2.client.ClientVO;
 import com.w2.client.service.ClientService;
 import com.w2.product.service.ProductService;
+import com.w2.util.ClientCookie;
 import com.w2.util.RandomString;
 import com.w2.util.ResponseDTO;
 import com.w2.util.Search;
@@ -78,7 +78,7 @@ public class ClientController {
 	 * @return
 	 */
 	@RequestMapping("loginProc.do")
-	public String loginProc(ClientVO vo, HttpServletRequest request, Model model) {
+	public String loginProc(ClientVO vo, HttpServletRequest request, HttpServletResponse response, Model model) {
 		HttpSession session = request.getSession();
 		ClientVO client = clientService.getClient(vo);
 		
@@ -90,6 +90,16 @@ public class ClientController {
 				return "login";
 			} else {
 				// 로그인 성공
+
+				// 쿠키 존재하는 경우 쿠키 삭제
+				if(ClientCookie.checkCookie(request, response) == 1) {
+					clientService.changeCookieSetId(WebUtils.getCookie(request, "clientCookie").getValue(), vo.getClientId());
+					ClientCookie.removeCookie(request, response);
+				}
+				
+				// 최근 로그인 날짜 변경
+				clientService.setLogDate(vo.getClientId());
+				
 				session.setAttribute("userInfo", client);
 				session.setMaxInactiveInterval(3600);
 				return "redirect:main.do";

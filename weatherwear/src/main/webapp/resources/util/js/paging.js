@@ -1,6 +1,18 @@
 /**
  * 
  */
+$(document).on('click', '.orderbyBtn', function(e) {
+	e.preventDefault();
+	var url = window.location.pathname;
+	url = url.replace('/w2/', '');
+	url += "?searchType=" + $('#searchType').val();
+	url += "&keyword=" + $('#keyword').val();
+	url += "&listSize=" + $('#listSize').val();
+	url += "&orderby=" + this.id;
+
+	location.href = url;
+});
+
 $(document).on('click', '.typebyBtn', function(e) {
 	e.preventDefault();
 	var url = window.location.pathname;

@@ -95,8 +95,10 @@
 												<div class="custom-control custom-radio">
 													<input class="custom-control-input custom-control-input-danger" type="radio" id="sameInfo" name="addressInfo">
 													<label for="sameInfo" class="custom-control-label">주문자 정보와 동일</label>&nbsp;&nbsp;&nbsp;
+											<c:if test="${ userInfo != null }">
 													<input class="custom-control-input custom-control-input-danger" type="radio" id="newInfo" name="addressInfo">
 													<label for="newInfo" class="custom-control-label">새로운 배송지</label>
+											</c:if>
 												</div>
 											</div>
 											<c:if test="${ userInfo != null }">
@@ -124,7 +126,7 @@
 										</div>
 									</div>
 									<div class="form-group">
-										<input type="text" class="form-control" name="address1" id="address1" required placeholder="기본주소" <c:if test="${ userInfo != null }">value="${ baseAddress.address1 }"</c:if>>
+										<input type="text" class="form-control" name="address1" id="address1" placeholder="기본주소" required disabled <c:if test="${ userInfo != null }">value="${ baseAddress.address1 }"</c:if>>
 									</div>
 									<div class="form-group">
 										<input type="text" class="form-control" name="address2" id="address2" required placeholder="상세주소" <c:if test="${ userInfo != null }">value="${ baseAddress.address2 }"</c:if>>
@@ -135,23 +137,25 @@
 									<div class="form-group" id="deliMsgDiv">
 										<select class="form-control selectOption" id="deliveryMessage" name="deliveryMessage" onchange="setMessage()">
 											<option value=""  <c:if test="${ userInfo == null }">selected="selected"</c:if>>---------- 배송메시지 선택 (선택사항) ----------</option>
-											<option value="배송 전에 미리 연락바랍니다.">배송 전에 미리 연락바랍니다.</option>
-											<option value="부재 시 경비실에 맡겨주세요.">부재 시 경비실에 맡겨주세요.</option>
-											<option value="부재 시 문 앞에 놓아주세요.">부재 시 문 앞에 놓아주세요.</option>
-											<option value="빠른 배송 부탁드립니다.">빠른 배송 부탁드립니다.</option>
-											<option value="택배함에 보관해 주세요.">택배함에 보관해 주세요.</option>
-											<option value="inputmessage" <c:if test="${ userInfo != null && baseAddress.addressMemo != null}">selected="selected"</c:if>>직접 입력</option>
+											<option value="배송 전에 미리 연락바랍니다." <c:if test="${ userInfo != null && baseAddress.addressMemo eq '배송 전에 미리 연락바랍니다.'}">selected="selected"</c:if>>배송 전에 미리 연락바랍니다.</option>
+											<option value="부재 시 경비실에 맡겨주세요." <c:if test="${ userInfo != null && baseAddress.addressMemo eq '부재 시 경비실에 맡겨주세요.'}">selected="selected"</c:if>>부재 시 경비실에 맡겨주세요.</option>
+											<option value="부재 시 문 앞에 놓아주세요." <c:if test="${ userInfo != null && baseAddress.addressMemo eq '부재 시 문 앞에 놓아주세요.'}">selected="selected"</c:if>>부재 시 문 앞에 놓아주세요.</option>
+											<option value="빠른 배송 부탁드립니다." <c:if test="${ userInfo != null && baseAddress.addressMemo eq '빠른 배송 부탁드립니다.'}">selected="selected"</c:if>>빠른 배송 부탁드립니다.</option>
+											<option value="택배함에 보관해 주세요." <c:if test="${ userInfo != null && baseAddress.addressMemo eq '택배함에 보관해 주세요.'}">selected="selected"</c:if>>택배함에 보관해 주세요.</option>
+											<option value="inputmessage" <c:if test="${ userInfo!=null&&baseAddress.addressMemo!=null&&baseAddress.addressMemo!='배송 전에 미리 연락바랍니다.'&&baseAddress.addressMemo!='부재 시 경비실에 맡겨주세요.'&& baseAddress.addressMemo!='부재 시 문 앞에 놓아주세요.'&&baseAddress.addressMemo!='빠른 배송 부탁드립니다.'&&baseAddress.addressMemo!='택배함에 보관해 주세요.'}">selected="selected"</c:if>>직접 입력</option>
 										</select>
 										<div class="form-group" id="deliDiv">
-											<c:if test="${ userInfo != null && baseAddress.addressMemo != null}">
+											<c:if test="${ userInfo!=null&&baseAddress.addressMemo!=null&&baseAddress.addressMemo!='배송 전에 미리 연락바랍니다.'&&baseAddress.addressMemo!='부재 시 경비실에 맡겨주세요.'&& baseAddress.addressMemo!='부재 시 문 앞에 놓아주세요.'&&baseAddress.addressMemo!='빠른 배송 부탁드립니다.'&&baseAddress.addressMemo!='택배함에 보관해 주세요.'}">
 												<input type='text' class='form-control' name='deliMsg' id='deliMsg' required value="${ baseAddress.addressMemo }">
 											</c:if>
 										</div>
 									</div>
+							<c:if test="${ userInfo != null }">
 									<div class="form-group">
 										<input type="checkbox" <c:if test="${ userInfo != null }">value="Y"</c:if><c:if test="${ userInfo == null }">value="N"</c:if> class="check" name="baseAddress" id="baseAddress">
 										<label for="baseAddress" class="custom-control-label">기본 배송지로 등록</label>
 									</div>
+							</c:if>
 								</div>
 							</div>
 						</div>
@@ -189,7 +193,7 @@
 										배송비<input type="hidden" name="deliveryPrice" id="deliveryPrice">	
 									</div>
 									<div class="form-group col-md-7 resultDiv"></div>
-									<div class="form-group col-md-2 resultDiv" id="deliveryPrice"></div>
+									<div class="form-group col-md-2 resultDiv" id="deliveryPriceDiv"></div>
 								</div><!-- End DeliveryPrice -->
 							</div>
 						</div>
@@ -287,10 +291,32 @@
 							</div>
 						</div>
 					</div>
-					
 					<div class="row">
 						<div class="form mt-5">
-							<input type="button" class="payBtn" value="결제하기" onclick="submit()">
+							<div class="php-email-form">
+								<div class="form-group">
+									<h3>결제 방식</h3>
+								</div>
+								<div class="row">
+									<div class="form-group col-md-3">
+										<input type="button" class="form-control" value="일반결제" id="html5_inicis">
+									</div>
+									<div class="form-group col-md-3">
+										<input type="button" class="form-control" value="카카오페이" id="kakaopay">
+									</div>
+									<div class="form-group col-md-3">
+										<input type="button" class="form-control" value="토스페이" id="tosspay">
+									</div>
+									<div class="form-group col-md-3">
+										<input type="button" class="form-control" value="가상결제" id="vbank">
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="form mt-5">
+							<input type="button" class="payBtn" value="결제하기" onclick="checkSubmit()">
 						</div>
 					</div>
 				</div>
@@ -310,8 +336,11 @@
 <script src="resources/util/js/sweetalert.js"></script>
 <!-- PortOne SDK -->
 <script src="https://cdn.iamport.kr/v1/iamport.js"></script>
+<!-- iamport.payment.js -->
+<script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.5.js"></script>
 
 <script src="resources/client/js/post.js"></script>
-<script src="resources/client/js/order.js"></script>
+<script src="resources/client/js/orderRegister.js"></script>
+<script src="resources/client/js/orderReady.js"></script>
 </body>
 </html>

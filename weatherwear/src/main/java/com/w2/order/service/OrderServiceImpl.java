@@ -52,19 +52,22 @@ public class OrderServiceImpl implements OrderService {
 
 	@Override
 	@Transactional
-	public int insertOrder(Map<String, Object> data) {
+	public int insertImsiOrder(Map<String, Object> data) {
 		int result = orderDAO.insertAddress(data);
-		if(data.get("addressBase").equals("Y")) {
-			result = orderDAO.updateBaseAddress(data);
+		
+		if(data.get("cookieId")== null) {
+			if(data.get("addressBase").equals("Y")) {
+				result = orderDAO.updateBaseAddress(data);
+			}
+			result = orderDAO.updateClientPoint(data);
 		}
+
 		result = orderDAO.insertOrder(data);
 		result = orderDAO.insertOrderInfo(data);
-		result = orderDAO.updateClientPoint(data);
 		if(data.get("usedCouponInfo") != null) {
 			result = orderDAO.updateCouponList(data);
 		}
 		result = orderDAO.updateProductStock(data);
-		result = orderDAO.insertPayment(data);
 		result = orderDAO.deleteCart(data);
 		return result;
 	}
@@ -89,5 +92,18 @@ public class OrderServiceImpl implements OrderService {
 		return orderDAO.getMyOrderListCnt(param);
 	}
 
-	
+	@Override
+	public int updateOrder(Map<String, Object> orderData) {
+		return orderDAO.updateOrderStatus(orderData);
+	}
+
+	@Override
+	public int insertSwapRefund(Map<String, Object> requestInfo) {
+		return orderDAO.insertSwapRefund(requestInfo);
+	}
+
+	@Override
+	public int insertPayment(Map<String, Object> data) {
+		return orderDAO.insertPayment(data);
+	}
 }

@@ -11,14 +11,17 @@
 			<when test="key == 'review'">client_image</when>
 			<when test="key == 'qna'">client_image</when>
 			<when test="key == 'refund'">client_image</when>
+			<when test="key == 'swap'">client_image</when>
+			<when test="key == 'client'">client_image</when>
 			<otherwise>admin_image</otherwise>
 		</choose>
 	</sql>
 	
 	<insert id="insertImage" parameterType="hashMap">
-		<foreach collection="list" item="image">
 		INSERT INTO <include refid="setTable"/>(imageId, imageName, imageDir, imageBy, imageStatus)
-		VALUES (#{ image.imageId }, #{ image.imageName }, #{ image.imageDir }, #{ image.imageBy }, #{ image.imageStatus })
+		VALUES 
+		<foreach collection="list" item="image" open="(" separator="),(" close=")">
+			#{ image.imageId }, #{ image.imageName }, #{ image.imageDir }, #{ image.imageBy }, #{ image.imageStatus }
 		</foreach>
 	</insert>
 	

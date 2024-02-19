@@ -101,4 +101,12 @@ public class OrderDAO {
 	public int getMyOrderListCnt(HashMap<String, Object> param) {
 		return sqlSessionTemplate.selectOne("OrderDAO.getMyOrderListCnt", param);
 	}
+	
+	public int updateOrderStatus(Map<String, Object> orderData) {
+		return sqlSessionTemplate.update("OrderDAO.updateOrderInfo", orderData);
+	}
+
+	public int insertSwapRefund(Map<String, Object> requestInfo) {
+		return sqlSessionTemplate.insert("OrderDAO.insertSwapRefund", requestInfo);
+	}
 }

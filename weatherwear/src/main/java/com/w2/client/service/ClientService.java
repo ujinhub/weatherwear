@@ -18,4 +18,6 @@ public interface ClientService {
 	int updateClientPwd(ClientVO vo);						// 비밀번호 변경
 	
 	String getWishList(ClientVO vo);
+	public void changeCookieSetId(String cookieId, String clientId);	// 쿠키 해제(장바구니)
+	void setLogDate(String clientId);						// 최근 로그인일자 변경
 }

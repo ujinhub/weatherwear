@@ -32,6 +32,14 @@ function orderSelect(){
 
 // 전체 상품 주문
 function orderAll(){
+	if(checkList.length == 0){
+		playToast("주문할 상품이 없습니다.", 'warning');
+		return;
+	}
+	checkCounts = document.querySelectorAll(".check");
+	checkCounts.forEach((check, index) => {
+		pushList(checkList, check.value);
+	});
 	location.href="orderRegister.do?cartList=" + checkList;
 }
 
@@ -244,6 +252,7 @@ let checkCounts = document.querySelectorAll(".check");
 // 수량 변경
 function count(num, name) {
 	const countInput = document.querySelector("input[name='" + name + "']");
+	const optionStock = document.querySelector("#stockCnt_" + name + "");
 	const pro_oriPriceInput = document.querySelector("input[name='oriPrice_" + name + "']");
 	const pro_totalPriceInput = document.querySelector("input[name='totalPrice_" + name + "']");
 	const pro_totalPriceSpan = document.querySelector("#totalPrice_" + name);
@@ -251,6 +260,8 @@ function count(num, name) {
 	let cnt = parseInt(countInput.value);
 	let pro_oriPrice = parseInt(pro_oriPriceInput.value);
 	let pro_totalPrice = parseInt(pro_totalPriceInput.value);
+	let stockCnt = parseInt(optionStock.value);
+	let stockCheck = "N";
 	
 	if (num == -1) { // 수량 증가
 		cnt++;
@@ -265,6 +276,12 @@ function count(num, name) {
 		cnt = 1;
 		pro_totalPrice = pro_oriPrice;
 	}
+
+	if(cnt > stockCnt){
+		playToast("재고가 부족합니다.", 'error');
+		stockCheck = "Y";
+		cnt = stockCnt;
+	}
 	
 	countInput.value = cnt;
 	pro_totalPriceInput.value = pro_totalPrice;
@@ -275,7 +292,7 @@ function count(num, name) {
 	$.ajax({
 		url: "/w2/cartUpdate.do",
 		type: "POST",
-		async: true,
+		async: false,
 		dataType: "text",
 		data: JSON.stringify({
 			cartId : name,
@@ -283,7 +300,10 @@ function count(num, name) {
 		}),
 		contentType: "application/json",
 		success: function(result){
-			playToast("수량이 변경되었습니다.", 'success');
+			if(stockCheck=="N"){
+				playToast("수량이 변경되었습니다.", 'success');
+			}
+			stockCheck = "N";
 		},
 		error : function(error){
 			playToast("ajax는 실패입니다.", 'error');

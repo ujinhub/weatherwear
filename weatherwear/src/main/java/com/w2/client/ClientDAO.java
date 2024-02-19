@@ -1,5 +1,6 @@
 package com.w2.client;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -48,5 +49,17 @@ public class ClientDAO {
 	
 	public String getWishList(ClientVO vo) {
 		return sqlSessionTemplate.selectOne("ClientDAO.getWishList", vo);
+	}
+	
+	public void changeCookieSetId(String cookieId, String clientId) {
+		HashMap<String, String> client = new HashMap<String, String>();
+		client.put("cookieId", cookieId);
+		client.put("clientId", clientId);
+		
+		sqlSessionTemplate.update("ClientDAO.changeCookieSetId", client);
+	}
+
+	public void setLogDate(String clientId) {
+		sqlSessionTemplate.update("ClientDAO.setLogDate", clientId);
 	}
 }

@@ -95,9 +95,9 @@
 	</update>
 	
 	<insert id="insertAddress" parameterType="hashMap">
-		INSERT INTO client_address (addressId, clientId, addressTitle, addressName, addressNum, addressPostNum, address1, address2, addressMemo, addressBase)
+		INSERT INTO client_address (addressId, clientId, addressTitle, addressName, addressNum, addressPostNum, address1, address2, addressMemo, addressBase, cookieId)
 		VALUES(#{ addressInfo.addressId }, #{ addressInfo.clientId }, #{ addressInfo.addressTitle }, #{ addressInfo.addressName }, #{ addressInfo.addressNum  }, 
-				#{ addressInfo.addressPostNum }, #{ addressInfo.address1 }, #{ addressInfo.address2 }, #{ addressInfo.addressMemo }, #{ addressInfo.addressBase })
+				#{ addressInfo.addressPostNum }, #{ addressInfo.address1 }, #{ addressInfo.address2 }, #{ addressInfo.addressMemo }, #{ addressInfo.addressBase }, #{ cookieId })
 		ON DUPLICATE KEY UPDATE
 			addressTitle=#{ addressInfo.addressTitle }, 
 			addressName=#{ addressInfo.addressName }, 
@@ -106,21 +106,29 @@
 			address1=#{ addressInfo.address1 }, 
 			address2=#{ addressInfo.address2 }, 
 			addressMemo=#{ addressInfo.addressMemo },
-			addressBase=#{ addressInfo.addressBase };
+			addressBase=#{ addressInfo.addressBase },
+			cookieId=#{ cookieId };
 	</insert>
 	
 	<update id="updateBaseAddress" parameterType="hashMap">
 		UPDATE client_address SET addressBase='N' WHERE clientId=#{ addressInfo.clientId } AND addressId != #{ addressInfo.addressId }
 	</update>
 	
-	<insert id="insertOrder" parameterType="hashMap" useGeneratedKeys="true" keyProperty="orderId" keyColumn="orderId">				
+	<insert id="insertOrder" parameterType="hashMap" useGeneratedKeys="true" keyProperty="orderId" keyColumn="orderId">					
 		INSERT INTO orders(orderId, clientId, addressId, optionIdList, orderEmail, orderPrice, usedPoint, couponId, cookieId, cookiePwd)
 		VALUES(#{ orderId }, #{ orderInfo.clientId }, #{ addressInfo.addressId }, #{ orderInfo.optionIdList }, #{ orderInfo.orderEmail },
-				#{ orderInfo.orderPrice }, #{ orderInfo.usedPoint }, #{ orderInfo.couponId }, #{ orderInfo.cookieId }, #{ orderInfo.cookiePwd });
+				#{ orderInfo.orderPrice }, #{ orderInfo.usedPoint }, #{ orderInfo.couponId }, #{ cookieId }, #{ orderInfo.cookiePwd });
 	</insert>
 	
 	<delete id="deleteCart" parameterType="hashMap">
-		DELETE FROM cart WHERE clientId=#{ orderInfo.clientId } AND cartId IN 
+		DELETE FROM cart WHERE 
+			<if test="cookieId == null">
+				clientId=#{ orderInfo.clientId } 
+			</if>
+			<if test="cookieId != null">
+				cookieId=#{ cookieId }
+			</if>
+		AND cartId IN 
 			<foreach collection="cartIdList" item="cartId" open="(" separator="," close=")">
 				#{ cartId }
 			</foreach>
@@ -148,7 +156,7 @@
 	
 	<insert id="insertPayment" parameterType="hashMap">
 		INSERT INTO payment_info(paymentId, orderId, paymentMethod, paymentStatus)
-		VALUES(#{ paymentInfo.paymentId }, #{ orderId }, #{ paymentInfo.paymentMethod }, #{ paymentInfo.paymentStatus })
+		VALUES(#{ paymentId }, #{ orderId }, #{ paymentMethod }, #{ paymentStatus })
 	</insert>
 	
 	<select id="getOrderInfo" parameterType="hashMap" resultType="hashMap">
@@ -162,12 +170,13 @@
 	</select>
 	
 	<select id="getOrderInfoList" parameterType="hashMap" resultType="hashMap">
-		SELECT oi.*, pro.productName, pro.productId, pri.productPrice, CONCAT(pm.imageDir, pm.imageName) AS mainImage, op.*
+		SELECT oi.*, pro.productName, pro.productId, pri.productPrice, CONCAT(pm.imageDir, pm.imageName) AS mainImage, op.*, re.reviewId
 		FROM orders_info oi
 		LEFT JOIN product pro ON (SUBSTRING(oi.optionId, 1, 9)=pro.productId)
 		LEFT JOIN product_price pri ON (pro.productId = pri.productId)
 		LEFT JOIN product_image pm ON (pro.productId = pm.imageBy AND pm.imageStatus="대표")
 		LEFT JOIN option_info op ON (oi.optionId = op.optionId)
+		LEFT JOIN review re ON (oi.orderId = re.orderId AND oi.optionId = re.optionId)
 		WHERE oi.orderId=#{ orderId }
 	</select>
 	
@@ -178,6 +187,21 @@
 		WHERE optionId = #{ order.optionId }
 		</foreach> 
 	</update>
+	
+	<update id="updateOrderInfo" parameterType="hashMap">
+		UPDATE orders_info
+		SET orderStatus=#{ orderStatus }
+		WHERE orderId=#{ order.orderId } AND optionId=#{ order.optionId }
+	</update>
+	
+	<insert id="insertSwapRefund" parameterType="hashMap">
+		INSERT INTO 
+			<if test="requestWhat == 'refund'">refund(refundId, orderId, optionId, refundReason, refundWay, refundCost, refundCostMtd, refundStatus, refundEmail, refundRegDate, bankId, refundBankNum)</if>
+			<if test="requestWhat == 'swap'">swap(swapId, orderId, optionId, swapReason, swapWay, swapCost, swapCostMtd, swapStatus, swapEmail, swapRegDate)</if>
+		VALUES(#{ id }, #{ orderId }, #{ optionId }, #{ reason }, #{ deliverWay }, #{ cost }, #{ costMtd }, #{ status }, #{ email }, CURRENT_TIMESTAMP()
+			<if test="requestWhat == 'refund'"> , #{ bankId }, #{ refundBankNum }</if>
+		);
+	</insert>
 	
 <!-- 나의 주문 내역 -->
 	<select id="getMyOrderList" parameterType="hashMap" resultType="hashMap">

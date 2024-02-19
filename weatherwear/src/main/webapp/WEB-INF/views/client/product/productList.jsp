@@ -24,7 +24,7 @@
 <style>
 .mb-2 { width: 210px; height: 50px; overflow: hidden}
 .col-lg-3 { height: 440px; padding-left: 5%;}
-.productName { width: 250px; }
+.productName { width: 100%; }
 .productList { display: flex; flex-direction: row; flex-wrap: wrap;}
 .productOne { height: 470px; display: flex; flex-direction: column; align-items: center;}
 </style>
@@ -49,7 +49,7 @@
 								<c:forEach var="item" items="${productList}" varStatus="status">
 								<!-- 상품 시작 -->
 								<div class="col-md-3 lg productOne row" onclick="location.href='productInfo.do?productId=${ item.productId }'">
-									<img src="${ item.mainImage }" alt="${ item.productId }_mainImage" class="img-fluid" style="width:250px; height:250px;">
+									<img src="${ item.mainImage }" alt="${ item.productId }_mainImage" class="img-fluid" style="width:100%; height:auto;">
 									<div class="productOneInfo row"><br>
 										<div class="post-meta">
 											<span class="date">
@@ -127,7 +127,7 @@
 <!-- sweetAlert (alert/confirm/toast) -->
 <script src="resources/util/js/sweetalert.js"></script>
 
-<script src="resources/util/js/orderbypaging.js"></script>
+<script src="resources/util/js/paging.js"></script>
 
 </body>
 </html>

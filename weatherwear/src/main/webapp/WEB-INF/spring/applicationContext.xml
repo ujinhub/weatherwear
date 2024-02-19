@@ -77,6 +77,18 @@
 		</props>
 		</property>
 	</bean>
+
+	<!-- Scheduler -->
+		<bean id="schedulerService" class="com.w2.util.SchedulingService" />
+		<bean id="CartDAO" class="com.w2.cart.CartDAO" />
+		<task:scheduler id="w2Scheduler" pool-size="10" />
+		<task:executor id="w2Executor" pool-size="10" />
+		<task:annotation-driven scheduler="w2Scheduler" executor="w2Executor" />
+		
+	<!-- 의존성 주입을 위해 빈 등록 대신 -->
+		<context:component-scan base-package="com.w2.util" />
+		<context:component-scan base-package="com.w2.weather" />
+		<context:component-scan base-package="com.w2.coupon" />
 </beans>
 
 

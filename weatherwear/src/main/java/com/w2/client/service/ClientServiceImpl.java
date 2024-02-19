@@ -61,4 +61,13 @@ public class ClientServiceImpl implements ClientService {
 		return clientDao.getWishList(vo);
 	}
 
+	@Override
+	public void changeCookieSetId(String cookieId, String clientId) {
+		clientDao.changeCookieSetId(cookieId, clientId);		
+	}
+
+	@Override
+	public void setLogDate(String clientId) {
+		clientDao.setLogDate(clientId);		
+	}
 }

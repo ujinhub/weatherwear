@@ -18,11 +18,13 @@ public interface OrderService {
 	// 사용자
 	List<CartVO> getOrderProductList(Map<String, Object> orderMap);
 	
-	// 테스트
-	ClientVO setClient(String string);
-	int insertOrder(Map<String, Object> data);							// 주문 등록
+	ClientVO setClient(String string);	
+	int insertImsiOrder(Map<String, Object> data);						// 주문 등록
 	Map<String, Object> getOrderInfo(String orderId);					// 주문 상세
 	List<Map<String, Object>> getOrderInfoList(String orderId);			// 주문 상품 목록
+	int updateOrder(Map<String, Object> orderData);						// 주문 상태 수정
+	int insertSwapRefund(Map<String, Object> requestInfo);				// 교환/환불 요청
+	int insertPayment(Map<String, Object> data);						// 결제 정보 등록
 	
 	/** 나의 주문 내역 */
 	List<Map<String, Object>> getMyOrderList(HashMap<String, Object> param);

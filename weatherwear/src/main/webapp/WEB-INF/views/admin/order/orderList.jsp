@@ -53,7 +53,7 @@
 											<button id="orderDate" type="button" class="orderbyBtn btn btn-sm btn-outline-light <c:if test="${search.orderby == 'orderDate'}">active</c:if>">최신순</button>
 											<button id="clientId" type="button" class="orderbyBtn btn btn-sm btn-outline-light <c:if test="${search.orderby == 'clientId'}">active</c:if>">아이디순</button>
 											<button id="orderStatus" type="button" class="orderbyBtn btn btn-sm btn-outline-light <c:if test="${search.orderby == 'orderStatus'}">active</c:if>">주문상태순</button>
-											<button class="btn btn-sm btn-secondary buttons-pdf buttons-html5 download" tabindex="0" aria-controls="example1" type="button" id="excelDownload" onclick="exportExcel('주문조회')">
+											<button class="btn btn-sm btn-secondary buttons-pdf buttons-html5 download" tabindex="0" aria-controls="example1" type="button" id="excelDownload" onclick="exportExcel('주문내역')">
 												<span>Excel 저장</span>
 											</button>
 										</div>
@@ -118,7 +118,7 @@
 												<col width="100px"/><!-- 회원번호 -->
 												<col width="100px"/><!-- 구매자이름 -->
 												<col width="150px"/><!-- 구매자연락처 -->
-												<col width="150px"/><!-- 주문상품 -->
+												<col width="500px"/><!-- 주문상품 -->
 												<col width="150px"/><!-- 주문옵션 -->
 												<col width="80px"/><!-- 주문수량 -->
 												<col width="100px"/><!-- 상품금액 -->
@@ -126,11 +126,11 @@
 												<col width="150px"/><!-- 수신인 연락처 -->
 												<col width="250px"/><!-- 송장번호 -->
 												<col width="100px"/><!-- 우편번호 -->
-												<col width="150px"/><!-- 기본주소 -->
-												<col width="150px"/><!-- 상세주소 -->
+												<col width="250px"/><!-- 기본주소 -->
+												<col width="250px"/><!-- 상세주소 -->
 												<col width="250px"/><!-- 배송메모 -->
 												<col width="100px"/><!-- 결제금액 -->
-												<col width="100px"/><!-- 결제수단 -->
+												<col width="150px"/><!-- 결제수단 -->
 												<col width="100px"/><!-- 결제상태 -->
 												<col width="200px"/><!-- 결제일자 -->
 											</colgroup>
@@ -240,7 +240,7 @@
 <!-- sweetAlert (alert/confirm/toast) -->
 <script src="resources/util/js/sweetalert.js"></script>
 
-<script src="resources/util/js/orderbypaging.js"></script>
+<script src="resources/util/js/paging.js"></script>
 <script src="resources/util/js/checkbox.js"></script>
 <script src="resources/util/js/saveExcel.js"></script>
 <script src="resources/admin/js/manageOrderList.js"></script>

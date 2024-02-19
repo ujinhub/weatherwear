@@ -34,6 +34,9 @@
 							<a href="noticeList.mdo" class="nav-link">공지</a>    				
 	    				</li>
 	    				<li class="nav-item">
+							<a href="couponList.mdo" class="nav-link">쿠폰</a>    				
+	    				</li>
+	    				<li class="nav-item">
 							<a href="clientList.mdo" class="nav-link">회원</a>    				
 	    				</li>
 	    				<li class="nav-item">

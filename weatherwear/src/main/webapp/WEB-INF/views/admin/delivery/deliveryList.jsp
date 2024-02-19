@@ -159,7 +159,7 @@
 <!-- sweetAlert (alert/confirm/toast) -->
 <script src="resources/util/js/sweetalert.js"></script>
 
-<script src="resources/util/js/paging.js"></script>
+<script src="resources/util/js/pagingNoOrderBy.js"></script>
 <script src="resources/util/js/modal.js"></script>
 <script src="resources/util/js/checkbox.js"></script>
 <script src="resources/admin/js/manageDelivery.js"></script>

@@ -14,22 +14,32 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.w2.product.service.ProductService;
 import com.w2.util.SearchOrderby;
+import com.w2.weather.service.WeatherService;
 
 @Controller
 public class ClientProductController {
 	
 	@Autowired
-	private ProductService productService;
+	private ProductService productService;	
+	
+	@Autowired
+	private WeatherService weatherService;
 	
 	/**
 	 * 메인 화면 호출
 	 * @return
-	 */
+	 */	
 	@RequestMapping("main.do")
 	public String mainView(Model model, HttpServletRequest request) {
 		HttpSession session = request.getSession(false);
+		String province = request.getParameter("province");
+		if(province == null || province == "") {
+			province = "seoul";
+		}
+		
 		model.addAttribute("bestItem", productService.getMainProductList("best"));
 		model.addAttribute("newItem", productService.getMainProductList("new"));
+		model.addAttribute("weatherList", weatherService.getWeather(province));
 		//model.addAttribute("userInfo", session.getAttribute("userInfo"));
 		return "main";
 	}

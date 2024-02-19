@@ -203,7 +203,10 @@
 	<update id="insertWishList" parameterType="hashmap">
 		<foreach collection="productList" item="product" index="index">
 			UPDATE client
-			SET clientMarkList = CONCAT(clientMarkList, ',', #{ product })
+			SET clientMarkList = CASE 
+			    WHEN clientMarkList IS NULL OR clientMarkList = '' THEN #{product}
+			    ELSE CONCAT(clientMarkList, ',', #{product})
+			    END
 			WHERE FIND_IN_SET(#{ product }, clientMarkList) = 0
 			AND clientId=#{ clientId };
 		</foreach>

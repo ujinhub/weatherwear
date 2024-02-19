@@ -60,7 +60,6 @@
 			// sendingmultiple : 여러 파일을 동시에 업로드시, 첫 전송 직전에 발생
 			this.on('sendingmultiple', function(file, xhr, formData) {
 				playToast('sending', 'info');
-				console.log('보내는 중');
 			});
 			
 			// successmultiple : 다중 파일 업로드 성공한 경우
@@ -75,12 +74,10 @@
 			
 			// queuecomplete : 이벤트 성공 여부 확인 로그
 			this.on('queuecomplete', function(e) {
-				console.log('queuecomplete');
 			});
 			
 			// 업로드된 파일 삭제
 			this.on('removedfile', function(data) {
-				console.log("data : " + data.name);
 				playToast('Remove File', 'success');
 			});
 		}

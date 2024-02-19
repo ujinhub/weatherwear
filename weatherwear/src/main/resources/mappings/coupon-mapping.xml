@@ -38,4 +38,85 @@
 		VALUES(#{couponId}, #{clientId}, #{couponStatus})
 	</insert>
 
+	<select id="getCouponListAll" resultType="coupon">
+		SELECT * 
+		FROM coupon_info
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="keyword != null and keyword != ''">
+				<if test="searchType == 'couponId'">
+					AND couponId like CONCAT('%', #{keyword}, '%')
+				</if>
+				<if test="searchType == 'couponName'">
+					AND couponName like CONCAT('%', #{keyword}, '%')
+				</if>
+			</if>
+		</trim>
+		ORDER BY couponId DESC
+		LIMIT #{startList}, #{listSize};
+	</select>
+
+	<select id="getCouponListCnt" resultType="int">
+		SELECT COUNT(*) 
+		FROM coupon_info
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="keyword != null and keyword != ''">
+				<if test="searchType == 'couponId'">
+					AND couponId like CONCAT('%', #{keyword}, '%')
+				</if>
+				<if test="searchType == 'couponName'">
+					AND couponName like CONCAT('%', #{keyword}, '%')
+				</if>
+			</if>
+		</trim>
+	</select>
+
+	<insert id="insertCoupon" parameterType="coupon">
+		INSERT INTO coupon_info(couponId, couponName, couponPrice, couponStDate, couponEndDate, minPrice, gradeList)
+		VALUES(#{ couponId } , #{ couponName }, #{ couponPrice }, #{ couponStDate } , #{ couponEndDate }, #{ minPrice }, #{ gradeList });
+	</insert>
+
+<!-- 하루전부터 현재 시간까지의 쿠폰 배부 -->
+	<insert id="setCoupon" parameterType="coupon">
+		INSERT INTO coupon_list (couponId, clientId, couponStatus)
+		SELECT ci.couponId, c.clientId, '사용가능'
+		FROM coupon_info AS ci
+		JOIN client AS c ON FIND_IN_SET(c.gradeId, ci.gradeList) > 0
+		WHERE ci.couponStDate BETWEEN DATE_SUB(CURDATE(), INTERVAL 1 DAY) AND now()
+		AND NOT EXISTS(
+			SELECT 1
+		    FROM coupon_list cl
+		    WHERE cl.couponId = ci.couponId 
+		    AND cl.clientId = c.clientId
+		);
+	</insert>
+
+<!-- 현재 시간 이전의 기간 만료 쿠폰 만료 -->
+	<update id="setCouponLimit" parameterType="coupon">
+		<![CDATA[UPDATE coupon_list cl SET cl.couponStatus='기간만료'
+		WHERE cl.couponStatus="사용가능"
+		AND EXISTS(
+			SELECT 1 
+		    FROM coupon_info ci
+		    WHERE ci.couponId = cl.couponId
+		    AND ci.couponEndDate < NOW());]]>
+	</update>
+
+	<update id="updateCoupon" parameterType="coupon">
+		UPDATE FROM coupon_list WHERE couponStatus=#{ couponStatus }
+	</update>
+
+	<delete id="deleteCouponInfo" parameterType="String">
+		DELETE FROM coupon_info WHERE couponId=#{ couponId }
+	</delete>
+	
+	<delete id="deleteCouponList" parameterType="String">
+		DELETE FROM coupon_list WHERE couponId=#{ couponId }
+	</delete>
+
+	<select id="getCouponList" parameterType="String" resultType="coupon">
+		SELECT *
+		FROM coupon_info ci
+		LEFT JOIN coupon_list cl ON (ci.couponId = cl.couponId AND cl.couponStatus='사용가능')
+		WHERE cl.clientId=#{ clientId }
+	</select>
 </mapper>

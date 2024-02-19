@@ -4,44 +4,48 @@
 "http://mybatis.org/dtd/mybatis-3-config.dtd">
 
 <configuration>
-
-<typeAliases>
-<!-- typeAlias
-		- 매핑파일에서 사용하는 type을 지정
-- 애플리케이션에서 SQL 문으로 값을 전달합니다
-- SQL 문 실행 시 반환되는 레코드를 저장하는 용도로 사용하기 위한 빈을 생성합니다.-->
-
-	<typeAlias type="com.w2.admin.AdminVO" alias="admin"/>
-	<typeAlias type="com.w2.client.ClientVO" alias="client"/>
-	<typeAlias type="com.w2.board.NoticeVO" alias="notice"/>
-	<typeAlias type="com.w2.board.QnaVO" alias="qna"/>
-	<typeAlias type="com.w2.board.TermsVO" alias="terms"/>
-	<typeAlias type="com.w2.board.ReviewVO" alias="review"/>
-	<typeAlias type="com.w2.product.ProductVO" alias="product"/>
-	<typeAlias type="com.w2.product.ProductPriceVO" alias="productPrice"/>
-	<typeAlias type="com.w2.product.OptionVO" alias="option"/>
-	<typeAlias type="com.w2.order.OrderVO" alias="order"/>
-	<typeAlias type="com.w2.delivery.DeliveryVO" alias="delivery"/>
-	<typeAlias type="com.w2.cart.CartVO" alias="cart"/>	
-	<typeAlias type="com.w2.file.ImageVO" alias="image"/>
-	<typeAlias type="com.w2.coupon.CouponVO" alias="coupon"/>
-	<typeAlias type="com.w2.clientAddress.ClientAddressVO" alias="address"/>
-</typeAliases>
-
-<!-- SQL 작성문을 지정하여 mapper 파일 경로 알려주는 역할입니다. -->
-<mappers>
-	<mapper resource="mappings/admin-mapping.xml"/>
-	<mapper resource="mappings/notice-mapping.xml"/>
-	<mapper resource="mappings/client-mapping.xml"/>
-	<mapper resource="mappings/qna-mapping.xml"/>
-	<mapper resource="mappings/terms-mapping.xml"/>
-	<mapper resource="mappings/review-mapping.xml"/>
-	<mapper resource="mappings/product-mapping.xml"/>
-	<mapper resource="mappings/order-mapping.xml"/>
-	<mapper resource="mappings/delivery-mapping.xml"/>
-	<mapper resource="mappings/cart-mapping.xml"/>
-	<mapper resource="mappings/file-mapping.xml"/>
-	<mapper resource="mappings/address-mapping.xml"/>
-	<mapper resource="mappings/coupon-mapping.xml"/>
-</mappers>
+	<typeAliases>
+	<!-- typeAlias
+			- 매핑파일에서 사용하는 type을 지정
+	- 애플리케이션에서 SQL 문으로 값을 전달합니다
+	- SQL 문 실행 시 반환되는 레코드를 저장하는 용도로 사용하기 위한 빈을 생성합니다.-->
+	
+		<typeAlias type="com.w2.admin.AdminVO" alias="admin"/>
+		<typeAlias type="com.w2.client.ClientVO" alias="client"/>
+		<typeAlias type="com.w2.board.NoticeVO" alias="notice"/>
+		<typeAlias type="com.w2.board.QnaVO" alias="qna"/>
+		<typeAlias type="com.w2.board.TermsVO" alias="terms"/>
+		<typeAlias type="com.w2.board.ReviewVO" alias="review"/>
+		<typeAlias type="com.w2.product.ProductVO" alias="product"/>
+		<typeAlias type="com.w2.product.ProductPriceVO" alias="productPrice"/>
+		<typeAlias type="com.w2.product.OptionVO" alias="option"/>
+		<typeAlias type="com.w2.order.OrderVO" alias="order"/>
+		<typeAlias type="com.w2.delivery.DeliveryVO" alias="delivery"/>
+		<typeAlias type="com.w2.cart.CartVO" alias="cart"/>	
+		<typeAlias type="com.w2.file.ImageVO" alias="image"/>
+		<typeAlias type="com.w2.coupon.CouponVO" alias="coupon"/>
+		<typeAlias type="com.w2.clientAddress.ClientAddressVO" alias="address"/>
+		
+		<typeAlias type="com.w2.weather.WeatherVO" alias="weathervo" />
+		<typeAlias type="com.w2.payment.PaymentVO" alias="payment" />
+	</typeAliases>
+	
+	<!-- SQL 작성문을 지정하여 mapper 파일 경로 알려주는 역할입니다. -->
+	<mappers>
+		<mapper resource="mappings/admin-mapping.xml"/>
+		<mapper resource="mappings/notice-mapping.xml"/>
+		<mapper resource="mappings/client-mapping.xml"/>
+		<mapper resource="mappings/qna-mapping.xml"/>
+		<mapper resource="mappings/terms-mapping.xml"/>
+		<mapper resource="mappings/review-mapping.xml"/>
+		<mapper resource="mappings/product-mapping.xml"/>
+		<mapper resource="mappings/order-mapping.xml"/>
+		<mapper resource="mappings/delivery-mapping.xml"/>
+		<mapper resource="mappings/cart-mapping.xml"/>
+		<mapper resource="mappings/file-mapping.xml"/>
+		<mapper resource="mappings/address-mapping.xml"/>
+		<mapper resource="mappings/coupon-mapping.xml"/>
+		
+		<mapper resource="mappings/weather-mapping.xml" />
+	</mappers>
 </configuration>

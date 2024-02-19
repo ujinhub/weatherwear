@@ -74,6 +74,7 @@
 											</span>
 											<span class="order_product_option">
 												${ pro.option.optionColor } / ${ pro.option.optionSize }
+												<input type="hidden" name="stockCnt" id="stockCnt_${ pro.cartId }" class="stockCnt" value="${ pro.option.stockCnt }">
 											</span>
 										</section>
 										</div>
