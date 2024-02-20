@@ -22,5 +22,9 @@ public class ImageDAO {
 	public void deleteProductImage(ImageVO image) {
 		sqlSessionTemplate.delete("ImageDAO.deleteProductImage", image);
 	}
+
+	public int deleteReviewImage(String imageBy) {
+		return sqlSessionTemplate.delete("ImageDAO.deleteReviewImage", imageBy);
+	}
 	
 }

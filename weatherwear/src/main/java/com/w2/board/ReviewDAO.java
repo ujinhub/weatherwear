@@ -39,4 +39,16 @@ public class ReviewDAO {
 	public int getMyReviewListCnt(String clientId) {
 		return sqlSessionTemplate.selectOne("ReviewDAO.getMyReviewListCnt", clientId);
 	}
+
+	public ReviewVO getReviewInfo(String reviewId) {
+		return sqlSessionTemplate.selectOne("ReviewDAO.getReviewInfo", reviewId);
+	}
+
+	public List<String> getReviewImage(ReviewVO review) {
+		return sqlSessionTemplate.selectList("ReviewDAO.getReviewImage", review);
+	}
+
+	public int deleteReview(String reviewId) {
+		return sqlSessionTemplate.delete("ReviewDAO.deleteReview", reviewId);
+	}
 }

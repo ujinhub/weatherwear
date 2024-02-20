@@ -27,4 +27,9 @@ public class ImageServiceImpl implements ImageService {
 	public void deleteProductImage(ImageVO image) {
 		imageDAO.deleteProductImage(image);
 	}
+
+	@Override
+	public int deleteReviewImage(String imageBy) {
+		return imageDAO.deleteReviewImage(imageBy);
+	}
 }

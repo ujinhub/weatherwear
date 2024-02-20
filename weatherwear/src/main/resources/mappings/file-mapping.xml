@@ -38,4 +38,9 @@
 		DELETE FROM product_image
 		WHERE imageBy = #{ imageBy } AND imageStatus = #{ imageStatus }
 	</delete>
+	
+	<delete id="deleteReviewImage" parameterType="String">
+		DELETE FROM client_image
+		WHERE imageBy = #{ imageBy } AND imageStatus ='리뷰'
+	</delete>
 </mapper>

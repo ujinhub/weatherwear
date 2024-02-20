@@ -11,10 +11,13 @@ public interface ReviewService {
 	int getReviewListCnt(Search search);
 	ReviewVO getReview(ReviewVO vo);
 	int insertReview(ReviewVO vo);
+	ReviewVO getReviewInfo(String reviewId);
 	
 	/**
 	 * 나의 리뷰 목록 (페이징) - 권유진 추가
 	 */
 	List<ReviewVO> getMyReviewList(HashMap<String, Object> param);
 	int getMyReviewListCnt(String clientId);
+	List<String> getReviewImage(ReviewVO review);
+	int deleteReview(String reviewId);
 }

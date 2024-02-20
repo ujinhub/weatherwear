@@ -46,4 +46,19 @@ public class ReviewServiceImpl implements ReviewService {
 		return reviewDao.getMyReviewListCnt(clientId);
 	}
 
+	@Override
+	public ReviewVO getReviewInfo(String reviewId) {
+		return reviewDao.getReviewInfo(reviewId);
+	}
+
+	@Override
+	public List<String> getReviewImage(ReviewVO review) {
+		return reviewDao.getReviewImage(review);
+	}
+
+	@Override
+	public int deleteReview(String reviewId) {
+		return reviewDao.deleteReview(reviewId);
+	}
+
 }

@@ -46,9 +46,9 @@
 		WHERE reviewId = #{reviewId}
 	</select>
 	
-	<insert id="insertReview">
-<!-- 		INSERT INTO review -->
-<!-- 		VALUES(#{noticeId}, #{noticeWriter}, default, #{noticeTitle}, #{noticeContent}, null, default) -->
+	<insert id="insertReview" parameterType="review">
+		INSERT INTO review(reviewId, clientId, orderId, optionId, reviewContent, reviewStar, reviewDate, reviewStatus, productId)
+		VALUES(#{reviewId}, #{ clientId }, #{ orderId }, #{ optionId }, #{ reviewContent }, #{ reviewStar }, CURRENT_TIMESTAMP, #{ reviewStatus }, #{ productId })
 	</insert>
 	
 <!-- 나의 리뷰 목록 (페이징) - 권유진 추가 -->
@@ -64,4 +64,22 @@
 		FROM review
 		WHERE clientId = #{clientId}
 	</select>
+	
+	<select id="getReviewInfo" parameterType="String" resultType="review">
+		SELECT * 
+		FROM review
+		WHERE reviewId = #{ reviewId }
+	</select>
+	
+	<select id="getReviewImage" parameterType="review" resultType="String">
+		SELECT CONCAT(imageDir, imageName)
+		FROM client_image
+		WHERE imageBy = CONCAT(#{ orderId }, '_', #{ optionId })
+	</select>
+	
+	<update id="deleteReview" parameterType="String">
+		UPDATE review
+		SET reviewStatus = '삭제'
+		WHERE reviewId=#{ reviewId }
+	</update>
 </mapper>

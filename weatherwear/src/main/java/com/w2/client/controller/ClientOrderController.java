@@ -2,7 +2,6 @@ package com.w2.client.controller;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,15 +22,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.util.WebUtils;
 
+import com.w2.board.ReviewVO;
+import com.w2.board.service.ReviewService;
 import com.w2.cart.CartVO;
-import com.w2.cart.service.CartService;
 import com.w2.client.ClientVO;
 import com.w2.client.service.ClientService;
 import com.w2.clientAddress.service.ClientAddressService;
 import com.w2.coupon.service.CouponService;
+import com.w2.file.service.ImageService;
 import com.w2.order.OrderInfoVO;
 import com.w2.order.service.OrderService;
-import com.w2.payment.PaymentVO;
 import com.w2.util.ClientCookie;
 import com.w2.util.RandomString;
 import com.w2.util.ResponseDTO;
@@ -45,9 +45,6 @@ public class ClientOrderController {
 	private ClientService clientService;
 	
 	@Autowired
-	private CartService cartService;
-	
-	@Autowired
 	private OrderService orderService;
 	
 	@Autowired
@@ -55,7 +52,13 @@ public class ClientOrderController {
 	
 	@Autowired
 	private CouponService couponService;
+	
+	@Autowired
+	private ReviewService reviewService;
 
+	@Autowired
+	private ImageService imageService;
+	
 	@RequestMapping("noClientOrder.do")
 	public String noClientOrderView() {
 		return "order/noClientOrder";
@@ -262,7 +265,7 @@ public class ClientOrderController {
 			if(result > 0) {
 				code = 1;
 				resultCode = "success";
-				msg = "주문 상태가 변경되었습니다.";
+				msg = "완료되었습니다.";
 			} else {
 				code = -1;
 				resultCode = "fail";
@@ -314,8 +317,6 @@ public class ClientOrderController {
 			requestInfo.put("clientId", client.getClientId());
 		}
 		
-		System.err.println("requestInfo : " + requestInfo);
-		
 		try {
 			int result = orderService.insertSwapRefund(requestInfo);
 			if(result > 0) {
@@ -334,5 +335,100 @@ public class ClientOrderController {
 		}
 		
 		return new ResponseDTO<String>(statusCode, code, resultCode, msg, id);
+	}
+	
+	/** 리뷰 등록 */
+	@ResponseBody
+	@PostMapping("insertReview.do")
+	public ResponseDTO<String> insertReview(ReviewVO review, HttpSession session, HttpServletRequest request, HttpServletResponse response) {
+		Integer statusCode = HttpStatus.OK.value();
+		int code = 0;
+		String resultCode;
+		String msg;
+		String id = "";
+
+		ClientVO client = (ClientVO)session.getAttribute("userInfo");
+
+		review.setClientId(client.getClientId());
+		review.setReviewId("RE" + RandomString.createFileName() + RandomString.setRandomString(5, "number"));
+
+		try {
+			int result = reviewService.insertReview(review);
+			System.err.println("누가 먼저 실행되냐고");
+			if(result > 0) {
+				code = 1;
+				resultCode = "success";
+				msg = "주문 상태가 변경되었습니다.";
+			} else {
+				code = -1;
+				resultCode = "fail";
+				msg = "오류가 발생했습니다.";
+			}
+		} catch (Exception e) {
+			code = -1;
+			resultCode = "fail";
+			msg = "오류가 발생했습니다.";
+		}
+		return new ResponseDTO<String>(statusCode, code, resultCode, msg, id);
+	}
+	
+	/** 리뷰 조회 */
+	@ResponseBody
+	@PostMapping("getReviewInfo.do")
+	public ResponseDTO<HashMap<String, Object>> getReviewInfo(String reviewId, HttpSession session) {
+		Integer statusCode = HttpStatus.OK.value();
+		int code = 0;
+		String resultCode;
+		String msg;
+
+		HashMap<String, Object> result = new HashMap<String, Object>();
+		ReviewVO review = reviewService.getReviewInfo(reviewId);
+		if(review != null) {
+			code = 1;
+			resultCode = "success";
+			msg = "조회가 완료되었습니다.";
+			
+			result.put("review", review);
+			if(review.getReviewStatus().equals("포토")) {
+				result.put("reviewImage", reviewService.getReviewImage(review));
+			}
+			System.err.println("result : " + result);
+		} else {
+			code = -1;
+			resultCode = "fail";
+			msg = "오류가 발생했습니다.";
+		}
+		return new ResponseDTO<HashMap<String, Object>>(statusCode, code, resultCode, msg, result);
+	}
+	
+	/** 리뷰 삭제 */
+	@ResponseBody
+	@PostMapping("deleteReview.do")
+	public ResponseDTO<String> deleteReview(String reviewId, HttpSession session) {
+		Integer statusCode = HttpStatus.OK.value();
+		int code = 0;
+		String resultCode;
+		String msg;
+
+		ClientVO client = (ClientVO)session.getAttribute("userInfo");
+		ReviewVO review = reviewService.getReviewInfo(reviewId);
+		if(review.getClientId().equals(client.getClientId())) {
+			int result = reviewService.deleteReview(reviewId);
+			if(result > 0) {
+				result = imageService.deleteReviewImage(review.getOrderId() + "_" + review.getOptionId());
+				code = 1;
+				resultCode = "success";
+				msg = "리뷰가 삭제되었습니다.";
+			} else {
+				code = -1;
+				resultCode = "fail";
+				msg = "오류가 발생했습니다.";
+			}
+		} else {
+			code = -1;
+			resultCode = "fail";
+			msg = "오류가 발생했습니다.";
+		}
+		return new ResponseDTO<String>(statusCode, code, resultCode, msg, reviewId);
 	}
 }

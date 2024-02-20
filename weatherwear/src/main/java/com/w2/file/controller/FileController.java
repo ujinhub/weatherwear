@@ -87,7 +87,7 @@ public class FileController {
 		imageMap.put("key", key);
 
 		int result = imageService.insertImage(imageMap);
-		
+		System.err.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ result : " + result);
 		return imageList;
 	}
 	

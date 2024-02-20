@@ -18,6 +18,11 @@
 <link href="resources/client/ZenBlog/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 <link href="resources/client/ZenBlog/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
 
+<!-- dropZone -->
+<link rel="stylesheet" href="resources/util/plugins/dropzone/dist/dropzone.min.css"/>
+<link rel="stylesheet" href="resources/util/plugins/dropzone/custom.css">
+<link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" type="text/css" />
+
 <!-- Swiper -->
 <link href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css" rel="stylesheet"/>
 
@@ -37,19 +42,43 @@
 	.deliDiv { display: flex; justify-content: space-between;}
 	.confirmDiv {border-bottom:1px solid silver; margin-bottom:10px;}
 	.info {font-size: large;}
+	.imagePreviewDiv {
+		padding: 5px 5px 5px 5px;
+		button {display:none; position:relative;}
+		&:hover {button{display:block;}}
+	}
+	#dropzone { display: flex; flex-direction: row; flex-wrap: wrap; justify-content: center;}
+	.previewImg { display: flex; flex-direction: column; align-content: center; justify-content: center;}
+	.custom-radio { display:flex; justify-content: space-evenly;}
 </style>
+<link href="resources/client/css/review.css" rel="stylesheet">
 </head>
 <body class="hold-transition sidebar-collapse layout-top-nav">
 	<div class="wrapper">
 		<%@ include file="../header.jsp" %>
-
 		<main id="main">
 			<section id="contact" class="contact mb-5">
 				<div class="container aos-init aos-animate" data-aos="fade-up">
+					<c:choose>
+						<c:when test="${ userInfo.clientId != orderInfo.clientId || cookieId != orderInfo.cookieId }">
+						<div style="height:800px;"></div>
+						<script>
+							$(document).ready(function(){
+								playToast("잘못된 접근입니다. 메인 페이지로 이동합니다.", "error");
+								setTimeout(function(){
+									location.href="main.do";
+								}, 1000);
+							})
+						</script>
+						</c:when>
+					<c:otherwise>
 					<div class="row">
 						<div class="col-lg-12 text-center mb-5">
 							<h1 class="page-title">Order Info</h1>
 						</div>
+					</div>
+					<!-- Modal -->
+					<div class="modal fade show" id="modal-default" style="display: none; padding-right: 17px;" aria-modal="true" role="dialog">
 					</div>
 					<div class="row gy-4">
 						<div class="col-md-6">
@@ -101,7 +130,7 @@
 									</div>
 									<c:forEach items="${ orderProductList }" var="pro">
 				<!-- 상품마다 반복 시작 -->
-									<div class="form-group" class="productDiv">
+									<div class="form-group" class="productDiv" id="${ pro.orderId }_${ pro.optionId }">
 										<div class="row">
 											<div class="col-md-4">
 												<img class="product_image" src="${ pro.mainImage }" style="height:150px; width:150px;">
@@ -112,39 +141,41 @@
 													${ pro.optionColor } / ${ pro.optionSize } [수량: ${ pro.orderProCnt }]<br>
 													<fmt:formatNumber pattern="#,###,###" value="${ pro.orderTotal }" /><br>
 													주문상태 : ${ pro.orderStatus }
+													<input type="hidden" name="orderStatus_${ pro.optionId }" value="${ pro.orderStatus }">
 												</span><br>
 												<c:choose>
-													<c:when test="${ pro.orderStatus=='상품준비중' || pro.orderStatus=='배송준비중' || pro.orderStatus=='배송보류'}">
+													<c:when test="${ pro.orderStatus=='상품준비중' || pro.orderStatus=='배송준비중' || pro.orderStatus=='배송보류' || pro.orderStatus=='배송대기'}">
 														<div class="row">
 															<div class="col-md-4">
-																<input type="button" value="취소요청" class="form-control">
-															</div>
-															<div class="col-md-4">
-																<input type="button" value="교환요청" class="form-control">
-															</div>
-															<div class="col-md-4">
-																<input type="button" value="환불요청" class="form-control">
+																<input type="button" value="취소요청" class="form-control" class="cancleBtn" id="cancleBtn" onclick="cancleOrder('${ pro.orderId }_${ pro.optionId }')">
 															</div>
 														</div>
 													</c:when>
 													<c:when test="${ pro.orderStatus=='배송중' || pro.orderStatus=='배송완료'}">
 														<div class="row">
-															<div class="col-md-4">
-																<input type="button" value="취소요청" class="form-control">
-															</div>
-															<div class="col-md-4">
-																<input type="button" value="교환요청" class="form-control">
-															</div>
-															<div class="col-md-4">
-																<input type="button" value="환불요청" class="form-control">
-															</div>
-															<div class="col-md-4">
-																<input type="button" value="리뷰작성" class="form-control">
-															</div>
+															<c:choose>
+																<c:when test="${ pro.reviewId == null }">
+																	<div class="col-md-4">
+																		<input type="button" value="교환요청" class="form-control" class="swapBtn" id="swapBtn" onclick="swapOrder('${ pro.orderId }_${ pro.optionId }')">
+																	</div>
+																	<div class="col-md-4">
+																		<input type="button" value="환불요청" class="form-control" class="refundBtn" id="refundBtn" onclick="refundOrder('${ pro.orderId }_${ pro.optionId }')">
+																	</div>
+																	<div class="col-md-4">
+																		<input type="button" value="리뷰작성" class="form-control" class="reviewWriteBtn" id="reviewWriteBtn" onclick="reviewWrite('${pro.productId}', '${pro.orderId}', '${pro.optionId}', '${pro.productName}', '${pro.mainImage}', '${pro.orderProCnt}', '${pro.optionColor}', '${pro.optionSize}' )">
+																	</div>
+																</c:when>
+																<c:when test="${ pro.reviewId != null && pro.reviewStatus != '삭제'}">
+																	<div class="col-md-4">
+																		<input type="button" value="리뷰보기" class="form-control" class="reviewWriteBtn" id="reviewViewBtn" onclick="reviewView('${ pro.reviewId }', '${pro.productName}', '${pro.mainImage}', '${pro.orderProCnt}', '${pro.optionColor}', '${pro.optionSize}' )">
+																	</div>
+																</c:when>
+															</c:choose>
 														</div>
 													</c:when>
 													<c:when test="${ pro.orderStatus=='교환중' || pro.orderStatus=='교환완료'}"></c:when>
 													<c:when test="${ pro.orderStatus=='환불중' || pro.orderStatus=='환불완료'}"></c:when>
+													<c:when test="${ pro.orderStatus=='취소요청' || pro.orderStatus=='취소완료'}"></c:when>
 												</c:choose>
 											</div>
 										</div>
@@ -203,8 +234,8 @@
 										결제 방법
 									</div>
 									<div class="form-group col-md-5"></div>
-									<div class="form-group col-md-3 resultInput" id="totalOrderPrice">${ orderInfo.paymentMethod }</div>
-									<div class="form-group col-md-1"></div>
+									<div class="form-group col-md-3 resultInput" id="paymentMethod">${ orderInfo.paymentMethod }</div>
+									<div class="form-group col-md-1"><input type="hidden" value="${ orderInfo.paymentMethod }" id="paymentMethodInput"></div>
 								</div>
 								<div class="row">
 									<div class="form-group col-md-1"></div>
@@ -212,7 +243,7 @@
 										결제 상태
 									</div>
 									<div class="form-group col-md-5"></div>
-									<div class="form-group col-md-3 resultInput" id="totalDeliveryPrice">${ orderInfo.paymentStatus }</div>
+									<div class="form-group col-md-3 resultInput" id="paymentStatus">${ orderInfo.paymentStatus }</div>
 									<div class="form-group col-md-1"></div>
 								</div>
 								<div class="row resultDiv" style="background-color:#F4F7FF;">
@@ -226,12 +257,15 @@
 							</div>
 						</div>
 					</div>
+					</c:otherwise>
+				</c:choose>
 				</div>
 			</section>
 		</main>
 		
 		<%@ include file="../footer.jsp" %>
 	</div>
+	<div class="modal-backdrop fade" style="display:none"></div>
 
 <script src="resources/client/ZenBlog/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script  src="resources/util/plugins/sweetalert/jquery-lates.min.js"></script>
@@ -244,7 +278,21 @@
 <!-- PortOne SDK -->
 <script src="https://cdn.iamport.kr/v1/iamport.js"></script>
 
+<script src="resources/util/js/modal.js"></script>
+<!-- dropzone -->
+<script src="resources/util/plugins/dropzone/dist/dropzone.min.js"></script>
+
 <script src="resources/client/js/post.js"></script>
-<!-- <script src="resources/client/js/order.js"></script> -->
+<script src="resources/client/js/orderInfo.js"></script>
+
+<!-- 포스팅 - 이미지/동영상 dropzone 영역 -->
+<div id="dropzone-preview" class="row" style="display:flex;">
+	<div class="row imagePreviewDiv"style="width: 50%;">
+		<div class="h-auto rounded-3 previewImg">
+			<img data-dz-thumbnail="data-dz-thumbnail" class="w-full h-auto rounded-3 block" src="#" alt="Dropzone-Image"/>
+			<button data-dz-remove="data-dz-remove" class="btn btn-sm btn-danger deleteBtn">삭제</button>
+		</div>
+	</div>
+</div>
 </body>
 </html>

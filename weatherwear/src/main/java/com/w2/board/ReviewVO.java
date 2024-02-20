@@ -13,6 +13,7 @@ public class ReviewVO {
 	private int reviewIdx;
 	private String reviewId;
 	private String orderId;
+	private String clientId;
 	private String optionId;
 	private String reviewContent;
 	private double reviewStar;
