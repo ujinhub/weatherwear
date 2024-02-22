@@ -109,4 +109,12 @@ public class OrderDAO {
 	public int insertSwapRefund(Map<String, Object> requestInfo) {
 		return sqlSessionTemplate.insert("OrderDAO.insertSwapRefund", requestInfo);
 	}
+
+	public int updateSwapRefund(Map<String, Object> requestInfo) {
+		return sqlSessionTemplate.update("OrderDAO.updateSwapRefund", requestInfo);
+	}
+
+	public int deleteCancleOrderInfo(String orderId) {
+		return sqlSessionTemplate.delete("OrderDAO.deleteCancleOrderInfo", orderId);
+	}
 }

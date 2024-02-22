@@ -129,6 +129,7 @@ $(document).ready(function(){
 		$("#addressNum").val("");
 		$("#deliveryMessage").val("");
 		$("#addressId").val("");
+		$("#baseAddress").val("N");
 	});
 });
 

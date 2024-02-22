@@ -3,11 +3,12 @@
 	 			
 <mapper namespace="OrderDAO">
 	<select id="getOrderList" resultType="hashMap">
-		SELECT od.orderId, od.orderDate, od.clientId, 
+		SELECT od.orderId, od.orderDate, od.clientId, od.couponId,
 			cl.clientName, cl.clientNum, di.deliverNum,
 	        ad.addressName, ad.addressNum, ad.addressPostNum, ad.address1, ad.address2, ad.addressMemo,
 	        pr.productName, pr.productId, SUBSTRING(oi.optionId, LENGTH(pr.productId)+1) as optionName, oi.orderProCnt, oi.orderTotal, oi.orderStatus, 
-	        od.orderPrice, od.usedPoint, ci.couponPrice, pi.paymentMethod, pi.paymentDate, pi.paymentStatus
+	        od.orderPrice, od.usedPoint, COALESCE(ci.couponPrice, 0) AS couponPrice, pi.paymentMethod, pi.paymentDate, pi.paymentStatus, pi.paymentId,
+	    	sw.*, rf.*
 		FROM orders od
 		LEFT JOIN orders_info oi ON (od.orderId=oi.orderId)
 		LEFT JOIN client cl ON (od.clientId=cl.clientId)
@@ -16,6 +17,8 @@
 		LEFT JOIN deliver_info di ON (od.orderId=di.orderId)
 		LEFT JOIN coupon_info ci ON (od.couponId=ci.couponId)
 		LEFT JOIN product pr ON (SUBSTRING(oi.optionId, 1, LENGTH(pr.productId))=pr.productId)
+		LEFT JOIN swap sw ON (od.orderId = sw.orderId AND oi.optionId = sw.optionId)
+		LEFT JOIN refund rf ON (od.orderId = rf.orderId AND oi.optionId = rf.optionId)
 		<trim prefix="WHERE" prefixOverrides="AND|OR">
 			<if test="keyword != null and keyword != ''">
 				<if test="searchType == 'orderId'">
@@ -26,6 +29,12 @@
 				</if>
 			</if>
 		</trim>
+		<if test="orderby == 'swap'">
+			WHERE oi.orderStatus IN ("교환진행중", "교환요청")
+		</if>
+		<if test="orderby == 'refund'">
+			WHERE oi.orderStatus IN ("환불진행중", "환불요청")
+		</if>
 		ORDER BY 
 			<choose>
 				<when test="orderby == 'clientId'">
@@ -38,8 +47,8 @@
 						WHEN oi.orderStatus = '배송대기' THEN 4
 						WHEN oi.orderStatus = '배송중' THEN 5
 						WHEN oi.orderStatus = '배송완료' THEN 6
-						WHEN oi.orderStatus = '교환중' THEN 7
-						WHEN oi.orderStatus = '환불중' THEN 8
+						WHEN oi.orderStatus = '교환진행중' THEN 7
+						WHEN oi.orderStatus = '환불진행중' THEN 8
 						WHEN oi.orderStatus = '교환완료' THEN 9
 						WHEN oi.orderStatus = '환불완료' THEN 10
 					END
@@ -83,7 +92,7 @@
 	<update id="updateOrderStatus" parameterType="java.util.List">
 		<foreach collection="list" item="order" index="index">
 			UPDATE orders_info SET orderStatus=#{ order.changeValue }
-			WHERE orderId=#{ order.orderId } AND optionId LIKE CONCAT(#{ order.productId }, '%');
+			WHERE orderId=#{ order.orderId } AND optionId LIKE CONCAT(#{ order.productId }, #{ order.optionName });
 		</foreach>
 	</update>
 	
@@ -96,12 +105,12 @@
 	
 	<insert id="insertAddress" parameterType="hashMap">
 		INSERT INTO client_address (addressId, clientId, addressTitle, addressName, addressNum, addressPostNum, address1, address2, addressMemo, addressBase, cookieId)
-		VALUES(#{ addressInfo.addressId }, #{ addressInfo.clientId }, #{ addressInfo.addressTitle }, #{ addressInfo.addressName }, #{ addressInfo.addressNum  }, 
+		VALUES(#{ addressInfo.addressId }, #{ addressInfo.clientId }, #{ addressInfo.addressTitle }, #{ addressInfo.addressName }, REPLACE(#{ addressInfo.addressNum  }, '-', ''), 
 				#{ addressInfo.addressPostNum }, #{ addressInfo.address1 }, #{ addressInfo.address2 }, #{ addressInfo.addressMemo }, #{ addressInfo.addressBase }, #{ cookieId })
 		ON DUPLICATE KEY UPDATE
 			addressTitle=#{ addressInfo.addressTitle }, 
 			addressName=#{ addressInfo.addressName }, 
-			addressNum=#{ addressInfo.addressNum }, 
+			addressNum=REPLACE(#{ addressInfo.addressNum  }, '-', ''), 
 			addressPostNum=#{ addressInfo.addressPostNum }, 
 			address1=#{ addressInfo.address1 }, 
 			address2=#{ addressInfo.address2 }, 
@@ -170,7 +179,7 @@
 	</select>
 	
 	<select id="getOrderInfoList" parameterType="hashMap" resultType="hashMap">
-		SELECT oi.*, pro.productName, pro.productId, pri.productPrice, CONCAT(pm.imageDir, pm.imageName) AS mainImage, op.*, re.reviewId
+		SELECT oi.*, pro.productName, pro.productId, pri.productPrice, CONCAT(pm.imageDir, pm.imageName) AS mainImage, op.*, re.reviewId, re.reviewStatus
 		FROM orders_info oi
 		LEFT JOIN product pro ON (SUBSTRING(oi.optionId, 1, 9)=pro.productId)
 		LEFT JOIN product_price pri ON (pro.productId = pri.productId)
@@ -196,12 +205,19 @@
 	
 	<insert id="insertSwapRefund" parameterType="hashMap">
 		INSERT INTO 
-			<if test="requestWhat == 'refund'">refund(refundId, orderId, optionId, refundReason, refundWay, refundCost, refundCostMtd, refundStatus, refundEmail, refundRegDate, bankId, refundBankNum)</if>
-			<if test="requestWhat == 'swap'">swap(swapId, orderId, optionId, swapReason, swapWay, swapCost, swapCostMtd, swapStatus, swapEmail, swapRegDate)</if>
-		VALUES(#{ id }, #{ orderId }, #{ optionId }, #{ reason }, #{ deliverWay }, #{ cost }, #{ costMtd }, #{ status }, #{ email }, CURRENT_TIMESTAMP()
+			<if test="requestWhat == 'refund'">refund(refundId, orderId, optionId, refundReason, refundWay, refundCost, refundCostMtd, refundStatus, refundEmail, refundRegDate, refundKeyword, bankId, refundBankNum)</if>
+			<if test="requestWhat == 'swap'">swap(swapId, orderId, optionId, swapReason, swapWay, swapCost, swapCostMtd, swapStatus, swapEmail, swapRegDate, swapKeyword)</if>
+		VALUES(#{ id }, #{ orderId }, #{ optionId }, #{ reason }, #{ deliverWay }, #{ cost }, #{ costMtd }, #{ status }, #{ email }, CURRENT_TIMESTAMP(), #{ keyword }
 			<if test="requestWhat == 'refund'"> , #{ bankId }, #{ refundBankNum }</if>
 		);
 	</insert>
+	
+	<update id="updateSwapRefund" parameterType="hashMap">
+		UPDATE ${ requestWhat } 
+		SET
+			<if test="requestWhat == 'refund'">refundStatus = #{ status } WHERE refundId = #{ id }</if>
+			<if test="requestWhat == 'swap'">swapStatus = #{ status } WHERE swapId = #{ id }</if>
+	</update>
 	
 <!-- 나의 주문 내역 -->
 	<select id="getMyOrderList" parameterType="hashMap" resultType="hashMap">
@@ -231,4 +247,9 @@
 			</if>
 		</if>
 	</select>
+	
+	<delete id="deleteOrderInfo" parameterType="String">
+		DELETE orders_info WHERE orderId=#{ orderId };
+		DELETE orders WHERE orderId=#{ orderId };
+	</delete>
 </mapper>

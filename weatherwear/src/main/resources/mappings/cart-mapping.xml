@@ -58,11 +58,14 @@
 	</select>	
 	
 	<!-- 수량 체크 -->
-	<select id="checkStock" parameterType="int" resultType="int">
-		SELECT oi.stockCnt
-		FROM cart ca
-		INNER JOIN option_info oi ON ca.optionId = oi.optionId
-		WHERE ca.cartId = #{ cartId };
+	<select id="checkStock" parameterType="list" resultType="option">
+		SELECT *
+		FROM option_info oi
+		INNER JOIN cart ca ON ca.optionId = oi.optionId
+		WHERE ca.cartId IN
+			<foreach collection="list" item="cart" open="(" separator="," close=")">
+		 		${ cart.cartId }
+	 		</foreach>
 	</select>
 	
 	<select id="getOrderProductList" parameterType="hashMap" resultMap="cart">

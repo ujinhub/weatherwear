@@ -15,6 +15,8 @@ let status;			// 상태(요청,진행,완료)
 let bankId;			// 환불 은행
 let refundBankNum;	// 환불 계좌
 let requestWhat;	// 교환/환불
+let keyword;		// 오배송/상품하자/단순변심/사이즈변경
+
 
 let reviewContent;
 let reviewStar;
@@ -48,6 +50,7 @@ let productId;
 			}else {		cost = 6000; 	}
 			break;
 		}	
+		keyword = id;
 		setCost(cost);
 	}
 
@@ -280,7 +283,8 @@ function setCost(cost){
 				costMtd: costMtd,
 				status: status,
 				bankId: bankId,
-				refundBankNum: refundBankNum
+				refundBankNum: refundBankNum,
+				keyword: keyword
 			},
 			success: function(res){
 				if(res.code == 1){

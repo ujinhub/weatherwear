@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -23,6 +22,7 @@ import org.springframework.web.util.WebUtils;
 import com.w2.cart.CartVO;
 import com.w2.cart.service.CartService;
 import com.w2.client.ClientVO;
+import com.w2.product.OptionVO;
 import com.w2.util.ClientCookie;
 import com.w2.util.ResponseDTO;
 
@@ -38,7 +38,6 @@ public class CartController {
 	 */
 	@RequestMapping("cart.do")
 	public String cart(HttpServletRequest request, HttpSession session, Model model, CartVO cartvo) {
-		
 		// 비로그인 상태인 경우
 		if(session.getAttribute("userInfo") == null) {
 			Cookie cookie = WebUtils.getCookie(request, "clientCookie");
@@ -50,7 +49,8 @@ public class CartController {
 			cartvo.setClientId(client.getClientId());
 		}
 		
-		model.addAttribute("cartList", cartService.getCartList(cartvo));
+		List<CartVO> cartList = cartService.getCartList(cartvo);
+		model.addAttribute("cartList", cartList);
 		return "cart";
 	}
 	

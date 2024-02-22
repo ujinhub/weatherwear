@@ -95,7 +95,10 @@ function checkSubmit(){
 	let addressId = $("#addressId").val();
 	let addressBase = $("#baseAddress").val();
 	let clientId = $("#clientId").val();
-	let couponId = $("#couponId").val().split("_")[2];
+	let couponId = $("#couponId").val()
+	if(couponId!= null && couponId !=""){
+		couponId = couponId.split("_")[2];
+	}
 	let usedPoint = parseInt($("#usedPoint").val());
 	
 	//비회원
@@ -106,6 +109,7 @@ function checkSubmit(){
 	let cntList = document.querySelectorAll(".cartCnt");				//상품별 수량
 	let cartId = document.querySelectorAll(".cartId");					//장바구니 번호
 	let optionList = document.querySelectorAll(".optionId");			//상품별 옵션
+	let productName = document.querySelectorAll(".productName");		//상품이름
 	let optionIdList = '';
 	let cartIdList = [];
 	let orderInfoList = [];
@@ -115,7 +119,8 @@ function checkSubmit(){
 	    let order = {
 	        "optionId": optionList[i].value,
 	        "orderProCnt": parseInt(cntList[i].value),
-	        "orderTotal": parseInt(priceList[i].value)
+	        "orderTotal": parseInt(priceList[i].value),
+	        "productName": productName[i].value
 	    };
 	    orderInfoList.push(order);
 	    cartIdList.push(parseInt(cartId[i].value));
@@ -125,9 +130,9 @@ function checkSubmit(){
 	    }
 	}
 	
-	let data = {};
-	data["cartIdList"] = cartIdList;
-	data["orderInfoList"] = orderInfoList;
+	let dataInfo = {};
+	dataInfo["cartIdList"] = cartIdList;
+	dataInfo["orderInfoList"] = orderInfoList;
 	
 	//배송지
 	let addressInfo = {
@@ -142,8 +147,8 @@ function checkSubmit(){
 		"addressMemo": addressMemo,
 		"addressBase": addressBase
 	};
-	data["addressInfo"] = addressInfo;
-	data["addressBase"] = addressBase;
+	dataInfo["addressInfo"] = addressInfo;
+	dataInfo["addressBase"] = addressBase;
 
 	//주문정보
 	let orderInfo = {
@@ -156,8 +161,8 @@ function checkSubmit(){
 		"couponId": couponId,
 		"cookiePwd": cookiePwd,
 	};
-	data["orderInfo"] = orderInfo;
-	data["orderPrice"] = orderPrice;
+	dataInfo["orderInfo"] = orderInfo;
+	dataInfo["orderPrice"] = orderPrice;
 	
 	// 회원	
 	if(couponId != null){
@@ -165,7 +170,7 @@ function checkSubmit(){
 			"couponId": couponId.split("_")[2],
 			"clientId": clientId
 		};
-		data["usedCouponInfo"] = usedCouponInfo;
+		dataInfo["usedCouponInfo"] = usedCouponInfo;
 	}
 	
 	$.ajax({
@@ -173,7 +178,7 @@ function checkSubmit(){
 		type: "POST",
 		async: true,
 		dataType: "json",
-		data: JSON.stringify(data),
+		data: JSON.stringify(dataInfo),
 		contentType: "application/json",
 		success: function(res){
 			if(res.code == 1){
@@ -222,10 +227,11 @@ function checkSubmit(){
 
 								let paymentInfo = {
 									"orderId": orderId,
-									"paymentId": rsp.merchant_uid,
+									"paymentId": rsp.imp_uid,
 									"paymentMethod": sqlPayMethod,
 									"paymentDate": rsp.paid_at,
-									"paymentStatus": paymentStatus
+									"paymentStatus": paymentStatus,
+									"amount": rsp.amount
 								}
 								
 								$.ajax({
@@ -236,7 +242,17 @@ function checkSubmit(){
 									data: JSON.stringify(paymentInfo),
 									contentType: "application/json",
 									success: function(res){
-										if(res.code == 1){
+										if(res.code > 0){
+											dataInfo["paymentInfo"] = paymentInfo;
+											$.ajax({
+												url: "sendMail.do",
+												type: "POST",
+												async: true,
+												dataType: "json",
+												data: JSON.stringify(dataInfo),
+												contentType: "application/json",
+											});
+											
 											let successAction = "location.href='orderInfo.do?orderId=" + res.data + "'";
 											playConfirm(res.message, "주문 상세페이지로 이동하시겠습니까?", "success", "이동하기", "메인페이지로", successAction, "location.href='main.do'");
 										}
@@ -254,6 +270,24 @@ function checkSubmit(){
 					}
 					if(res.code == -1){
 						playToast(res.message, "error");
+						$.ajax({
+							url: "deleteCancleOrderInfo.do",
+							type: "POST",
+							async: true,
+							dataType: "json",
+							data: { orderId : res.data },
+							success: function(res){
+								if(res.code == 1){
+									console.log("주문정보 삭제 성공");
+								}
+								if(res.code == -1){
+									console.log("주문정보 삭제 실패");
+								}
+							},
+							error: function(){
+								console.log("오류발생");
+							}
+						});
 					}
 				});
 			}

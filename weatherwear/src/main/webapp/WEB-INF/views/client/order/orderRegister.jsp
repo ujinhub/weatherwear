@@ -182,6 +182,7 @@
 											<input type="hidden" name="cartCnt" class="cartCnt" value="${ pro.cartCnt }">
 											<input type="hidden" name="cartId" class="cartId" value="${ pro.cartId }">
 											<input type="hidden" name="optionId" class="optionId" value="${ pro.optionId }">
+											<input type="hidden" name="productName" class="productName" value="${ pro.product.productName }">
 										</div>
 									</div>
 								</div>

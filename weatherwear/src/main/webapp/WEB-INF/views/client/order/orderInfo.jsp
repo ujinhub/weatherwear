@@ -60,7 +60,18 @@
 			<section id="contact" class="contact mb-5">
 				<div class="container aos-init aos-animate" data-aos="fade-up">
 					<c:choose>
-						<c:when test="${ userInfo.clientId != orderInfo.clientId || cookieId != orderInfo.cookieId }">
+						<c:when test="${ userInfo.clientId != null && userInfo.clientId != orderInfo.clientId }">
+						<div style="height:800px;"></div>
+						<script>
+							$(document).ready(function(){
+								playToast("잘못된 접근입니다. 메인 페이지로 이동합니다.", "error");
+								setTimeout(function(){
+									location.href="main.do";
+								}, 1000);
+							})
+						</script>
+						</c:when>
+						<c:when test="${ userInfo.clientId == null && cookieId != orderInfo.cookieId }">
 						<div style="height:800px;"></div>
 						<script>
 							$(document).ready(function(){
@@ -88,13 +99,27 @@
 										<h3>주문자</h3>
 									</div>
 									<div class="form-group">
-										<span class="info">주문자 : ${ orderInfo.clientName }</span>
+										<span class="info">주문자 : 
+											<c:if test="${ orderInfo.clientName != null}">
+										${ orderInfo.clientName }
+											</c:if>
+											<c:if test="${ orderInfo.clientName == null}">
+										${ orderInfo.addressName }
+											</c:if>
+										</span>
 									</div>
 									<div class="form-group">
 										<span class="info">이메일 : ${ orderInfo.orderEmail }</span>
 									</div>
 									<div class="form-group">
-										<span class="info">연락처 : ${fn:substring(orderInfo.clientNum,0,3)}-${fn:substring(orderInfo.clientNum,3,7)}-${fn:substring(orderInfo.clientNum,7,12)}</span>
+										<span class="info">연락처 : 
+											<c:if test="${ orderInfo.clientNum != null}">
+										${fn:substring(orderInfo.clientNum,0,3)}-${fn:substring(orderInfo.clientNum,3,7)}-${fn:substring(orderInfo.clientNum,7,12)}
+											</c:if>
+											<c:if test="${ orderInfo.clientNum == null}">
+										${fn:substring(orderInfo.addressNum,0,3)}-${fn:substring(orderInfo.addressNum,3,7)}-${fn:substring(orderInfo.addressNum,7,12)}
+											</c:if>
+										</span>	
 									</div>
 								</div><br>
 								<div class="php-email-form">
@@ -114,7 +139,7 @@
 										<span class="info">상세주소 : ${ orderInfo.address2 }</span>
 									</div>
 									<div class="form-group">
-										<span class="info">연락처 : ${fn:substring(orderInfo.clientNum,0,3)}-${fn:substring(orderInfo.clientNum,3,7)}-${fn:substring(orderInfo.clientNum,7,12)}</span>
+										<span class="info">연락처 : ${fn:substring(orderInfo.addressNum,0,3)}-${fn:substring(orderInfo.addressNum,3,7)}-${fn:substring(orderInfo.addressNum,7,12)}</span>
 									</div>
 									<div class="form-group" id="deliMsgDiv">
 										<span class="info">배송메모 : ${ orderInfo.addressMemo }</span>

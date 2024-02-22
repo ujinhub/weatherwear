@@ -106,4 +106,14 @@ public class OrderServiceImpl implements OrderService {
 	public int insertPayment(Map<String, Object> data) {
 		return orderDAO.insertPayment(data);
 	}
+
+	@Override
+	public int updateSwapRefund(Map<String, Object> requestInfo) {
+		return orderDAO.updateSwapRefund(requestInfo);
+	}
+
+	@Override
+	public int deleteCancleOrderInfo(String orderId) {
+		return orderDAO.deleteCancleOrderInfo(orderId);
+	}
 }

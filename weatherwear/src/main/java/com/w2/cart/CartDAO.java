@@ -6,6 +6,8 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.w2.product.OptionVO;
+
 @Repository
 public class CartDAO {
 
@@ -71,8 +73,8 @@ public class CartDAO {
 	}
 	
 	// 재고 확인
-	public int checkStock(int cartId) {
-		return sqlSessionTemplate.selectOne("CartDAO.checkStock", cartId);
+	public List<OptionVO> checkStock(List<CartVO> cartList) {
+		return sqlSessionTemplate.selectList("CartDAO.checkStock", cartList);
 	}
 
 	// 만료된 쿠키 확인

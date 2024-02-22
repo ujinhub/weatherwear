@@ -29,4 +29,6 @@ public interface OrderService {
 	/** 나의 주문 내역 */
 	List<Map<String, Object>> getMyOrderList(HashMap<String, Object> param);
 	int getMyOrderListCnt(HashMap<String, Object> param);
+	int updateSwapRefund(Map<String, Object> requestInfo);
+	int deleteCancleOrderInfo(String orderId);
 }

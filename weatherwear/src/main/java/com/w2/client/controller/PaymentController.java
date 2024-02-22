@@ -1,18 +1,25 @@
 package com.w2.client.controller;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.siot.IamportRestClient.IamportClient;
 import com.siot.IamportRestClient.exception.IamportResponseException;
+import com.siot.IamportRestClient.request.CancelData;
 import com.siot.IamportRestClient.response.IamportResponse;
 import com.siot.IamportRestClient.response.Payment;
+import com.w2.order.service.OrderService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -36,10 +43,92 @@ public class PaymentController {
 	
 	@ResponseBody
 	@RequestMapping("verifyIamport.do")
-    public IamportResponse<Payment> paymentByImpUid(@Param("imp_uid") String imp_uid) throws IamportResponseException, IOException {
+	public IamportResponse<Payment> paymentByImpUid(@Param("imp_uid") String imp_uid) throws IamportResponseException, IOException {
 		iamportClient = new IamportClient(apiKey, secretKey);
 		IamportResponse<Payment> result = iamportClient.paymentByImpUid(imp_uid);
 
 		return result;
 	}
+
+	/** 결제 취소 */
+	@ResponseBody
+	@PostMapping("refundPriceProc.do")
+	public Map<String, Object> refundPriceProc(int refundPrice, int totalPrice, String paymentId) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		
+		IamportResponse<Payment> payment_response;
+		iamportClient = new IamportClient(apiKey, secretKey);
+		CancelData cancel_data;
+		
+		if(refundPrice == totalPrice) {
+			cancel_data = new CancelData(paymentId, true);
+			result.put("cancleMethod", "전액취소");
+		} else {
+			cancel_data = new CancelData(paymentId, true, BigDecimal.valueOf(refundPrice));
+			result.put("cancleMethod", "부분취소");
+		}
+		
+		try {
+			IamportResponse<Payment> cancledInfo = iamportClient.paymentByImpUid(paymentId);
+			Payment paymentInfo = (Payment)cancledInfo.getResponse();
+			
+			if(paymentInfo.getAmount().intValue() > refundPrice) {
+				payment_response = iamportClient.cancelPaymentByImpUid(cancel_data);
+				
+				if(payment_response != null) {
+					result.put("code", 1);
+					result.put("resultCode", "success");
+					result.put("msg", "환불처리가 완료되었습니다.");
+				} 
+			} else {
+				result.put("code", -1);
+				result.put("resultCode", "fail");
+				result.put("msg", "환불 처리 중 문제가 발생했습니다.");
+			}
+		} catch (IamportResponseException e) {
+			System.err.println(e.getMessage());
+			
+			result.put("code", -1);
+			result.put("resultCode", "fail");
+			switch (e.getHttpStatusCode()) {
+				case 401:	// 클라이언트가 서버에 접근하기 위해 필요한 인증 정보를 제공하지 못한 경우
+					System.err.println("인증 실패");
+					result.put("msg", "인증에 실패하였습니다.");
+					break;
+				case 500:	// 서버가 요청을 처리하는 도중에 오류가 발생한 경우
+					System.err.println("서버 오류");
+					result.put("msg", "서버에 오류가 발생했습니다.");
+					break;
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	/*
+		String test_already_cancelled_imp_uid = "imp_497911164010";
+        CancelData cancel_data = new CancelData(test_already_cancelled_imp_uid, true); //imp_uid를 통한 전액취소
+
+        try {
+            IamportResponse<Payment> payment_response = client.cancelPaymentByImpUid(cancel_data);
+            System.err.println("getMessage : " + payment_response.getMessage());
+            System.err.println("getResponse : " + payment_response.getResponse());
+            setPayment(payment_response.getResponse());
+
+        } catch (IamportResponseException e) {
+            System.err.println(e.getMessage());
+
+            switch (e.getHttpStatusCode()) {
+                case 401:
+                    //TODO
+                    break;
+                case 500:
+                    //TODO
+                    break;
+            }
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+	 */
 }

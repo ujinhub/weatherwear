@@ -1,11 +1,15 @@
 package com.w2.client.controller;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.mail.Message;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -13,6 +17,8 @@ import javax.servlet.http.HttpSession;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -58,6 +64,9 @@ public class ClientOrderController {
 
 	@Autowired
 	private ImageService imageService;
+
+	@Autowired
+	private JavaMailSender mailSender;
 	
 	@RequestMapping("noClientOrder.do")
 	public String noClientOrderView() {
@@ -66,7 +75,6 @@ public class ClientOrderController {
 
 	@RequestMapping("ttt.do")
 	public String ttt(@Param("ID")String id) {
-		System.err.println(">>> id : " + id);
 		return "test";
 	}
 	
@@ -102,7 +110,7 @@ public class ClientOrderController {
 		
 		List<CartVO> orderList = orderService.getOrderProductList(orderMap);
 		if(orderList.size() <= 0) {
-			return "redirect:login.do";
+			return "order/orderLogin";
 		}else {
 			model.addAttribute("orderList", orderList);
 		}
@@ -147,10 +155,7 @@ public class ClientOrderController {
 		} 
 		
 		try {
-			System.err.println("6. try 시작");
 			int result = orderService.insertImsiOrder(data);
-			
-			System.err.println("14. insertImsiOrder : " + result);
 			orderId = (String)data.get("orderId");
 			if(result > 0) {
 				code = 1;
@@ -170,6 +175,36 @@ public class ClientOrderController {
 		return new ResponseDTO<String>(statusCode, code, resultCode, msg, orderId);
 	}
 	
+	/** 주문 정보 취소 */
+	@ResponseBody
+	@PostMapping("deleteCancleOrderInfo.do")
+	public ResponseDTO<String> deleteCancleOrderInfo(String orderId) {
+		Integer statusCode = HttpStatus.OK.value();
+		int code = 0;
+		String resultCode;
+		String msg;
+		
+		try {
+			int result = orderService.deleteCancleOrderInfo(orderId);
+			if(result > 0) {
+				code = 1;
+				resultCode = "success";
+				msg = "주문이 완료되었습니다.";
+			} else {
+				code = -1;
+				resultCode = "fail";
+				msg = "주문중 오류가 발생했습니다.";
+			}
+		} catch (Exception e) {
+			code = -1;
+			resultCode = "fail";
+			msg = "오류가 발생했습니다.";
+			orderId = null;
+		}
+		return new ResponseDTO<String>(statusCode, code, resultCode, msg, orderId);
+	}
+	
+	
 	/** 결제 정보 등록 */
 	@ResponseBody
 	@PostMapping("paymentInsert.do")
@@ -181,9 +216,7 @@ public class ClientOrderController {
 		String orderId = (String)data.get("orderId");
 
 		try {
-			System.err.println("31. try 시작");
 			int result = orderService.insertPayment(data);
-			System.err.println("32. insertPayment :  " + result);
 			if(result > 0) {
 				code = 1;
 				resultCode = "success";
@@ -258,8 +291,6 @@ public class ClientOrderController {
 			orderData.put("clientId", client.getClientId());
 		}
 		
-		System.err.println("orderData : " + orderData);
-		
 		try {
 			int result = orderService.updateOrder(orderData);
 			if(result > 0) {
@@ -285,7 +316,7 @@ public class ClientOrderController {
 	@PostMapping("insertSwapRefund.do")
 	public ResponseDTO<String> insertSwapRefund(String requestWhat, String orderId, String optionId, String reason, String email, 
 												String deliverWay, int cost, String costMtd, String status, String bankId, String refundBankNum, 
-												HttpSession session, HttpServletRequest request, HttpServletResponse response) {
+												String keyword, HttpSession session, HttpServletRequest request, HttpServletResponse response) {
 		Integer statusCode = HttpStatus.OK.value();
 		int code = 0;
 		String resultCode;
@@ -295,12 +326,14 @@ public class ClientOrderController {
 		Map<String, Object> requestInfo = new HashMap<String, Object>();
 		requestInfo.put("requestWhat", requestWhat);
 		requestInfo.put("orderId", orderId);
+		requestInfo.put("optionId", optionId);
 		requestInfo.put("reason", reason);
 		requestInfo.put("email", email);
 		requestInfo.put("deliverWay", deliverWay);
 		requestInfo.put("cost", cost);
 		requestInfo.put("costMtd", costMtd);
 		requestInfo.put("status", status);
+		requestInfo.put("keyword", keyword);
 
 		if(requestWhat.equals("swap")) {
 			id += "SW";
@@ -354,7 +387,6 @@ public class ClientOrderController {
 
 		try {
 			int result = reviewService.insertReview(review);
-			System.err.println("누가 먼저 실행되냐고");
 			if(result > 0) {
 				code = 1;
 				resultCode = "success";
@@ -392,7 +424,6 @@ public class ClientOrderController {
 			if(review.getReviewStatus().equals("포토")) {
 				result.put("reviewImage", reviewService.getReviewImage(review));
 			}
-			System.err.println("result : " + result);
 		} else {
 			code = -1;
 			resultCode = "fail";
@@ -430,5 +461,52 @@ public class ClientOrderController {
 			msg = "오류가 발생했습니다.";
 		}
 		return new ResponseDTO<String>(statusCode, code, resultCode, msg, reviewId);
+	}
+
+	@PostMapping("sendMail.do")
+	public void sendMail(@RequestBody Map<String, Object> data) {
+		System.err.println(">>>>>>>>>>>>>> 메일보낸다 : " + data);
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy년 M월 d일");
+		
+		List<HashMap<String, String>> orderInfoList = (List<HashMap<String, String>>)data.get("orderInfoList");
+		
+		String orderListString = "";
+		for(int i=0; i<orderInfoList.size(); i++) {
+			orderListString += (String)orderInfoList.get(i).get("productName");
+			if(i<orderInfoList.size()-1) {
+				orderListString += ", <br>";
+			}
+		}
+		
+		data.put("orderString", orderListString);
+		
+		MimeMessagePreparator preparator = new MimeMessagePreparator() {
+			StringBuffer content = new StringBuffer()
+								.append("<p><img src='https://hyeongabucket.s3.ap-northeast-2.amazonaws.com/main/logo.png' width='237px' onclick=\"location.href='http://localhost:8080/w2/main.do'\"></p><p>&nbsp;</p>")
+								.append("<h1><span style=\"font-family: 'Nanum Gothic';\"><b>웨더웨어 주문 완료</b></span></h1>")
+								.append("<div style='witdh:80%;'><hr><p><span style=\"font-family: 'Nanum Gothic';\">안녕하세요.</span></p>")
+								.append("<p><span style=\"font-family: 'Nanum Gothic';\">주문하신 내역입니다.</span><span style=\"font-family: 'Nanum Gothic';\"></span></p>")
+								.append("<hr>")
+								.append("<p><span style=\"font-family: 'Nanum Gothic';\">주문번호 : <b>" + ((HashMap<String,String>)data.get("paymentInfo")).get("orderId") + "</b></span></p>")
+								.append("<p><span style=\"font-family: 'Nanum Gothic';\">결제금액 : <b>" + ((HashMap<String,String>)data.get("orderInfo")).get("orderPrice") + "</b></span></p>")
+								.append("<p><span style=\"font-family: 'Nanum Gothic';\">결제방식 : <b>" + ((HashMap<String,String>)data.get("paymentInfo")).get("paymentMethod") + "</b></span></p>")
+								.append("<p><span style=\"font-family: 'Nanum Gothic';\">결제상태 : <b>" + ((HashMap<String,String>)data.get("paymentInfo")).get("paymentStatus") + "</b></span></p>")
+								.append("<p><span style=\"font-family: 'Nanum Gothic';\">상품정보 <br><b>" + (String)data.get("orderString") + "</b></span></p>")
+								.append("<hr></div>");
+			@Override
+			public void prepare(MimeMessage mimeMessage) throws Exception {
+				mimeMessage.setFrom(new InternetAddress("weatherwear493@gmail.com", "WeatherWear", "UTF-8"));
+				mimeMessage.setSubject("[웨더웨어] 주문하신 내역입니다.");
+				mimeMessage.setRecipients(Message.RecipientType.TO, InternetAddress.parse(((HashMap<String,String>)data.get("orderInfo")).get("orderEmail")));
+				mimeMessage.setContent(content.toString(), "text/html;charset=UTF-8");
+				mimeMessage.setReplyTo(InternetAddress.parse(((HashMap<String,String>)data.get("orderInfo")).get("orderEmail")));
+			}
+		};
+		
+		try {
+			mailSender.send(preparator);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

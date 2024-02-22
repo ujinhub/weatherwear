@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.w2.cart.CartDAO;
 import com.w2.cart.CartVO;
+import com.w2.product.OptionVO;
 
 @Service
 public class CartServiceImpl implements CartService {
@@ -35,8 +36,8 @@ public class CartServiceImpl implements CartService {
 	}
 	
 	@Override
-	public int checkStock(int cartId) {
-		return cartDAO.checkStock(cartId);
+	public List<OptionVO> checkStock(List<CartVO> cartList) {
+		return cartDAO.checkStock(cartList);
 	}
 
 	@Override

@@ -53,6 +53,8 @@
 											<button id="orderDate" type="button" class="orderbyBtn btn btn-sm btn-outline-light <c:if test="${search.orderby == 'orderDate'}">active</c:if>">최신순</button>
 											<button id="clientId" type="button" class="orderbyBtn btn btn-sm btn-outline-light <c:if test="${search.orderby == 'clientId'}">active</c:if>">아이디순</button>
 											<button id="orderStatus" type="button" class="orderbyBtn btn btn-sm btn-outline-light <c:if test="${search.orderby == 'orderStatus'}">active</c:if>">주문상태순</button>
+											<button id="swap" type="button" class="orderbyBtn btn btn-sm btn-outline-light <c:if test="${search.orderby == 'swap'}">active</c:if>">교환</button>
+											<button id="refund" type="button" class="orderbyBtn btn btn-sm btn-outline-light <c:if test="${search.orderby == 'refund'}">active</c:if>">환불</button>
 											<button class="btn btn-sm btn-secondary buttons-pdf buttons-html5 download" tabindex="0" aria-controls="example1" type="button" id="excelDownload" onclick="exportExcel('주문내역')">
 												<span>Excel 저장</span>
 											</button>
@@ -91,8 +93,8 @@
 														<option value="배송대기">배송대기</option>
 														<option value="배송중">배송중</option>
 														<option value="배송완료">배송완료</option>
-														<option value="교환중">교환중</option>
-														<option value="환불중">환불중</option>
+														<option value="교환진행중">교환진행중</option>
+														<option value="환불진행중">환불진행중</option>
 														<option value="교환완료">교환완료</option>
 														<option value="환불완료">환불완료</option>
 													</select>
@@ -115,7 +117,7 @@
 												<col width="280px"/><!-- 주문번호 -->
 												<col width="150px"/><!-- 주문상태 -->
 												<col width="200px"/><!-- 주문일자 -->
-												<col width="100px"/><!-- 회원번호 -->
+												<col width="150px"/><!-- 회원번호 -->
 												<col width="100px"/><!-- 구매자이름 -->
 												<col width="150px"/><!-- 구매자연락처 -->
 												<col width="500px"/><!-- 주문상품 -->
@@ -163,9 +165,38 @@
 											<tbody>
 												<c:forEach var="item" items="${orderList}" varStatus="status">
 													<tr>
-														<td class="checklist"><input type="checkbox" value="${item.orderId}_${item.productId}" class="check"></td>
+														<td class="checklist"><input type="checkbox" value="${item.orderId}_${item.productId}_${item.optionName}" class="check"></td>
 														<td>${item.orderId}</td>
-														<td>${item.orderStatus}</td>
+														<td id="status_${ item.orderId }" onclick="checkInfo('${ item.orderId }', '${ item.refundId }', '${ item.swapId }')">
+															${item.orderStatus}
+															<input type="hidden" id="optionId_${ item.orderId }" value="${ item.optionId }">
+															<input type="hidden" id="clientId_${ item.orderId }" value="${ item.clientId }">
+															<input type="hidden" id="clientNum_${ item.orderId }" value="${ item.clientNum }">
+															<c:if test="${ item.refundId != null || item.refundId == '' }">
+																<input type="hidden" id="refundId_${ item.orderId }" value="${ item.refundId }">
+																<input type="hidden" id="refundReason_${ item.refundId }" value="${ item.refundReason }">
+																<input type="hidden" id="refundKeyword_${ item.refundId }" value="${ item.refundKeyword }">
+																<input type="hidden" id="refundWay_${ item.refundId }" value="${ item.refundWay }">
+																<input type="hidden" id="refundCost_${ item.refundId }" value="${ item.refundCost }">
+																<input type="hidden" id="refundCostMtd_${ item.refundId }" value="${ item.refundCostMtd }">
+																<input type="hidden" id="refundBankId_${ item.refundId }" value="${ item.bankId }">
+																<input type="hidden" id="refundBankNum_${ item.refundId }" value="${ item.refundBankNum }">
+																<input type="hidden" id="refundStatus_${ item.refundId }" value="${ item.refundStatus }">
+																<input type="hidden" id="refundRegDate_${ item.refundId }" value="${ item.refundRegDate }">
+																<input type="hidden" id="refundEmail_${ item.refundId }" value="${ item.refundEmail }">
+															</c:if>
+															<c:if test="${ item.swapId != null || item.swapId == '' }">
+																<input type="hidden" id="swapId_${ item.orderId }" value="${ item.swapId }">
+																<input type="hidden" id="swapReason_${ item.swapId }" value="${ item.swapReason }">
+																<input type="hidden" id="swapKeyword_${ item.swapId }" value="${ item.swapKeyword }">
+																<input type="hidden" id="swapWay_${ item.swapId }" value="${ item.swapWay }">
+																<input type="hidden" id="swapCost_${ item.swapId }" value="${ item.swapCost }">
+																<input type="hidden" id="swapCostMtd_${ item.swapId }" value="${ item.swapCostMtd }">
+																<input type="hidden" id="swapStatus_${ item.swapId }" value="${ item.swapStatus }">
+																<input type="hidden" id="swapRegDate_${ item.swapId }" value="${ item.swapRegDate }">
+																<input type="hidden" id="swapEmail_${ item.swapId }" value="${ item.swapEmail }">
+															</c:if>
+														</td>
 														<td>${item.orderDate}</td>
 														<td>${item.clientId}</td>
 														<td>${item.clientName}</td>
@@ -175,13 +206,20 @@
 														<td>${item.orderProCnt}</td>
 														<td><fmt:formatNumber value="${item.orderTotal}" pattern="###,###"/></td>
 														<td>${item.addressName}</td>
-														<td>${fn:substring(item.addressNum,0,3)}-${fn:substring(item.addressNum,3,7)}-${fn:substring(item.addressNum,7,11)}</td>
+														<td>${item.addressNum}</td>
 														<td><input type="text" value="${item.deliverNum}"></td>
 														<td>${item.addressPostNum}</td>
 														<td>${item.address1}</td>
 														<td>${item.address2}</td>
 														<td>${item.addressMemo}</td>
-														<td><fmt:formatNumber value="${item.orderPrice - item.usedPoint - ci.couponPrice}" pattern="###,###"/></td>
+														<td>
+															<fmt:formatNumber value="${item.orderPrice - item.usedPoint - item.couponPrice}" pattern="###,###"/>
+															<input type="hidden" id="proPrice_${ item.orderId }" value="${ item.orderTotal }">
+															<input type="hidden" id="orderPrice_${ item.orderId }" value="${ item.orderPrice }">
+															<input type="hidden" id="usedPoint_${ item.orderId }" value="${ item.usedPoint }">
+															<input type="hidden" id="couponPrice_${ item.orderId }" value="${ item.couponPrice }">
+															<input type="hidden" id="paymentId_${ item.orderId }" value="${ item.paymentId }">
+														</td>
 														<td>${item.paymentMethod}</td>
 														<td>${item.paymentStatus}</td>
 														<td>${item.paymentDate}</td>
