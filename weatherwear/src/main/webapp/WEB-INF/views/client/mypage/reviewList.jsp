@@ -31,13 +31,14 @@
 <!-- Font Awesome -->
 <link href="resources/admin/AdminLTE/plugins/fontawesome-free/css/all.min.css" rel="stylesheet">
 
+<link href="resources/client/css/review.css" rel="stylesheet">
+
 <style>
 .mg-2 { margin: 20px 0; }
 .mg-3 { margin: 30px 0 0; }
 .pd-1 { padding: 10px; }
-.table td {
-	vertical-align: middle;
-}
+.table td { vertical-align: middle; }
+.custom-radio { display:flex; justify-content: space-evenly;}	
 </style>
 </head>
 <body class="hold-transition sidebar-collapse layout-top-nav">
@@ -89,17 +90,17 @@
 					<div class="card-body table-responsive p-0">
 						<table class="table table-hover text-nowrap" style="table-layout: fixed;">
 							<colgroup>
-								<col width="10%" />
-								<col width="25%" />
-								<col width="20%" />
+								<col width="15%" />
+								<col width="35%" />
+								<col width="35%" />
 								<col width="15%" />
 							</colgroup>
 							<thead>
 								<tr>
-									<th>분류</th>
-									<th>제목</th>
-									<th>작성일</th>
-									<th>답변여부</th>
+									<th>사진</th>
+									<th>상품정보</th>
+									<th>리뷰내용</th>
+									<th>등록일자</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -110,11 +111,14 @@
 								</c:if>
 								<c:if test="${fn:length(reviewList) > 0}">
 									<c:forEach var="item" items="${reviewList}" varStatus="status">
-										<tr>
-											<td>${item.qnaType}</td>
-											<td>${item.qnaTitle}</td>
-											<td>${item.qnaDate}</td>
-											<td>${item.qnaStatus}</td>
+										<tr onclick="reviewView('${ item.reviewId }', '${item.productName}', '${item.image}', '', '${item.optionColor}', '${item.optionSize}' )">
+											<td><img src="${item.image}" style="height: 100px;"></td>
+											<td class="text-left">
+												${item.productName}<br>
+												[옵션: ${item.optionColor} / ${item.optionSize}]
+											</td>
+											<td>${item.reviewContent}</td>
+											<td>${item.reviewDate}</td>
 										</tr>
 									</c:forEach>
 								</c:if>
@@ -147,6 +151,9 @@
 		
 		<%@ include file="../footer.jsp" %>
 	</div>
+	<!-- Modal -->
+	<div class="modal fade show" id="modal-default" style="display: none; padding-right: 17px;" aria-modal="true" role="dialog"></div>
+	<div class="modal-backdrop fade" style="display:none"></div>
 
 <script src="resources/client/ZenBlog/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script  src="resources/util/plugins/sweetalert/jquery-lates.min.js"></script>
@@ -161,7 +168,9 @@
 <!-- AdminLTE App -->
 <script src="resources/admin/AdminLTE/dist/js/adminlte.js"></script>
 
+<script src="resources/util/js/modal.js"></script>
 <script src="resources/util/js/paging.js"></script>
+<script src="resources/client/js/orderInfo.js"></script>
 
 </body>
 </html>

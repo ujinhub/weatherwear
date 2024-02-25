@@ -98,4 +98,37 @@ public class SmsUtil {
 		}
 		return "redirect:test.do";
 	}
+	
+	
+	public String sentOneMessage(String to, String text) {
+		Coolsms coolsms = new Coolsms(APIKEY, SECRETKEY);
+		HashMap<String, String> set = new HashMap<String, String>();
+		set.put("from", FROM_NUMBER);	//발신번호
+		set.put("to", to);	// 수신번호
+		set.put("text", text);
+		set.put("type", "sms");
+		
+		// 전송 결과 확인
+		JSONObject result = coolsms.send(set);
+		
+		if((boolean)result.get("status") == true) {
+			System.err.println("성공 =====");
+			/**
+			 result.get("")
+			 	- group_id			: 그룹아이디
+			 	- result_code		: 결과코드
+			 	- result_message	: 결과메세지
+			 	- success_count		: 메세지아이디
+			 	- error_count		: 다건 전송시 오류 수
+			 */
+		} else {
+			System.err.println("실패 =====");
+			/**
+			 result.get("")
+			 	- code			: REST API 에러코드
+			 	- message		: 에러메세지
+			 */
+		}
+		return "redirect:test.do";
+	}
 }

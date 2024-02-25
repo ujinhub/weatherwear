@@ -32,9 +32,6 @@
 
 <style>
 .a-before a:not(:first-child)::before { content: "\0020\007C\0020" }
-.btnNaver { content: url(resources/client/images/btn_naver.png); height: 50px; }
-.btnKakao { content: url(resources/client/images/btn_kakao.png); height: 50px; }
-.btnGoogle { content: url(resources/client/images/btn_google.png); height: 50px; }
 .mg-2 { margin: 20px 0; }
 .mg-3 { margin: 30px 0 0; }
 .pd-1 { padding: 10px; }

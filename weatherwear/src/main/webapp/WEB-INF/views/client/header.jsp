@@ -51,7 +51,6 @@ pageEncoding="UTF-8"%>
 		</div>
 	</div>
 </header>
-
 <!-- Swiper -->
 <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
 <script>

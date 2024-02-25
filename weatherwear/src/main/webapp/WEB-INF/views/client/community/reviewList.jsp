@@ -31,6 +31,8 @@
 <!-- Font Awesome -->
 <link href="resources/admin/AdminLTE/plugins/fontawesome-free/css/all.min.css" rel="stylesheet">
 
+<link href="resources/client/css/review.css" rel="stylesheet">
+
 <style>
 .mg-2 { margin: 20px 0; }
 .mg-3 { margin: 30px 0 0; }
@@ -44,6 +46,8 @@
 	content: "*";
 	color: red;
 }
+.table td { vertical-align: middle; }
+.custom-radio { display:flex; justify-content: space-evenly;}	
 </style>
 </head>
 <body class="hold-transition sidebar-collapse layout-top-nav">
@@ -81,9 +85,9 @@
 					<div class="card-tools">
 						<div class="input-group input-group-sm">
 							<select id="searchType" class="form-control">
-								<option value="noticeTitle">제목</option>
-								<option value="noticeContent">내용</option>
-								<option value="noticeWriter">작성자</option>
+								<option value="productName">상품명</option>
+								<option value="reviewContent">내용</option>
+								<option value="clientId">작성자</option>
 							</select>
 							
 							<input type="text" id="keyword" class="form-control float-right" placeholder="Search">
@@ -99,20 +103,26 @@
 					<table class="table table-hover text-nowrap" style="table-layout: fixed;">
 						<colgroup>
 							<col width="10%" />
-							<col width="20%" />
-							<col width="20%" />
+							<col width="15%" />
+							<col width="45" />
+							<col width="15%" />
+							<col width="15%" />
 						</colgroup>
 						<thead>
 							<tr>
 								<th>번호</th>
+								<th>사진</th>
+								<th>상품명</th>
 								<th>작성자</th>
 								<th>등록일시</th>
 							</tr>
 						</thead>
 						<tbody>
 							<c:forEach var="item" items="${reviewList}" varStatus="status">
-								<tr onclick="location.href='reviewInfo.do?reviewId=${item.reviewId}'">
+								<tr onclick="reviewView('${ item.reviewId }', '${item.productName}', '${item.image}', '', '${item.optionColor}', '${item.optionSize}' )">
 									<td>${item.reviewIdx}</td>
+									<td><img src="${item.image}" style="height: 100px;"></td>
+									<td>${item.productName}</td>
 									<td>
 										${fn:substring(item.clientId, 0, 2)}
 										<c:forEach begin="2" end="${fn:length(item.clientId)}" step="1">*</c:forEach>
@@ -149,6 +159,9 @@
 		
 		<%@ include file="../footer.jsp" %>
 	</div>
+	<!-- Modal -->
+	<div class="modal fade show" id="modal-default" style="display: none; padding-right: 17px;" aria-modal="true" role="dialog"></div>
+	<div class="modal-backdrop fade" style="display:none"></div>
 
 <script src="resources/client/ZenBlog/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script  src="resources/util/plugins/sweetalert/jquery-lates.min.js"></script>
@@ -163,7 +176,9 @@
 <!-- AdminLTE App -->
 <script src="resources/admin/AdminLTE/dist/js/adminlte.js"></script>
 
+<script src="resources/util/js/modal.js"></script>
 <script src="resources/util/js/paging.js"></script>
+<script src="resources/client/js/orderInfo.js"></script>
 
 </body>
 </html>

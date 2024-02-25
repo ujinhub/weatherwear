@@ -1,7 +1,5 @@
 package com.w2.client.controller;
 
-import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -169,7 +167,7 @@ public class CommunityController {
 	 */
 	@RequestMapping("reviewList.do")
 	public String reviewList(Model model, @RequestParam(required = false, defaultValue = "1") int page,
-			@RequestParam(required = false, defaultValue = "1") int range, @RequestParam(required = false, defaultValue = "reviewTitle") String searchType,
+			@RequestParam(required = false, defaultValue = "1") int range, @RequestParam(required = false, defaultValue = "productName") String searchType,
 			@RequestParam(required = false) String keyword, @ModelAttribute("search") Search search) {
 		
 		// 검색

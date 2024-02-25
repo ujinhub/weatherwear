@@ -18,6 +18,7 @@ import com.w2.board.service.QnaService;
 import com.w2.client.ClientVO;
 import com.w2.client.service.ClientService;
 import com.w2.util.Search;
+import com.w2.util.SmsUtil;
 
 @Controller
 public class QnaController {
@@ -28,6 +29,8 @@ public class QnaController {
 	private ClientService clientService;
 	@Autowired
 	private JavaMailSender mailSender;
+	@Autowired
+	private SmsUtil sms;
 	
 
 	/**
@@ -94,7 +97,13 @@ public class QnaController {
 //			System.err.println(client);
 //			if(client.getClientEmailCheck().equals("Y")) {
 //				System.err.println("메일전송");
-				sendAnswerMail(vo, client.getClientEmail());
+			
+			// 메일 전송
+			sendAnswerMail(vo, client.getClientEmail());
+			
+			// 문자 전송
+			sms.sentOneMessage(client.getClientNum(), "웨더웨어 1:1 문의에 대한 답변이 완료되었습니다.");
+				
 //			}
 		}
 		qnaService.updateQnaAnswer(vo);
@@ -156,4 +165,5 @@ public class QnaController {
 			e.printStackTrace();
 		}
 	}
+	
 }

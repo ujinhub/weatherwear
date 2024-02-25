@@ -2,41 +2,42 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 	 			
 <mapper namespace="ReviewDAO">
-	<select id="getReviewList" resultType="review">
-		SELECT row_number() over(ORDER BY reviewDate) as reviewIdx, r.*
+	<select id="getReviewList" resultType="hashmap">
+		SELECT row_number() over(ORDER BY reviewDate) as reviewIdx, r.*, CONCAT(pi.ImageDir, pi.ImageName) as image, op.optionColor, op.optionSize, p.productName, p.productId
 		FROM review r
-		<trim prefix="WHERE" prefixOverrides="AND|OR">
-			<if test="keyword != null and keyword != ''">
-<!-- 				<if test="searchType == 'noticeTitle'"> -->
-<!-- 					AND noticeTitle like CONCAT('%', #{keyword}, '%') -->
-<!-- 				</if> -->
-<!-- 				<if test="searchType == 'noticeContent'"> -->
-<!-- 					AND noticeContent like CONCAT('%', #{keyword}, '%') -->
-<!-- 				</if> -->
-<!-- 				<if test="searchType == 'noticeWriter'"> -->
-<!-- 					AND noticeWriter like CONCAT('%', #{keyword}, '%') -->
-<!-- 				</if> -->
+		JOIN option_info op ON r.optionId = op.optionId
+		JOIN product p ON p.productId = r.productId
+		JOIN product_image pi ON pi.ImageBy = r.productId
+		WHERE pi.ImageStatus = '대표'
+		<if test="keyword != null and keyword != ''">
+			<if test="searchType == 'reviewContent'">
+				AND reviewContent like CONCAT('%', #{keyword}, '%')
 			</if>
-		</trim>
+			<if test="searchType == 'clientId'">
+				AND clientId like CONCAT('%', #{keyword}, '%')
+			</if>
+			<if test="searchType == 'productName'">
+				AND p.productName like CONCAT('%', #{keyword}, '%')
+			</if>
+		</if>
 		ORDER BY reviewIdx DESC
 		LIMIT #{startList}, #{listSize};
 	</select>
 	
 	<select id="getReviewListCnt" resultType="int">
 		SELECT count(*)
-		FROM review
+		FROM review r
+		JOIN product p ON p.productId = r.productId
 		<trim prefix="WHERE" prefixOverrides="AND|OR">
-<!-- 			<if test="keyword != null and keyword != ''"> -->
-<!-- 				<if test="searchType == 'noticeTitle'"> -->
-<!-- 					AND noticeTitle like CONCAT('%', #{keyword}, '%') -->
-<!-- 				</if> -->
-<!-- 				<if test="searchType == 'noticeContent'"> -->
-<!-- 					AND noticeContent like CONCAT('%', #{keyword}, '%') -->
-<!-- 				</if> -->
-<!-- 				<if test="searchType == 'noticeWriter'"> -->
-<!-- 					AND noticeWriter like CONCAT('%', #{keyword}, '%') -->
-<!-- 				</if> -->
-<!-- 			</if> -->
+			<if test="searchType == 'reviewContent'">
+				AND reviewContent like CONCAT('%', #{keyword}, '%')
+			</if>
+			<if test="searchType == 'clientId'">
+				AND clientId like CONCAT('%', #{keyword}, '%')
+			</if>
+			<if test="searchType == 'productName'">
+				AND p.productName like CONCAT('%', #{keyword}, '%')
+			</if>
 		</trim>
 	</select>
 	
@@ -52,10 +53,13 @@
 	</insert>
 	
 <!-- 나의 리뷰 목록 (페이징) - 권유진 추가 -->
-	<select id="getMyReviewList" parameterType="hashmap" resultType="review">
-		SELECT *
-		FROM review
-		WHERE clientId = #{clientId}
+	<select id="getMyReviewList" parameterType="hashmap" resultType="hashmap">
+		SELECT r.*, CONCAT(pi.ImageDir, pi.ImageName) as image, op.optionColor, op.optionSize, p.productName, p.productId
+		FROM review r
+		JOIN option_info op ON r.optionId = op.optionId
+		JOIN product p ON p.productId = r.productId
+		JOIN product_image pi ON pi.ImageBy = r.productId
+		WHERE r.clientId = #{clientId} AND pi.ImageStatus = '대표'
 		LIMIT #{search.startList}, #{search.listSize}
 	</select>
 	

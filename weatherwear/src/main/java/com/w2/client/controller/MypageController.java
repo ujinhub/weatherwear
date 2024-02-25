@@ -528,6 +528,7 @@ public class MypageController {
 		int listCnt = orderService.getMyOrderListCnt(param);
 		
 		// 검색 페이지 정보
+		search.setListSize(5);
 		search.pageInfo(page, range, listCnt);
 		// 페이징
 		model.addAttribute("pagination", search);

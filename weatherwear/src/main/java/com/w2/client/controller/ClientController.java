@@ -38,6 +38,7 @@ import com.w2.util.ClientCookie;
 import com.w2.util.RandomString;
 import com.w2.util.ResponseDTO;
 import com.w2.util.Search;
+import com.w2.util.SmsUtil;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -56,6 +57,8 @@ public class ClientController {
 	private BCryptPasswordEncoder passwordEncoder;
 	@Autowired
 	private JavaMailSender mailSender;
+	@Autowired
+	private SmsUtil sms;
 	
 	@RequestMapping("test.do")
 	public String test() {
@@ -102,7 +105,6 @@ public class ClientController {
 				clientService.setLogDate(vo.getClientId());
 				
 				session.setAttribute("userInfo", client);
-				session.setMaxInactiveInterval(3600);
 				return "redirect:main.do";
 			}
 		} else {
@@ -316,7 +318,10 @@ public class ClientController {
 		if(keyType.equals("clientEmail")) {
 			sendTempMail(vo.getClientEmail(), strTemp);
 		} else if(keyType.equals("clientNum")) {
+			String to = vo.getClientNum();
+			String text = "웨더웨어 요청하신 임시비밀번호 입니다. [ " + strTemp + " ]";
 			
+			sms.sentOneMessage(to, text);
 		}
 
 		model.addAttribute("msg", "임시 비밀번호 발급 성공.");

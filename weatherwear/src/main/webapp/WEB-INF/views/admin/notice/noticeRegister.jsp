@@ -47,7 +47,6 @@
 								</div>
 								<form class="form-horizontal" id="noticeRegForm" action="noticeRegProc.mdo" method="post">
 									<input type="hidden" id="key" value="notice">
-<%-- 									<input type="hidden" name="noticeWriter" value="${userInfo.adminId}"> --%>
 									<input type="hidden" name="noticeWriter" value="${adminInfo.adminId}">
 									<div class="card-body">
 										<div class="form-group row">
