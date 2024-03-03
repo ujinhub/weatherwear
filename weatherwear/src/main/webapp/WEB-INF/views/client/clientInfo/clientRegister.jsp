@@ -4,41 +4,35 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>WeatherWear 사용자</title>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<!-- Google Fonts -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com">
-<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500&amp;family=Inter:wght@400;500&amp;family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&amp;display=swap" rel="stylesheet">
-
-<!-- Theme style -->
-<link rel="stylesheet" href="resources/admin/AdminLTE/dist/css/adminlte.min.css">
-
-<!-- Vendor CSS Files -->
-<link href="resources/client/ZenBlog/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-<link href="resources/client/ZenBlog/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-
-<!-- Swiper -->
-<link href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css" rel="stylesheet"/>
-
-<!-- Template Main CSS Files -->
-<link href="resources/client/ZenBlog/assets/css/main.css" rel="stylesheet">
-<link href="resources/client/ZenBlog/assets/css/variables.css" rel="stylesheet">
-
-<!-- Font Awesome -->
-<link href="resources/admin/AdminLTE/plugins/fontawesome-free/css/all.min.css" rel="stylesheet">
-
-<style>
-.mg-2 { margin: 20px 0; }
-.mg-3 { margin: 30px 0 0; }
-.pd-05 { padding: 5px; }
-.pd-1 { padding: 10px; }
-.description { color: #6c757d; font-size: 13px; vertical-align: middle; }
-.required .col-form-label:after { content: "*"; color: red; }
-.form-check-input { padding: 15px; width: 15px; height: 15px; }
-</style>
+	<meta charset="UTF-8">
+	<title>WeatherWear 사용자</title>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<!-- Google Fonts -->
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com">
+	<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500&amp;family=Inter:wght@400;500&amp;family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&amp;display=swap" rel="stylesheet">
+	<!-- Theme style -->
+	<link rel="stylesheet" href="resources/admin/AdminLTE/dist/css/adminlte.min.css">
+	<!-- Vendor CSS Files -->
+	<link href="resources/client/ZenBlog/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+	<link href="resources/client/ZenBlog/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+	<!-- Swiper -->
+	<link href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css" rel="stylesheet"/>
+	<!-- Template Main CSS Files -->
+	<link href="resources/client/ZenBlog/assets/css/main.css" rel="stylesheet">
+	<link href="resources/client/ZenBlog/assets/css/variables.css" rel="stylesheet">
+	<!-- Font Awesome -->
+	<link href="resources/admin/AdminLTE/plugins/fontawesome-free/css/all.min.css" rel="stylesheet">
+	<style>
+		.mg-2 { margin: 20px 0; }
+		.mg-3 { margin: 30px 0 0; }
+		.pd-05 { padding: 5px; }
+		.pd-1 { padding: 10px; }
+		.description { color: #6c757d; font-size: 13px; vertical-align: middle; }
+		.required .col-form-label:after { content: "*"; color: red; }
+		.form-check-input { padding: 15px; width: 15px; height: 15px; }
+	</style>
 </head>
 <body class="hold-transition sidebar-collapse layout-top-nav">
 	<div class="wrapper">
@@ -225,150 +219,148 @@
 		<%@ include file="../footer.jsp" %>
 	</div>
 
-<script src="resources/client/ZenBlog/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script  src="resources/util/plugins/sweetalert/jquery-lates.min.js"></script>
-<script src="resources/util/plugins/sweetalert/sweetalert2.js"></script>
-
-<!-- Template Main JS File -->
-<script src="resources/client/ZenBlog/assets/js/main.js"></script>
-
-<!-- sweetAlert (alert/confirm/toast) -->
-<script src="resources/util/js/sweetalert.js"></script>
-
-<!-- AdminLTE App -->
-<script src="resources/admin/AdminLTE/dist/js/adminlte.js"></script>
-
-<!-- jQuery-validation -->
-<script src="resources/admin/AdminLTE/plugins/jquery-validation/jquery.validate.min.js"></script>
-<script src="resources/admin/AdminLTE/plugins/jquery-validation/additional-methods.min.js"></script>
-
-<script>
-$(function() {
-	$('#clientRegForm').validate({
-		rules: {
-			clientId: {
-				required: true,
-				minlength: 4,
-				maxlength: 16,
-				isEqualId: true
-			},
-			clientPwd: {
-				required: true,
-				minlength: 8,
-				maxlength: 16
-			},
-			clientPwdCheck: {
-				required: true,
-				equalTo: "#clientPwd"
-			},
-			clientName: {
-				required: true
-			},
-			clientEmail: {
-				required: true
-			},
-			clientNum1: {
-				required: true
-			},
-			clientNum2: {
-				required: true,
-				minlength: 4
-			},
-			clientNum3: {
-				required: true,
-				minlength: 4
-			},
-		},
-		messages: {
-			clientId: {
-				required: "",
-				minlength: "아이디는 4자 이상 16자 이하 입니다.",
-				maxlength: "아이디는 4자 이상 16자 이하 입니다.",
-				isEqualId: "동일한 아이디가 존재합니다. 다른 아이디를 입력해주세요."
-			},
-			clientPwd: {
-				required: "",
-				minlength: "비밀번호는 8자 이상 16자 이하 입니다.",
-				maxlength: "비밀번호는 8자 이상 16자 이하 입니다."
-			},
-			clientPwdCheck: {
-				required: "",
-				equalTo: "비밀번호가 일치하지 않습니다."
-			},
-			clientName: {
-				required: "",
-			},
-			clientEmail: {
-				required: "",
-			},
-			clientNum1: {
-				required: "",
-			},
-			clientNum2: {
-				required: "",
-                minlength: "휴대폰번호는 4자 입력해주세요.",
-			},
-			clientNum3: {
-				required: "",
-                minlength: "휴대폰번호는 4자 입력해주세요.",
-			},
-		},
-		errorElement: 'span',
-		errorPlacement: function(error, element) {
-			error.addClass('invalid-feedback');
-			element.closest('.form-group div').append(error);
-		},
-		highlight: function(element, errorClass, validClass) {
-			$(element).addClass('is-invalid');
-		},
-		unhighlight: function(element, errorClass, validClass) {
-			$(element).removeClass('is-invalid');
-		},
-		submitHandler: function(form) {
-
-			$('#clientNum').val($('#clientNum1').val() + $('#clientNum2').val() + $('#clientNum3').val());
-			$('#clientBirth').val($('#clientYear').val() + $('#clientMonth').val() + $('#clientDay').val());
+	<script src="resources/client/ZenBlog/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<script  src="resources/util/plugins/sweetalert/jquery-lates.min.js"></script>
+	<script src="resources/util/plugins/sweetalert/sweetalert2.js"></script>
+	
+	<!-- Template Main JS File -->
+	<script src="resources/client/ZenBlog/assets/js/main.js"></script>
+	<!-- sweetAlert (alert/confirm/toast) -->
+	<script src="resources/util/js/sweetalert.js"></script>
+	<!-- AdminLTE App -->
+	<script src="resources/admin/AdminLTE/dist/js/adminlte.js"></script>
+	<!-- jQuery-validation -->
+	<script src="resources/admin/AdminLTE/plugins/jquery-validation/jquery.validate.min.js"></script>
+	<script src="resources/admin/AdminLTE/plugins/jquery-validation/additional-methods.min.js"></script>
+	<!-- sweetAlert (alert/confirm/toast) -->
+	<script src="resources/util/js/sweetalert.js"></script>
+	<script>
+		$(function() {
+			$('#clientRegForm').validate({
+				rules: {
+					clientId: {
+						required: true,
+						minlength: 4,
+						maxlength: 16,
+						isEqualId: true
+					},
+					clientPwd: {
+						required: true,
+						minlength: 8,
+						maxlength: 16
+					},
+					clientPwdCheck: {
+						required: true,
+						equalTo: "#clientPwd"
+					},
+					clientName: {
+						required: true
+					},
+					clientEmail: {
+						required: true
+					},
+					clientNum1: {
+						required: true
+					},
+					clientNum2: {
+						required: true,
+						minlength: 4
+					},
+					clientNum3: {
+						required: true,
+						minlength: 4
+					},
+				},
+				messages: {
+					clientId: {
+						required: "",
+						minlength: "아이디는 4자 이상 16자 이하 입니다.",
+						maxlength: "아이디는 4자 이상 16자 이하 입니다.",
+						isEqualId: "동일한 아이디가 존재합니다. 다른 아이디를 입력해주세요."
+					},
+					clientPwd: {
+						required: "",
+						minlength: "비밀번호는 8자 이상 16자 이하 입니다.",
+						maxlength: "비밀번호는 8자 이상 16자 이하 입니다."
+					},
+					clientPwdCheck: {
+						required: "",
+						equalTo: "비밀번호가 일치하지 않습니다."
+					},
+					clientName: {
+						required: "",
+					},
+					clientEmail: {
+						required: "",
+					},
+					clientNum1: {
+						required: "",
+					},
+					clientNum2: {
+						required: "",
+		                minlength: "휴대폰번호는 4자 입력해주세요.",
+					},
+					clientNum3: {
+						required: "",
+		                minlength: "휴대폰번호는 4자 입력해주세요.",
+					},
+				},
+				errorElement: 'span',
+				errorPlacement: function(error, element) {
+					error.addClass('invalid-feedback');
+					element.closest('.form-group div').append(error);
+				},
+				highlight: function(element, errorClass, validClass) {
+					$(element).addClass('is-invalid');
+				},
+				unhighlight: function(element, errorClass, validClass) {
+					$(element).removeClass('is-invalid');
+				},
+				submitHandler: function(form) {
+		
+					$('#clientNum').val($('#clientNum1').val() + $('#clientNum2').val() + $('#clientNum3').val());
+					$('#clientBirth').val($('#clientYear').val() + $('#clientMonth').val() + $('#clientDay').val());
+					
+					$('input:checkbox[id^="chk"]').each(function() {
+						$('#' + $(this).val()).val($(this).prop('checked') ? "Y":"N");
+					});
+					
+					form.submit();
+				}
+			}); 
 			
-			$('input:checkbox[id^="chk"]').each(function() {
-				$('#' + $(this).val()).val($(this).prop('checked') ? "Y":"N");
+			// 아이디 중복 체크
+			$.validator.addMethod("isEqualId", function(value, element) {
+				var res = false;
+				$.ajax({
+					url: "clientCheck.do",
+					type: "post",
+					dataType:'json',
+					async: false,
+					data: {
+						clientId: $('#clientId').val(),
+						chkType: 'clientId'
+					},
+					success: function(result) {
+						res = result;
+					}
+				});
+				return res;
 			});
 			
-			form.submit();
-		}
-	}); 
-	
-	// 아이디 중복 체크
-	$.validator.addMethod("isEqualId", function(value, element) {
-		var res = false;
-		$.ajax({
-			url: "clientCheck.do",
-			type: "post",
-			dataType:'json',
-			async: false,
-			data: {
-				clientId: $('#clientId').val(),
-				chkType: 'clientId'
-			},
-			success: function(result) {
-				res = result;
-			}
+			$('#checkAll').on('click', function() {
+				if($("#checkAll").is(":checked")) $("input[id^='chk']").prop("checked", true);
+				else $("input[id^='chk']").prop("checked", false);		
+			});
+			
+			$("input[type=checkbox]").click(function() {
+				var total = $("input[id^='chk']").length;
+				var checked = $("input[id^='chk']:checked").length;
+				
+				if(total != checked) $("#checkAll").prop("checked", false);
+				else $("#checkAll").prop("checked", true); 
+			});
 		});
-		return res;
-	});
-	
-	$('#checkAll').on('click', function() {
-		if($("#checkAll").is(":checked")) $("input[id^='chk']").prop("checked", true);
-		else $("input[id^='chk']").prop("checked", false);		
-	});
-	
-	$("input[type=checkbox]").click(function() {
-		var total = $("input[id^='chk']").length;
-		var checked = $("input[id^='chk']:checked").length;
-		
-		if(total != checked) $("#checkAll").prop("checked", false);
-		else $("#checkAll").prop("checked", true); 
-	});
-});
-</script>
+	</script>
 </body>
 </html>

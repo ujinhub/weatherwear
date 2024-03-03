@@ -5,33 +5,28 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>WeatherWear 사용자</title>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<!-- Google Fonts -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com">
-<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500&amp;family=Inter:wght@400;500&amp;family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&amp;display=swap" rel="stylesheet">
-
-<!-- Theme style -->
-<link rel="stylesheet" href="resources/admin/AdminLTE/dist/css/adminlte.min.css">
-
-<!-- Vendor CSS Files -->
-<link href="resources/client/ZenBlog/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-<link href="resources/client/ZenBlog/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-
-<!-- Swiper -->
-<link href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css" rel="stylesheet"/>
-
-<!-- Template Main CSS Files -->
-<link href="resources/client/ZenBlog/assets/css/main.css" rel="stylesheet">
-<link href="resources/client/ZenBlog/assets/css/variables.css" rel="stylesheet">
-
-<style>
-.description { color: #6c757d; font-size: 13px; vertical-align: middle; }
-.mg-2 { margin: 20px 0; }
-</style>
+	<meta charset="UTF-8">
+	<title>WeatherWear 사용자</title>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<!-- Google Fonts -->
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com">
+	<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500&amp;family=Inter:wght@400;500&amp;family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&amp;display=swap" rel="stylesheet">
+	<!-- Theme style -->
+	<link rel="stylesheet" href="resources/admin/AdminLTE/dist/css/adminlte.min.css">
+	<!-- Vendor CSS Files -->
+	<link href="resources/client/ZenBlog/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+	<link href="resources/client/ZenBlog/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+	<!-- Swiper -->
+	<link href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css" rel="stylesheet"/>
+	<!-- Template Main CSS Files -->
+	<link href="resources/client/ZenBlog/assets/css/main.css" rel="stylesheet">
+	<link href="resources/client/ZenBlog/assets/css/variables.css" rel="stylesheet">
+	<style>
+		.description { color: #6c757d; font-size: 13px; vertical-align: middle; }
+		.mg-2 { margin: 20px 0; }
+	</style>
 </head>
 <body class="hold-transition sidebar-collapse layout-top-nav">
 	<div class="wrapper">
@@ -191,91 +186,88 @@
 		<%@ include file="../footer.jsp" %>
 	</div>
 
-<script src="resources/client/ZenBlog/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script  src="resources/util/plugins/sweetalert/jquery-lates.min.js"></script>
-<script src="resources/util/plugins/sweetalert/sweetalert2.js"></script>
-
-<!-- Template Main JS File -->
-<script src="resources/client/ZenBlog/assets/js/main.js"></script>
-
-<!-- sweetAlert (alert/confirm/toast) -->
-<script src="resources/util/js/sweetalert.js"></script>
-
-<!-- AdminLTE App -->
-<script src="resources/admin/AdminLTE/dist/js/adminlte.js"></script>
-
-<!-- jQuery-validation -->
-<script src="resources/admin/AdminLTE/plugins/jquery-validation/jquery.validate.min.js"></script>
-<script src="resources/admin/AdminLTE/plugins/jquery-validation/additional-methods.min.js"></script>
+	<script src="resources/client/ZenBlog/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<script  src="resources/util/plugins/sweetalert/jquery-lates.min.js"></script>
+	<script src="resources/util/plugins/sweetalert/sweetalert2.js"></script>
 	
-<script>
-$(document).ready(function() {
-	<c:if test="${msg != null && msg != ''}">
-		playToast('${msg}', 'error');
-		<% session.removeAttribute("msg"); %>
-	</c:if>	
-	
-	$('#btnWithdraw').on('click', function() {
-		if(confirm('탈퇴할 경우 회원관련 데이터가 복구되지 않습니다.\n정말로 탈퇴를 하시겠습니까?')) {
-			location.href = "clientWithdraw.do?clientId=" + $('#clientId').val();
-		}
-	});
-	
-	$('#editInfoForm').validate({
-		rules: {
-			clientEmail: {
-				required: true
-			},
-			clientNum1: {
-				required: true
-			},
-			clientNum2: {
-				required: true,
-				minlength: 4
-			},
-			clientNum3: {
-				required: true,
-				minlength: 4
-			},
-		},
-		messages: {
-			clientPwd: {
-				required: "비밀번호를 입력해주세요."
-			},
-			clientEmail: {
-				required: "",
-			},
-			clientNum1: {
-				required: "",
-			},
-			clientNum2: {
-				required: "",
-                minlength: "휴대폰번호는 4자 입력해주세요.",
-			},
-			clientNum3: {
-				required: "",
-                minlength: "휴대폰번호는 4자 입력해주세요.",
-			},
-		},
-		errorElement: 'span',
-		errorPlacement: function(error, element) {
-			error.addClass('invalid-feedback');
-			element.closest('.form-group div').append(error);
-		},
-		highlight: function(element, errorClass, validClass) {
-			$(element).addClass('is-invalid');
-		},
-		unhighlight: function(element, errorClass, validClass) {
-			$(element).removeClass('is-invalid');
-		},
-		submitHandler: function(form) {
-			$('#clientNum').val($('#clientNum1').val() + $('#clientNum2').val() + $('#clientNum3').val());
-			$('#clientBirth').val($('#clientYear').val() + $('#clientMonth').val().padStart(2, "0") + $('#clientDay').val().padStart(2, "0"));
-
-			form.submit();
-		}
-	}); 
-});
-</script>
+	<!-- Template Main JS File -->
+	<script src="resources/client/ZenBlog/assets/js/main.js"></script>
+	<!-- sweetAlert (alert/confirm/toast) -->
+	<script src="resources/util/js/sweetalert.js"></script>
+	<!-- AdminLTE App -->
+	<script src="resources/admin/AdminLTE/dist/js/adminlte.js"></script>
+	<!-- jQuery-validation -->
+	<script src="resources/admin/AdminLTE/plugins/jquery-validation/jquery.validate.min.js"></script>
+	<script src="resources/admin/AdminLTE/plugins/jquery-validation/additional-methods.min.js"></script>
+		
+	<script>
+		$(document).ready(function() {
+			<c:if test="${msg != null && msg != ''}">
+				playToast('${msg}', 'error');
+				<% session.removeAttribute("msg"); %>
+			</c:if>	
+			
+			$('#btnWithdraw').on('click', function() {
+				if(confirm('탈퇴할 경우 회원관련 데이터가 복구되지 않습니다.\n정말로 탈퇴를 하시겠습니까?')) {
+					location.href = "clientWithdraw.do?clientId=" + $('#clientId').val();
+				}
+			});
+			
+			$('#editInfoForm').validate({
+				rules: {
+					clientEmail: {
+						required: true
+					},
+					clientNum1: {
+						required: true
+					},
+					clientNum2: {
+						required: true,
+						minlength: 4
+					},
+					clientNum3: {
+						required: true,
+						minlength: 4
+					},
+				},
+				messages: {
+					clientPwd: {
+						required: "비밀번호를 입력해주세요."
+					},
+					clientEmail: {
+						required: "",
+					},
+					clientNum1: {
+						required: "",
+					},
+					clientNum2: {
+						required: "",
+		                minlength: "휴대폰번호는 4자 입력해주세요.",
+					},
+					clientNum3: {
+						required: "",
+		                minlength: "휴대폰번호는 4자 입력해주세요.",
+					},
+				},
+				errorElement: 'span',
+				errorPlacement: function(error, element) {
+					error.addClass('invalid-feedback');
+					element.closest('.form-group div').append(error);
+				},
+				highlight: function(element, errorClass, validClass) {
+					$(element).addClass('is-invalid');
+				},
+				unhighlight: function(element, errorClass, validClass) {
+					$(element).removeClass('is-invalid');
+				},
+				submitHandler: function(form) {
+					$('#clientNum').val($('#clientNum1').val() + $('#clientNum2').val() + $('#clientNum3').val());
+					$('#clientBirth').val($('#clientYear').val() + $('#clientMonth').val().padStart(2, "0") + $('#clientDay').val().padStart(2, "0"));
+		
+					form.submit();
+				}
+			}); 
+		});
+	</script>
 </body>
 </html>

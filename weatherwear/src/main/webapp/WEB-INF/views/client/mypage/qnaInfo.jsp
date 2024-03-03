@@ -5,49 +5,42 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>WeatherWear 사용자</title>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<!-- Google Fonts -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com">
-<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500&amp;family=Inter:wght@400;500&amp;family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&amp;display=swap" rel="stylesheet">
-
-<!-- Theme style -->
-<link rel="stylesheet" href="resources/admin/AdminLTE/dist/css/adminlte.min.css">
-
-<!-- Vendor CSS Files -->
-<link href="resources/client/ZenBlog/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-<link href="resources/client/ZenBlog/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-
-<!-- Swiper -->
-<link href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css" rel="stylesheet"/>
-
-<!-- Template Main CSS Files -->
-<link href="resources/client/ZenBlog/assets/css/main.css" rel="stylesheet">
-<link href="resources/client/ZenBlog/assets/css/variables.css" rel="stylesheet">
-
-<!-- Font Awesome -->
-<link href="resources/admin/AdminLTE/plugins/fontawesome-free/css/all.min.css" rel="stylesheet">
-
-<!-- summernote -->
-<link href="resources/util/plugins/summernote/summernote-lite.css" rel="stylesheet">
-
-<style>
-.mg-2 { margin: 20px 0; }
-.mg-3 { margin: 30px 0 0; }
-.pd-1 { padding: 10px; }
-.description {
-    color: #6c757d;
-    font-size: 13px;
-    vertical-align: middle;
-}
-.required .col-form-label:after {
-	content: "*";
-	color: red;
-}
-</style>
+	<meta charset="UTF-8">
+	<title>WeatherWear 사용자</title>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<!-- Google Fonts -->
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com">
+	<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500&amp;family=Inter:wght@400;500&amp;family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&amp;display=swap" rel="stylesheet">
+	<!-- Theme style -->
+	<link rel="stylesheet" href="resources/admin/AdminLTE/dist/css/adminlte.min.css">
+	<!-- Vendor CSS Files -->
+	<link href="resources/client/ZenBlog/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+	<link href="resources/client/ZenBlog/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+	<!-- Swiper -->
+	<link href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css" rel="stylesheet"/>
+	<!-- Template Main CSS Files -->
+	<link href="resources/client/ZenBlog/assets/css/main.css" rel="stylesheet">
+	<link href="resources/client/ZenBlog/assets/css/variables.css" rel="stylesheet">
+	<!-- Font Awesome -->
+	<link href="resources/admin/AdminLTE/plugins/fontawesome-free/css/all.min.css" rel="stylesheet">
+	<!-- summernote -->
+	<link href="resources/util/plugins/summernote/summernote-lite.css" rel="stylesheet">
+	<style>
+		.mg-2 { margin: 20px 0; }
+		.mg-3 { margin: 30px 0 0; }
+		.pd-1 { padding: 10px; }
+		.description {
+		    color: #6c757d;
+		    font-size: 13px;
+		    vertical-align: middle;
+		}
+		.required .col-form-label:after {
+			content: "*";
+			color: red;
+		}
+	</style>
 </head>
 <body class="hold-transition sidebar-collapse layout-top-nav">
 	<div class="wrapper">
@@ -160,55 +153,55 @@
 		<%@ include file="../footer.jsp" %>
 	</div>
 
-<script src="resources/client/ZenBlog/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script  src="resources/util/plugins/sweetalert/jquery-lates.min.js"></script>
-<script src="resources/util/plugins/sweetalert/sweetalert2.js"></script>
-
-<!-- Template Main JS File -->
-<script src="resources/client/ZenBlog/assets/js/main.js"></script>
-
-<!-- sweetAlert (alert/confirm/toast) -->
-<script src="resources/util/js/sweetalert.js"></script>
-
-<!-- AdminLTE App -->
-<script src="resources/admin/AdminLTE/dist/js/adminlte.js"></script>
-
-<!-- summernote -->
-<script src="resources/util/plugins/summernote/summernote-lite.js"></script>
-
-<script src="resources/util/js/summernote.js"></script>
-
-<script>
-$(document).ready(function() {
-	$('#deleteQna').on('click', function() {
-		if(confirm("문의를 삭제하시겠습니까?")) {
-			$.ajax({
-				url: "qnaDeleteProc.do",
-				type: "post",
-				dataType: 'json',
-				data: $('#qnaInfoForm').serialize(),
-				success: function(res){
-					console.log(res);
-					if(res.code == -1) {
-						playToast(res.message, 'error');
-						return;
-					}else if (res.code == -2){
-						playConfirm(res.message, res.data, 'question', '로그인하기', '취소하기', "location.href='login.do'", null);
-					} 
-					
-					if(res.code == 1) {
-						playToast(res.message, 'success');
-						location.href = "myqnaList.do";
-					} 
-					return;
-				},
-				error : function(error){
-					playToast(error.message, 'error');
+	<script src="resources/client/ZenBlog/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<script  src="resources/util/plugins/sweetalert/jquery-lates.min.js"></script>
+	<script src="resources/util/plugins/sweetalert/sweetalert2.js"></script>
+	
+	<!-- Template Main JS File -->
+	<script src="resources/client/ZenBlog/assets/js/main.js"></script>
+	
+	<!-- sweetAlert (alert/confirm/toast) -->
+	<script src="resources/util/js/sweetalert.js"></script>
+	
+	<!-- AdminLTE App -->
+	<script src="resources/admin/AdminLTE/dist/js/adminlte.js"></script>
+	
+	<!-- summernote -->
+	<script src="resources/util/plugins/summernote/summernote-lite.js"></script>
+	
+	<script src="resources/util/js/summernote.js"></script>
+	
+	<script>
+		$(document).ready(function() {
+			$('#deleteQna').on('click', function() {
+				if(confirm("문의를 삭제하시겠습니까?")) {
+					$.ajax({
+						url: "qnaDeleteProc.do",
+						type: "post",
+						dataType: 'json',
+						data: $('#qnaInfoForm').serialize(),
+						success: function(res){
+							console.log(res);
+							if(res.code == -1) {
+								playToast(res.message, 'error');
+								return;
+							}else if (res.code == -2){
+								playConfirm(res.message, res.data, 'question', '로그인하기', '취소하기', "location.href='login.do'", null);
+							} 
+							
+							if(res.code == 1) {
+								playToast(res.message, 'success');
+								location.href = "myqnaList.do";
+							} 
+							return;
+						},
+						error : function(error){
+							playToast(error.message, 'error');
+						}
+					});
 				}
 			});
-		}
-	});
-})
-</script>
+		})
+	</script>
 </body>
 </html>

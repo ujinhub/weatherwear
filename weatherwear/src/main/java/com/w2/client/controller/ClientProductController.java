@@ -1,5 +1,7 @@
 package com.w2.client.controller;
 
+import java.util.HashMap;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -26,9 +28,11 @@ public class ClientProductController {
 	private WeatherService weatherService;
 	
 	/**
-	 * 메인 화면 호출
+	 * 메인 화면 호출	
+	 * @param model
+	 * @param request
 	 * @return
-	 */	
+	 */
 	@RequestMapping("main.do")
 	public String mainView(Model model, HttpServletRequest request) {
 		HttpSession session = request.getSession(false);
@@ -40,12 +44,18 @@ public class ClientProductController {
 		model.addAttribute("bestItem", productService.getMainProductList("best"));
 		model.addAttribute("newItem", productService.getMainProductList("new"));
 		model.addAttribute("weatherList", weatherService.getWeather(province));
-		//model.addAttribute("userInfo", session.getAttribute("userInfo"));
 		return "main";
 	}
 
 	/**
 	 * 상품 목록 화면 호출
+	 * @param model
+	 * @param page
+	 * @param range
+	 * @param searchType
+	 * @param keyword
+	 * @param orderby
+	 * @param search
 	 * @return
 	 */
 	@RequestMapping("productList.do")
@@ -75,6 +85,10 @@ public class ClientProductController {
 
 	/**
 	 * 상품 상세 화면 호출
+	 * @param productId
+	 * @param model
+	 * @param request
+	 * @param response
 	 * @return
 	 */
 	@RequestMapping("productInfo.do")
@@ -84,7 +98,6 @@ public class ClientProductController {
 		// 최근본 상품 구현 로직 추가 - 권유진
 		Cookie cookie = new Cookie("recent_" + productId, productId);
 		cookie.setPath("/");
-//		cookie.setMaxAge(60 * 60 * 1);	// 우선 한시간 저장
 		cookie.setMaxAge(60 * 60 * 24);	// 하루동안 저장
 		response.addCookie(cookie);
 		// ======================================

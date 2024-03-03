@@ -5,40 +5,34 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>WeatherWear 사용자</title>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<!-- Google Fonts -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com">
-<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500&amp;family=Inter:wght@400;500&amp;family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&amp;display=swap" rel="stylesheet">
-
-<!-- Theme style -->
-<link rel="stylesheet" href="resources/admin/AdminLTE/dist/css/adminlte.min.css">
-
-<!-- Vendor CSS Files -->
-<link href="resources/client/ZenBlog/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-<link href="resources/client/ZenBlog/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-
-<!-- Swiper -->
-<link href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css" rel="stylesheet"/>
-
-<!-- Template Main CSS Files -->
-<link href="resources/client/ZenBlog/assets/css/main.css" rel="stylesheet">
-<link href="resources/client/ZenBlog/assets/css/variables.css" rel="stylesheet">
-
-<!-- Font Awesome -->
-<link href="resources/admin/AdminLTE/plugins/fontawesome-free/css/all.min.css" rel="stylesheet">
-
-<style>
-.mg-2 { margin: 20px 0; }
-.mg-3 { margin: 30px 0 0; }
-.pd-1 { padding: 10px; }
-.table td {
-	vertical-align: middle;
-}
-</style>
+	<meta charset="UTF-8">
+	<title>WeatherWear 사용자</title>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<!-- Google Fonts -->
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com">
+	<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500&amp;family=Inter:wght@400;500&amp;family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&amp;display=swap" rel="stylesheet">
+	<!-- Theme style -->
+	<link rel="stylesheet" href="resources/admin/AdminLTE/dist/css/adminlte.min.css">
+	<!-- Vendor CSS Files -->
+	<link href="resources/client/ZenBlog/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+	<link href="resources/client/ZenBlog/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+	<!-- Swiper -->
+	<link href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css" rel="stylesheet"/>
+	<!-- Template Main CSS Files -->
+	<link href="resources/client/ZenBlog/assets/css/main.css" rel="stylesheet">
+	<link href="resources/client/ZenBlog/assets/css/variables.css" rel="stylesheet">
+	<!-- Font Awesome -->
+	<link href="resources/admin/AdminLTE/plugins/fontawesome-free/css/all.min.css" rel="stylesheet">
+	<style>
+		.mg-2 { margin: 20px 0; }
+		.mg-3 { margin: 30px 0 0; }
+		.pd-1 { padding: 10px; }
+		.table td {
+			vertical-align: middle;
+		}
+	</style>
 </head>
 <body class="hold-transition sidebar-collapse layout-top-nav">
 	<div class="wrapper">
@@ -58,9 +52,6 @@
 						<label class="btn btn-flat btn-outline-dark">
 							<input type="radio" name="options" id="order" autocomplete="off" onclick="location.href='myorderList.do'">주문조회
 						</label>
-<!-- 						<label class="btn btn-flat btn-outline-dark"> -->
-<!-- 							<input type="radio" name="options" id="point" autocomplete="off" onclick="location.href='mypointList.do'">적립금 -->
-<!-- 						</label> -->
 						<label class="btn btn-flat btn-outline-dark">
 							<input type="radio" name="options" id="coupon" autocomplete="off" onclick="location.href='mycouponList.do'" checked>쿠폰
 						</label>
@@ -76,14 +67,9 @@
 						<label class="btn btn-flat btn-outline-dark">
 							<input type="radio" name="options" id="review" autocomplete="off" onclick="location.href='myreviewList.do'">리뷰
 						</label>
-<!-- 						<label class="btn btn-flat btn-outline-dark"> -->
-<!-- 							<input type="radio" name="options" id="address" autocomplete="off" onclick="location.href='myaddressList.do'">배송지 -->
-<!-- 						</label> -->
 					</div>
 				</div>
-				
 			</section>
-			
 			<section class="contact mb-2">
 				<div class="card" style="width: 80%; margin: 0 auto;">
 					<div class="card-body" style="width: 50%; margin: 0 auto;">
@@ -166,59 +152,54 @@
 		<%@ include file="../footer.jsp" %>
 	</div>
 
-<script src="resources/client/ZenBlog/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script  src="resources/util/plugins/sweetalert/jquery-lates.min.js"></script>
-<script src="resources/util/plugins/sweetalert/sweetalert2.js"></script>
-
-<!-- Template Main JS File -->
-<script src="resources/client/ZenBlog/assets/js/main.js"></script>
-
-<!-- sweetAlert (alert/confirm/toast) -->
-<script src="resources/util/js/sweetalert.js"></script>
-
-<!-- AdminLTE App -->
-<script src="resources/admin/AdminLTE/dist/js/adminlte.js"></script>
-
-<!-- jQuery-validation -->
-<script src="resources/admin/AdminLTE/plugins/jquery-validation/jquery.validate.min.js"></script>
-<script src="resources/admin/AdminLTE/plugins/jquery-validation/additional-methods.min.js"></script>
-
-<script src="resources/util/js/paging.js"></script>
-
-<script>
-$(document).ready(function() {
-	$('#couponReg').on('click', function() {
-		if($('#couponId').val() == '') {
-			playToast("쿠폰번호를 입력해주세요.", 'warning');
-		} else {
-			$.ajax({
-				url: "couponRegProc.do",
-				type: "POST",
-				async: true,
-				data: $('#couponId').val(),
-				dataType: "json",
-				contentType: "application/json",
-				success: function(res){
-					if(res.code == -1) {
-						playToast(res.message, 'error');
-						return;
-					}else if (res.code == -2){
-						playConfirm(res.message, res.data, 'question', '로그인하기', '취소하기', "location.href='login.do'", null);
-					} 
-					
-					if(res.code == 1) {
-						playToast(res.message, 'success');
-						location.reload();
-					} 
-					return;
-				},
-				error : function(error){
-					playToast(error.message, 'error');
+	<script src="resources/client/ZenBlog/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<script  src="resources/util/plugins/sweetalert/jquery-lates.min.js"></script>
+	<script src="resources/util/plugins/sweetalert/sweetalert2.js"></script>
+	
+	<!-- Template Main JS File -->
+	<script src="resources/client/ZenBlog/assets/js/main.js"></script>
+	<!-- sweetAlert (alert/confirm/toast) -->
+	<script src="resources/util/js/sweetalert.js"></script>
+	<!-- AdminLTE App -->
+	<script src="resources/admin/AdminLTE/dist/js/adminlte.js"></script>
+	<!-- jQuery-validation -->
+	<script src="resources/admin/AdminLTE/plugins/jquery-validation/jquery.validate.min.js"></script>
+	<script src="resources/admin/AdminLTE/plugins/jquery-validation/additional-methods.min.js"></script>
+	
+	<script src="resources/util/js/paging.js"></script>
+	<script>
+		$(document).ready(function() {
+			$('#couponReg').on('click', function() {
+				if($('#couponId').val() == '') {
+					playToast("쿠폰번호를 입력해주세요.", 'warning');
+				} else {
+					$.ajax({
+						url: "couponRegProc.do",
+						type: "POST",
+						async: true,
+						data: $('#couponId').val(),
+						dataType: "json",
+						contentType: "application/json",
+						success: function(res){
+							if(res.code == -1) {
+								playToast(res.message, 'error');
+								return;
+							}else if (res.code == -2){
+								playConfirm(res.message, res.data, 'question', '로그인하기', '취소하기', "location.href='login.do'", null);
+							} 
+							if(res.code == 1) {
+								playToast(res.message, 'success');
+								location.reload();
+							} 
+							return;
+						},
+						error : function(error){
+							playToast(error.message, 'error');
+						}
+					});
 				}
-			});
-		}
-	});			
-})
-</script>
+			});			
+		})
+	</script>
 </body>
 </html>

@@ -8,6 +8,14 @@
 
 */
 
+function playalert(message, iconType, text){
+    Swal.fire({
+      icon: iconType,
+      title: message,
+      text: text,
+    })
+}
+
 function playAlert(message, iconType, text, url){
     Swal.fire({
       icon: iconType,

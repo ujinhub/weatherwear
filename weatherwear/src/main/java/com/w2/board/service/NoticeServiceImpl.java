@@ -14,37 +14,37 @@ public class NoticeServiceImpl implements NoticeService {
 	@Autowired
 	private NoticeDAO noticeDao;
 
-	@Override
+	@Override	// 공지사항 목록 가져오기
 	public List<NoticeVO> getNoticeList(Search search) {
 		return noticeDao.getNoticeList(search);
 	}
 
-	@Override
+	@Override	// 공지사항 목록 개수 가져오기
 	public int getNoticeListCnt(Search search) {
 		return noticeDao.getNoticeListCnt(search);
 	}
 
-	@Override
+	@Override	// 공지사항 정보 가져오기
 	public NoticeVO getNotice(NoticeVO vo) {
 		return noticeDao.getNotice(vo);
 	}
 
-	@Override
+	@Override	// 공지사항 정보 등록
 	public int insertNotice(NoticeVO vo) {
 		return noticeDao.insertNotice(vo);
 	}
 
-	@Override
+	@Override	// 공지사항 정보 수정
 	public int updateNotice(NoticeVO vo) {
 		return noticeDao.updateNotice(vo);
 	}
 
-	@Override
+	@Override	// 공지사항 정보 삭제
 	public int deleteNotice(NoticeVO vo) {
 		return noticeDao.deleteNotice(vo);
 	}
 
-	@Override
+	@Override	// 공지사항 조회수 증가
 	public int updateViewCnt(NoticeVO vo) {
 		return noticeDao.updateViewCnt(vo);
 	}

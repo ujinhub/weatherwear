@@ -45,8 +45,6 @@ public class WeatherServiceImpl implements WeatherService {
 
 	// 날씨 불러오기(메인페이지)
 	public HashMap<String, Object> getWeather(String province) {
-		System.out.println("[ WeatherService ] getWeather");
-		
 		return weatherDAO.getWeather(province);
 	}
 	
@@ -124,9 +122,6 @@ public class WeatherServiceImpl implements WeatherService {
 		double maxTemp = -300.0;
 		
 		for(int city=0; city<weatherList.size(); city++) {
-			if(city == 0)
-				System.out.println("---다음 도시---" + province);
-			
 			JSONObject data = (JSONObject) weatherList.get(city);
 			
 			String dt_txt = (String) data.get("dt_txt");

@@ -14,7 +14,7 @@ public interface WeatherService {
 	void saveWeather() throws IOException, ParseException;				// 날씨 업데이트
 	void setUrl(String province) throws IOException, ParseException;	// 도시별 JSON 파일 받아오기
 	void getJSON(String dataJson, String province) throws ParseException;	// 도시별 JSON 파일 확인
-	String getDay(LocalDate date);	// 요일 확인
-	String getDate(Long unixTime);	// yyyy.MM.dd 형식 날짜 반환
-	HashMap<String, Object> setWeather();
+	String getDay(LocalDate date);										// 요일 확인
+	String getDate(Long unixTime);										// yyyy.MM.dd 형식 날짜 반환
+	HashMap<String, Object> setWeather();								// 날씨 설정
 }

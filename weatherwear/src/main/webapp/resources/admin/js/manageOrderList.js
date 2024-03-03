@@ -22,7 +22,8 @@ function modify(){
 	let modifyType = $("#modifyType").val();
 	let changeValue;
 	let orderId = selectedList[0].value.split("_")[0];
-
+	let optionId = selectedList[0].value.split("_")[1] + selectedList[0].value.split("_")[2];
+	
 	if(modifyType == 'orderStatus'){
 		changeValue = $("#orderStatus_value").val();
 	} else if (modifyType == 'deliverNum'){
@@ -34,7 +35,7 @@ function modify(){
 		return;
 	}
 	
-	for(let i=0; i<selectedList.length; i++){ 
+	for(let i=0; i<selectedList.length; i++){
 		if(!checkList.includes(selectedList[i].value)){
 			let order = {};
 			
@@ -43,11 +44,12 @@ function modify(){
 			order.orderId = selectedList[i].value.split("_")[0];
 			order.productId = selectedList[i].value.split("_")[1];
 			order.optionName = selectedList[i].value.split("_")[2];
+			order.optionId =  selectedList[i].value.split("_")[1] + selectedList[i].value.split("_")[2];
 			checkList.push(order);
 		}
 	}
 	
-	if(checkList.some(order => order.orderId !== checkList[0].orderId)){
+	if(changeValue=="환불완료" && checkList.some(order => order.orderId !== checkList[0].orderId)){
 		playToast("같은 주문번호만 일시 환불 처리가 가능합니다.", "error");
 		return; 
 	}
@@ -59,18 +61,21 @@ function modify(){
 		dataType: "json",
 		contentType: "application/json",
 		success: function(){
-			if(changeValue != "환불완료"){
-				let swapId = $("#swapId_" + orderId).val();
+			if(changeValue == "교환완료"){
+				let swapId = $("#swapId_" + orderId + "_" + optionId).val();
 				let swapStatus = "교환완료";
 				
 				updateStatus("swap", swapId, swapStatus);
-			} else {
+			} else if(changeValue == "환불완료"){
 				let proPrice = 0;
 				let orderPrice = parseInt($("#orderPrice_" + orderId).val());
 				let usedPoint = parseInt($("#usedPoint_" + orderId).val());
+				if (isNaN(usedPoint)) {
+				    usedPoint = 0;
+				}
 				let couponPrice = parseInt($("#couponPrice_" + orderId).val());
 				let refundPrice = 0;
-				let refundId = $("#refundId_" + orderId).val();
+				let refundId = $("#refundId_" + orderId + "_" + optionId).val();
 				let refundCost = $("#refundCost_" + refundId).val();
 				let refundCostMtd = $("#refundCostMtd_" + refundId).val();
 				
@@ -140,7 +145,11 @@ function modify(){
 						console.log("환불 취소");
 					}
 				});
-				
+			} else {
+				playToast("수정되었습니다.", "success");
+				setTimeout(function(){
+					window.location.reload();
+				}, 1000);
 			}
 		},
 		error: function(){
@@ -185,11 +194,11 @@ function updateStatus(requestWhat, id, status){
 	});
 }
 
-function checkInfo(orderId, refundId, swapId){
+function checkInfo(orderId, optionId, refundId, swapId){
 	let word;
 	let tagName;
-	let clientId = $("#clientId_" + orderId).val();
-	let clientNum = $("#clientNum_" + orderId).val();
+	let clientId = $("#clientId_" + orderId + "_" + optionId).val();
+	let clientNum = $("#clientNum_" + orderId + "_" + optionId).val();
 	
 	if(refundId == '' && swapId == ''){
 		console.log("교환/환불 없음");
@@ -208,67 +217,89 @@ function checkInfo(orderId, refundId, swapId){
 		tagName = "#refund";
 	}
 	
-	let id = $(tagName + "Id_" + orderId).val();
-	let	bankId = $(tagName + "BankId_" + id).val();
-	let	bankNum = $(tagName + "BankNum_" + id).val();
-	let optionId = $("#optionId_" + orderId).val();
-	let reason = $(tagName + "Reason_" + id).val();
-	let keyword = $(tagName + "Keyword_" + id).val();
-	let way = $(tagName + "Way_" + id).val();
-	let cost = $(tagName + "Cost_" + id).val();
-	let costMtd = $(tagName + "CostMtd_" + id).val();
-	let status = $(tagName + "Status_" + id).val();
-	let regDate = $(tagName + "regDate_" + id).val();
-	let email = $(tagName + "Email_" + id).val();
+	let imageDir = "";
 	
-					
-	let InfoInput = "<div class='row' style='border-bottom:1px solid silver; margin-bottom:10px;'></div>";
-	InfoInput += "<div class='confirmDiv'><div class='InfoDiv'><div class='row'><div class='InfoDiv_sub'><h4>" + word + " 요청</h4></div></div>";
-	InfoInput += "<div class='InfoDiv'><div class='row'><div class='InfoDiv_sub' style='width:30%; display:flex; justify-content:flex-end;'>주문 번호 : </div>";
-	InfoInput += "<div class='InfoDiv_sub' style='width:70%; display:flex; justify-content:flex-start; padding-left: 20px;'><b>" + orderId +"</b></div></div>";
-	InfoInput += "<div class='InfoDiv'><div class='row'><div class='InfoDiv_sub' style='width:30%; display:flex; justify-content:flex-end;'>옵션 번호 : </div>";
-	InfoInput += "<div class='InfoDiv_sub' style='width:70%; display:flex; justify-content:flex-start; padding-left: 20px;'><b>" + optionId +"</b></div></div>";
-	InfoInput += "<div class='InfoDiv'><div class='row'><div class='InfoDiv_sub' style='width:30%; display:flex; justify-content:flex-end;'>카테고리 : </div>";
-	InfoInput += "<div class='InfoDiv_sub' style='width:70%; display:flex; justify-content:flex-start; padding-left: 20px;'><b>" + keyword +"</b></div></div>";
-	InfoInput += "<div class='InfoDiv'><div class='row'><div class='InfoDiv_sub' style='width:30%; display:flex; justify-content:flex-end;'>" + word + " 사유 : </div>";
-	InfoInput += "<div class='InfoDiv_sub' style='width:70%; display:flex; justify-content:flex-start; padding-left: 20px;'><b>" + reason +"</b></div></div>";
-	InfoInput += "<div class='InfoDiv'><div class='row'><div class='InfoDiv_sub' style='width:30%; display:flex; justify-content:flex-end;'>수거 방법 : </div>";
-	InfoInput += "<div class='InfoDiv_sub' style='width:70%; display:flex; justify-content:flex-start; padding-left: 20px;'><b>" + way +"</b></div></div>";
-	InfoInput += "<div class='InfoDiv'><div class='row'><div class='InfoDiv_sub' style='width:30%; display:flex; justify-content:flex-end;'>추가 비용 : </div>";
-	InfoInput += "<div class='InfoDiv_sub' style='width:70%; display:flex; justify-content:flex-start; padding-left: 20px;'><b>" + cost.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") +"</b></div></div>";
-	InfoInput += "<div class='InfoDiv'><div class='row'><div class='InfoDiv_sub' style='width:30%; display:flex; justify-content:flex-end;'>" + word + " 상태 : </div>";
-	InfoInput += "<div class='InfoDiv_sub' style='width:70%; display:flex; justify-content:flex-start; padding-left: 20px;'><b>" + status +"</b></div></div>";
-	InfoInput += "<div class='InfoDiv'><div class='row'><div class='InfoDiv_sub' style='width:30%; display:flex; justify-content:flex-end;'>신청일자 : </div>";
-	InfoInput += "<div class='InfoDiv_sub' style='width:70%; display:flex; justify-content:flex-start; padding-left: 20px;'><b>" + regDate +"</b></div></div><hr>";
-	InfoInput += "<div class='InfoDiv'><div class='row'><div class='InfoDiv_sub'><h4> 기본 정보</h4></div></div>";
-	InfoInput += "<div class='InfoDiv'><div class='row'><div class='InfoDiv_sub' style='width:30%; display:flex; justify-content:flex-end;'>회원 아이디 : </div>";
-	InfoInput += "<div class='InfoDiv_sub' style='width:70%; display:flex; justify-content:flex-start; padding-left: 20px;'><b>" + clientId +"</b></div></div>";
-	InfoInput += "<div class='InfoDiv'><div class='row'><div class='InfoDiv_sub' style='width:30%; display:flex; justify-content:flex-end;'>연락처 : </div>";
-	InfoInput += "<div class='InfoDiv_sub' style='width:70%; display:flex; justify-content:flex-start; padding-left: 20px;'><b>" + clientNum +"</b></div></div>";
-	InfoInput += "<div class='InfoDiv'><div class='row'><div class='InfoDiv_sub' style='width:30%; display:flex; justify-content:flex-end;'>이메일 : </div>";
-	InfoInput += "<div class='InfoDiv_sub' style='width:70%; display:flex; justify-content:flex-start; padding-left: 20px;'><b>" + email +"</b></div></div>";
-	InfoInput += "<input type='hidden' value='" + id + "' id='id'>";
-	
-	if(word == "환불"){
-		InfoInput += "<div class='InfoDiv'><div class='row'><div class='InfoDiv_sub' style='width:30%; display:flex; justify-content:flex-end;'>" + word + " 은행 : </div>";
-		InfoInput += "<div class='InfoDiv_sub' style='width:70%; display:flex; justify-content:flex-start; padding-left: 20px;'><b>" + bankId +"</b></div></div>";
-		InfoInput += "<div class='InfoDiv'><div class='row'><div class='InfoDiv_sub' style='width:30%; display:flex; justify-content:flex-end;'>" + word + " 은행 계좌 : </div>";
-		InfoInput += "<div class='InfoDiv_sub' style='width:70%; display:flex; justify-content:flex-start; padding-left: 20px;'><b>" + bankNum +"</b></div></div>";
-	}
-	
-	InfoInput += "</div>";
-
-	Swal.fire({
-	  title: word + "정보",
-	  html: InfoInput,
-	  icon: "success",
-	  showCancelButton: false,
-	  confirmButtonColor: '#3085d6',
-	  confirmButtonText: "닫기",
-	}).then((result) => {
-		if(result.isConfirmed){	// 매개변수 list 안됨
-			return;	
-		}
+	$.ajax({
+		url: "/w2/getSwapRefundImage.mdo",
+		type: "POST",
+		data: {
+			imageBy: orderId + "_" + optionId
+		},
+		dataType: "json",
+		success: function(res){
+			for(let i=0; i<res.data.length; i++){
+				if(i == res.data.length-1){
+					imageDir += "<img src='" + res.data[i] + "' style='width:80%; height:auto;'>";
+					imageDir += "<br><br>";
+				} else {
+					imageDir += "<img src='" + res.data[i] + "' style='width:80%; height:auto;'>";
+				}
+				console.log("imageDir : " + imageDir);
+			}
+			
+			let id = $(tagName + "Id_" + orderId + "_" + optionId).val();
+			let	bankId = $(tagName + "BankId_" + id).val();
+			let	bankNum = $(tagName + "BankNum_" + id).val();
+			let reason = $(tagName + "Reason_" + id).val();
+			let keyword = $(tagName + "Keyword_" + id).val();
+			let way = $(tagName + "Way_" + id).val();
+			let cost = $(tagName + "Cost_" + id).val();
+			let costMtd = $(tagName + "CostMtd_" + id).val();
+			let status = $(tagName + "Status_" + id).val();
+			let regDate = $(tagName + "RegDate_" + id).val();
+			let email = $(tagName + "Email_" + id).val();
+			
+			let InfoInput = "<div class='row' style='border-bottom:1px solid silver; margin-bottom:10px;'></div>";
+			InfoInput += "<div class='confirmDiv'><div class='InfoDiv'><div class='row'><div class='InfoDiv_sub'><h4>" + word + " 요청</h4></div></div>";
+			InfoInput += "<div class='InfoDiv'><div class='row'><div class='InfoDiv_sub' style='width:30%; display:flex; justify-content:flex-end;'>주문 번호 : </div>";
+			InfoInput += "<div class='InfoDiv_sub' style='width:70%; display:flex; justify-content:flex-start; padding-left: 20px;'><b>" + orderId +"</b></div></div>";
+			InfoInput += "<div class='InfoDiv'><div class='row'><div class='InfoDiv_sub' style='width:30%; display:flex; justify-content:flex-end;'>옵션 번호 : </div>";
+			InfoInput += "<div class='InfoDiv_sub' style='width:70%; display:flex; justify-content:flex-start; padding-left: 20px;'><b>" + optionId +"</b></div></div>";
+			InfoInput += "<div class='InfoDiv'><div class='row'><div class='InfoDiv_sub' style='width:30%; display:flex; justify-content:flex-end;'>카테고리 : </div>";
+			InfoInput += "<div class='InfoDiv_sub' style='width:70%; display:flex; justify-content:flex-start; padding-left: 20px;'><b>" + keyword +"</b></div></div>";
+			InfoInput += "<div class='InfoDiv'><div class='row'><div class='InfoDiv_sub' style='width:30%; display:flex; justify-content:flex-end;'>" + word + " 사유 : </div>";
+			InfoInput += "<div class='InfoDiv_sub' style='width:70%; display:flex; justify-content:flex-start; padding-left: 20px;'><b>" + reason +"</b></div></div>";
+			InfoInput += "<div class='InfoDiv'><div class='row'><div class='InfoDiv_sub' style='width:30%; display:flex; justify-content:flex-end;'>수거 방법 : </div>";
+			InfoInput += "<div class='InfoDiv_sub' style='width:70%; display:flex; justify-content:flex-start; padding-left: 20px;'><b>" + way +"</b></div></div>";
+			InfoInput += "<div class='InfoDiv'><div class='row'><div class='InfoDiv_sub' style='width:30%; display:flex; justify-content:flex-end;'>추가 비용 : </div>";
+			InfoInput += "<div class='InfoDiv_sub' style='width:70%; display:flex; justify-content:flex-start; padding-left: 20px;'><b>" + cost.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") +"</b></div></div>";
+			InfoInput += "<div class='InfoDiv'><div class='row'><div class='InfoDiv_sub' style='width:30%; display:flex; justify-content:flex-end;'>" + word + " 상태 : </div>";
+			InfoInput += "<div class='InfoDiv_sub' style='width:70%; display:flex; justify-content:flex-start; padding-left: 20px;'><b>" + status +"</b></div></div>";
+			InfoInput += "<div class='InfoDiv'><div class='row'><div class='InfoDiv_sub' style='width:30%; display:flex; justify-content:flex-end;'>신청일자 : </div>";
+			InfoInput += "<div class='InfoDiv_sub' style='width:70%; display:flex; justify-content:flex-start; padding-left: 20px;'><b>" + regDate +"</b></div></div>";
+			InfoInput += "<div class='InfoDiv'><div class='row'><div class='InfoDiv_sub' style='width:30%; display:flex; justify-content:flex-end;'>첨부사진 : </div>";
+			InfoInput += "<div class='InfoDiv_sub' style='width:70%; display:flex; justify-content:flex-start; padding-left: 20px; flex-direction: column;'>" + imageDir + "</div></div><hr>";
+			InfoInput += "<div class='InfoDiv'><div class='row'><div class='InfoDiv_sub'><h4> 기본 정보</h4></div></div>";
+			InfoInput += "<div class='InfoDiv'><div class='row'><div class='InfoDiv_sub' style='width:30%; display:flex; justify-content:flex-end;'>회원 아이디 : </div>";
+			InfoInput += "<div class='InfoDiv_sub' style='width:70%; display:flex; justify-content:flex-start; padding-left: 20px;'><b>" + clientId +"</b></div></div>";
+			InfoInput += "<div class='InfoDiv'><div class='row'><div class='InfoDiv_sub' style='width:30%; display:flex; justify-content:flex-end;'>연락처 : </div>";
+			InfoInput += "<div class='InfoDiv_sub' style='width:70%; display:flex; justify-content:flex-start; padding-left: 20px;'><b>" + clientNum +"</b></div></div>";
+			InfoInput += "<div class='InfoDiv'><div class='row'><div class='InfoDiv_sub' style='width:30%; display:flex; justify-content:flex-end;'>이메일 : </div>";
+			InfoInput += "<div class='InfoDiv_sub' style='width:70%; display:flex; justify-content:flex-start; padding-left: 20px;'><b>" + email +"</b></div></div>";
+			InfoInput += "<input type='hidden' value='" + id + "' id='id'>";
+			
+			if(word == "환불"){
+				InfoInput += "<div class='InfoDiv'><div class='row'><div class='InfoDiv_sub' style='width:30%; display:flex; justify-content:flex-end;'>" + word + " 은행 : </div>";
+				InfoInput += "<div class='InfoDiv_sub' style='width:70%; display:flex; justify-content:flex-start; padding-left: 20px;'><b>" + bankId +"</b></div></div>";
+				InfoInput += "<div class='InfoDiv'><div class='row'><div class='InfoDiv_sub' style='width:30%; display:flex; justify-content:flex-end;'>" + word + " 은행 계좌 : </div>";
+				InfoInput += "<div class='InfoDiv_sub' style='width:70%; display:flex; justify-content:flex-start; padding-left: 20px;'><b>" + bankNum +"</b></div></div>";
+			}
+			
+			InfoInput += "</div>";
+		
+			Swal.fire({
+			  title: word + "정보",
+			  html: InfoInput,
+			  icon: "success",
+			  showCancelButton: false,
+			  confirmButtonColor: '#3085d6',
+			  confirmButtonText: "닫기",
+			}).then((result) => {
+				if(result.isConfirmed){	// 매개변수 list 안됨
+					return;	
+				}
+			});
+		},
 	});
 	
 }

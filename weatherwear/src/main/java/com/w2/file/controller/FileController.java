@@ -47,28 +47,21 @@ public class FileController {
 		String imageStatus = request.getParameter("imageStatus");
 		String imageBy = request.getParameter("imageBy");
 
-		System.err.println("key : " + key);
-		System.err.println("imageStatus : " + imageStatus);
-		System.err.println("imageBy : " + imageBy);
-		
 		Map<String, MultipartFile> fileMap = request.getFileMap();
 		List<ImageVO> imageList = new ArrayList<ImageVO>();
 		
 		for(MultipartFile multipartFile: fileMap.values()) {
-//			String resultUrl = awsS3.upload(multipartFile, key+"_image");
-//			System.err.println("resultUrl: " + resultUrl);
-//			String s3Path = resultUrl.substring(0, resultUrl.indexOf(key) + (key + "_image").length() + 1);
-//			System.err.println("s3Path: " + s3Path);
-//			String s3FileName = resultUrl.substring(resultUrl.indexOf(key) + (key + "_image").length() + 1, resultUrl.length());
-//			System.err.println("s3FileName: " + s3FileName);
-
+			String resultUrl = awsS3.upload(multipartFile, key+"_image");
+			String s3Path = resultUrl.substring(0, resultUrl.indexOf(key) + (key + "_image").length() + 1);
+			String s3FileName = resultUrl.substring(resultUrl.indexOf(key) + (key + "_image").length() + 1, resultUrl.length());
+/*
 			String resultUrl = awsS3.upload(multipartFile, key);
 			System.err.println("resultUrl: " + resultUrl);
 			String s3Path = resultUrl.substring(0, resultUrl.indexOf(key) + key.length() + 1);
 			System.err.println("s3Path: " + s3Path);
 			String s3FileName = resultUrl.substring(resultUrl.indexOf(key) + key.length() + 1, resultUrl.length());
 			System.err.println("s3FileName: " + s3FileName);
-			
+*/			
 			ImageVO image = new ImageVO();
 			image.setImageBy(imageBy);
 			image.setImageStatus(imageStatus);
@@ -85,9 +78,7 @@ public class FileController {
 		Map<String, Object> imageMap = new HashMap<String, Object>();
 		imageMap.put("list", imageList);
 		imageMap.put("key", key);
-
 		int result = imageService.insertImage(imageMap);
-		System.err.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ result : " + result);
 		return imageList;
 	}
 	
@@ -101,11 +92,9 @@ public class FileController {
 	@ResponseBody
 	@RequestMapping("summernoteFileUpload.mdo")
 	public String summernoteFileUpload(MultipartFile file, String key) throws IOException {
-		
 		if(key.equals("notice")) {
 			key = "notice_image";
 		}
-			
 		return awsS3.upload(file, key);
 	}
 	
@@ -156,7 +145,6 @@ public class FileController {
 			resultCode = "fail";
 			msg = "오류가 발생했습니다. 다시 시도해주세요";
 		}
-		
 		return new ResponseDTO<String>(statusCode, code, resultCode, msg, null);
 	}
 }

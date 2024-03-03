@@ -28,7 +28,6 @@ import com.w2.board.service.ReviewService;
 import com.w2.cart.service.CartService;
 import com.w2.client.ClientVO;
 import com.w2.client.service.ClientService;
-import com.w2.clientAddress.service.ClientAddressService;
 import com.w2.coupon.CouponVO;
 import com.w2.coupon.service.CouponService;
 import com.w2.order.service.OrderService;
@@ -47,8 +46,6 @@ public class MypageController {
 	@Autowired
 	private CouponService couponService;
 	@Autowired
-	private ClientAddressService addressService;
-	@Autowired
 	private CartService cartService;
 	@Autowired
 	private QnaService qnaService;
@@ -61,6 +58,9 @@ public class MypageController {
 	
 	/**
 	 * 마이페이지 화면 호출
+	 * @param request
+	 * @param model
+	 * @return
 	 */
 	@RequestMapping("mypage.do")
 	public String mypage(HttpServletRequest request, Model model) {
@@ -125,6 +125,10 @@ public class MypageController {
 	
 	/**
 	 * 정보수정 화면 호출
+	 * @param model
+	 * @param request
+	 * @param vo
+	 * @return
 	 */
 	@RequestMapping("editInfo.do")
 	public String editInfoView(Model model, HttpServletRequest request, ClientVO vo) {
@@ -158,6 +162,9 @@ public class MypageController {
 	
 	/**
 	 * 정보수정 프로세스
+	 * @param vo
+	 * @param model
+	 * @return
 	 */
 	@RequestMapping("editInfoProc.do")
 	public String editInfoProc(ClientVO vo, Model model) {
@@ -177,6 +184,14 @@ public class MypageController {
 	
 	/**
 	 * 나의 쿠폰 리스트
+	 * @param model
+	 * @param session
+	 * @param page
+	 * @param range
+	 * @param searchType
+	 * @param keyword
+	 * @param search
+	 * @return
 	 */
 	@RequestMapping("mycouponList.do")
 	public String mycouponList(Model model, HttpSession session, @RequestParam(required = false, defaultValue = "1") int page,
@@ -212,6 +227,9 @@ public class MypageController {
 	
 	/**
 	 * 쿠폰 등록
+	 * @param couponId
+	 * @param session
+	 * @return
 	 */
 	@ResponseBody
 	@RequestMapping("couponRegProc.do")
@@ -232,7 +250,6 @@ public class MypageController {
 		ClientVO client = (ClientVO) session.getAttribute("userInfo");
 		CouponVO coupon = couponService.getCouponInfo(couponId);
 		
-		System.err.println(coupon);
 		if(coupon == null) {
 			code = -1;
 			resultCode = "fail";
@@ -264,6 +281,14 @@ public class MypageController {
 	
 	/**
 	 * 나의 문의 목록
+	 * @param model
+	 * @param session
+	 * @param page
+	 * @param range
+	 * @param searchType
+	 * @param keyword
+	 * @param search
+	 * @return
 	 */
 	@RequestMapping("myqnaList.do")
 	public String myqnaList(Model model, HttpSession session, @RequestParam(required = false, defaultValue = "1") int page,
@@ -299,6 +324,9 @@ public class MypageController {
 	
 	/**
 	 * 1:1 문의 상세보기
+	 * @param model
+	 * @param vo
+	 * @return
 	 */
 	@RequestMapping("myqnaInfo.do")
 	public String myqnaInfo(Model model, QnaVO vo) {
@@ -308,6 +336,9 @@ public class MypageController {
 	
 	/**
 	 * 1:1 문의 삭제
+	 * @param vo
+	 * @param session
+	 * @return
 	 */
 	@ResponseBody
 	@RequestMapping("qnaDeleteProc.do")
@@ -341,6 +372,7 @@ public class MypageController {
 	
 	/**
 	 * 1:1 문의 등록 화면
+	 * @return
 	 */
 	@RequestMapping("qnaRegister.do")
 	public String qnaRegisterView() {
@@ -349,7 +381,9 @@ public class MypageController {
 	
 	/**
 	 * 1:1 문의 등록 프로세스
-	 * @throws IOException 
+	 * @param vo
+	 * @return
+	 * @throws IOException
 	 */
 	@RequestMapping("qnaRegProc.do")
 	public String qnaRegProc(QnaVO vo) throws IOException {
@@ -365,6 +399,8 @@ public class MypageController {
 	
 	/**
 	 * 1:1 문의 수정
+	 * @param vo
+	 * @return
 	 */
 	@RequestMapping("qnaUpdateProc.do")
 	public String qnaUpdateProc(QnaVO vo) {
@@ -375,6 +411,14 @@ public class MypageController {
 	
 	/**
 	 * 나의 리뷰 목록
+	 * @param model
+	 * @param session
+	 * @param page
+	 * @param range
+	 * @param searchType
+	 * @param keyword
+	 * @param search
+	 * @return
 	 */
 	@RequestMapping("myreviewList.do")
 	public String myreviewList(Model model, HttpSession session, @RequestParam(required = false, defaultValue = "1") int page,
@@ -409,6 +453,14 @@ public class MypageController {
 	
 	/**
 	 * 나의 관심상품 목록
+	 * @param model
+	 * @param session
+	 * @param page
+	 * @param range
+	 * @param searchType
+	 * @param keyword
+	 * @param search
+	 * @return
 	 */
 	@RequestMapping("mywishList.do")
 	public String mywishList(Model model, HttpSession session, @RequestParam(required = false, defaultValue = "1") int page,
@@ -457,6 +509,9 @@ public class MypageController {
 	
 	/**
 	 * 최근본상품 목록
+	 * @param request
+	 * @param model
+	 * @return
 	 */
 	@RequestMapping("myrecentList.do")
 	public String myrecentList(HttpServletRequest request, Model model) {
@@ -480,6 +535,10 @@ public class MypageController {
 	
 	/**
 	 * 최근본 상품 목록 삭제
+	 * @param checkList
+	 * @param request
+	 * @param response
+	 * @return
 	 */
 	@ResponseBody
 	@RequestMapping("recentListDelete.do")
@@ -505,6 +564,14 @@ public class MypageController {
 	
 	/**
 	 * 주문조회
+	 * @param model
+	 * @param session
+	 * @param page
+	 * @param range
+	 * @param searchType
+	 * @param keyword
+	 * @param search
+	 * @return
 	 */
 	@RequestMapping("myorderList.do")
 	public String myorderList(Model model, HttpSession session, @RequestParam(required = false, defaultValue = "1") int page,
@@ -528,7 +595,7 @@ public class MypageController {
 		int listCnt = orderService.getMyOrderListCnt(param);
 		
 		// 검색 페이지 정보
-		search.setListSize(5);
+		search.setListSize(15);
 		search.pageInfo(page, range, listCnt);
 		// 페이징
 		model.addAttribute("pagination", search);
@@ -537,48 +604,4 @@ public class MypageController {
 		
 		return "mypage/orderList";
 	}
-	
-	/**
-	 * 나의 배송지 목록
-	 */
-//	@RequestMapping("myaddressList.do")
-//	public String myaddressList(Model model, HttpSession session, @RequestParam(required = false, defaultValue = "1") int page,
-//			@RequestParam(required = false, defaultValue = "1") int range, @RequestParam(required = false, defaultValue = "couponId") String searchType,
-//			@RequestParam(required = false) String keyword, @ModelAttribute("search") Search search) {
-//		
-//		if(session.getAttribute("userInfo") == null) { return "main"; }
-//		
-//		ClientVO client = (ClientVO) session.getAttribute("userInfo");
-//		
-//		// 검색
-//		model.addAttribute("search", search);
-//		search.setSearchType(searchType);
-//		search.setKeyword(keyword);
-//		
-//		// 전체 게시글 개수
-//		int listCnt = addressService.getMyAddressListCnt(client.getClientId());
-//		
-//		// 검색 페이지 정보
-//		search.pageInfo(page, range, listCnt);
-//		// 페이징
-//		model.addAttribute("pagination", search);
-//		
-//		HashMap<String, Object> param = new HashMap<String, Object>();
-//		param.put("search", search);
-//		param.put("clientId", client.getClientId());
-//				
-//		
-//		model.addAttribute("addressList", addressService.getMyAddressList(param));
-//		
-//		return "mypage/addressList";
-//	}
-	
-	/**
-	 * 배송지 등록 화면
-	 */
-//	@RequestMapping("addressRegister.do")
-//	public String addressRegisterView() {
-//		return "mypage/addressRegister";
-//	}
-
 }

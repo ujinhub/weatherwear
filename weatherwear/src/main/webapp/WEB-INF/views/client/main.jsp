@@ -4,50 +4,52 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>WeatherWear 사용자</title>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<!-- Google Fonts -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com">
-<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500&amp;family=Inter:wght@400;500&amp;family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&amp;display=swap" rel="stylesheet">
-
-<!-- Vendor CSS Files -->
-<link href="resources/client/ZenBlog/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-<link href="resources/client/ZenBlog/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-
-<!-- Swiper -->
-<link href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css" rel="stylesheet"/>
-
-<!-- Template Main CSS Files -->
-<link href="resources/client/ZenBlog/assets/css/main.css" rel="stylesheet">
-<link href="resources/client/ZenBlog/assets/css/variables.css" rel="stylesheet">
-
-<link rel="stylesheet" href="/w2/resources/client/css/main.css">
-<script>
-$(document).ready(function() {
-	let weatherId = ${ weatherList.get('day3').get('weather_id') };
-	image = '';
-	
-	selectWeather(weatherId);
-	
-	<c:if test="${withdrawMsg != null && withdrawMsg != ''}">
-		location.href = "logoutProc.do"
-		alert("${withdrawMsg}");
-	</c:if>
-	
-});
-</script>
-<style>
-.mb-2 { width: 210px; height: 50px; overflow: hidden}
-.col-lg-3 { height: 440px; padding-left: 5%;}
-.productDiv:hover { cursor: pointer; }
-</style>
+	<meta charset="UTF-8">
+	<title>WeatherWear 사용자</title>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<!-- Google Fonts -->
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com">
+	<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500&amp;family=Inter:wght@400;500&amp;family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&amp;display=swap" rel="stylesheet">
+	<!-- Vendor CSS Files -->
+	<link href="resources/client/ZenBlog/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+	<link href="resources/client/ZenBlog/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+	<!-- Swiper -->
+	<link href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css" rel="stylesheet"/>
+	<!-- Template Main CSS Files -->
+	<link href="resources/client/ZenBlog/assets/css/main.css" rel="stylesheet">
+	<link href="resources/client/ZenBlog/assets/css/variables.css" rel="stylesheet">
+	<link rel="stylesheet" href="/w2/resources/client/css/main.css">
+	<script>
+		$(document).ready(function() {
+			let weatherId = ${ weatherList.get('day3').get('weather_id') };
+			image = '';
+			
+			selectWeather(weatherId);
+			
+			<c:if test="${withdrawMsg != null && withdrawMsg != ''}">
+				location.href = "logoutProc.do"
+				alert("${withdrawMsg}");
+			</c:if>
+			
+		});
+	</script>
+	<style>
+		.mb-2 { width: 210px; height: 50px; overflow: hidden}
+		.col-lg-3 { height: 440px; padding-left: 5%;}
+		.productDiv:hover { cursor: pointer; }
+	</style>
 </head>
 <body class="hold-transition sidebar-collapse layout-top-nav">
 	<div class="wrapper">
 		<%@ include file="header.jsp" %>
+		<c:if test="${withdrawMsg != null && withdrawMsg != ''}">
+			<script>
+			location.href = "logoutProc.do"
+			alert("${withdrawMsg}");
+			</script>
+		</c:if>
 		<main id="main">
 			<section id="hero-slider" class="hero-slider">
 				<div id="weather">
@@ -138,7 +140,7 @@ $(document).ready(function() {
 					<div class="section-header d-flex justify-content-between align-items-center mb-5">
 			        	<h2>BEST</h2>
 			        	<div>
-			        		<a href="#" class="more">MORE</a>
+			        		<a href="productList.do?orderby=productCnt" class="more">MORE</a>
 			        	</div>
 					</div>
 					<!-- 상품 한 줄 시작 -->
@@ -171,7 +173,6 @@ $(document).ready(function() {
 									</div>
 									<h2 class="mb-2">${ item.productName }</h2>
 									<span class="author mb-3 d-block"><fmt:formatNumber value="${item.productPrice}" pattern="###,###"/></span>
-									<p class="mb-4 d-block">1/26일 순차배송</p>
 								</div>
 							</div>
 							<!-- 상품 하나 반복 끝 -->
@@ -187,7 +188,7 @@ $(document).ready(function() {
 					<div class="section-header d-flex justify-content-between align-items-center mb-5">
 			        	<h2>NEW</h2>
 			        	<div>
-			        		<a href="#" class="more">MORE</a>
+			        		<a href="productList.do" class="more">MORE</a>
 			        	</div>
 					</div>
 					<!-- 상품 한 줄 시작 -->
@@ -218,7 +219,6 @@ $(document).ready(function() {
 									</div>
 									<h2 class="mb-2">${ item.productName }</h2>
 									<span class="author mb-3 d-block"><fmt:formatNumber value="${item.productPrice}" pattern="###,###"/></span>
-									<p class="mb-4 d-block">1/26일 순차배송</p>
 								</div>
 							</div>
 							<!-- 상품 하나 반복 끝 -->
@@ -234,16 +234,15 @@ $(document).ready(function() {
 		<%@ include file="footer.jsp" %>
 	</div>
 
-<script src="resources/client/ZenBlog/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script  src="resources/util/plugins/sweetalert/jquery-lates.min.js"></script>
-<script src="resources/util/plugins/sweetalert/sweetalert2.js"></script>
-
-<!-- Template Main JS File -->
-<script src="resources/client/ZenBlog/assets/js/main.js"></script>
-
-<!-- sweetAlert (alert/confirm/toast) -->
-<script src="resources/util/js/sweetalert.js"></script>
-<script src="resources/client/js/main.js"></script>
-
+	<script src="resources/client/ZenBlog/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<script  src="resources/util/plugins/sweetalert/jquery-lates.min.js"></script>
+	<script src="resources/util/plugins/sweetalert/sweetalert2.js"></script>
+	
+	<!-- Template Main JS File -->
+	<script src="resources/client/ZenBlog/assets/js/main.js"></script>
+	
+	<!-- sweetAlert (alert/confirm/toast) -->
+	<script src="resources/util/js/sweetalert.js"></script>
+	<script src="resources/client/js/main.js"></script>
 </body>
 </html>

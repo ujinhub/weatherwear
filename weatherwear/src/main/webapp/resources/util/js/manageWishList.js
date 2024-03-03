@@ -19,6 +19,7 @@ function insertWishList(checkList){
 			} else if (res.code == -2){
 				playConfirm(res.message, res.data, 'question', '로그인하기', '취소하기', "location.href='login.do'");
 			} else if(res.code == 1) {
+				deleteSelect('addWishList');
 				playConfirm(res.message, res.data, 'question', '위시리스트로 이동', '계속 쇼핑하기', "location.href='mywishList.do'", null);
 			} else if(res.code == -3){
 				Swal.fire({	// 매개변수 있어서 직접 작성

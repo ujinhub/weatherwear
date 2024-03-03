@@ -5,39 +5,35 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>WeatherWear 사용자</title>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<!-- Google Fonts -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com">
-<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500&amp;family=Inter:wght@400;500&amp;family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&amp;display=swap" rel="stylesheet">
-
-<!-- Vendor CSS Files -->
-<link href="resources/client/ZenBlog/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-<link href="resources/client/ZenBlog/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-
-<!-- Swiper -->
-<link href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css" rel="stylesheet"/>
-
-<!-- Template Main CSS Files -->
-<link href="resources/client/ZenBlog/assets/css/main.css" rel="stylesheet">
-<link href="resources/client/ZenBlog/assets/css/variables.css" rel="stylesheet">
-
-<!-- 주소 검색 -->
-<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-<style>
-	.resultDiv{ height: 55px; font-size: larger !important; display: flex; align-items: center;}
-	.inputLabel{ font-size: larger !important; display: flex; align-items: center; justify-content: center;}
-	.resultInput{ font-size: larger !important; display: flex; align-items: center; justify-content: flex-end;}
-	.selectOption{ border-radius:0; text-align: center; font-size: large;}
-	.check {width:15px; height:15px;}
-	.rowDivForm {height: 700px;}
-	.payBtn { width:100%; height:70px; font-size: x-large; background-color: black; color: white; border-radius: 0;}
-	.deliDiv { display: flex; justify-content: space-between;}
-	.confirmDiv {border-bottom:1px solid silver; margin-bottom:10px;}
-</style>
+	<meta charset="UTF-8">
+	<title>WeatherWear 사용자</title>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<!-- Google Fonts -->
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com">
+	<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500&amp;family=Inter:wght@400;500&amp;family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&amp;display=swap" rel="stylesheet">
+	<!-- Vendor CSS Files -->
+	<link href="resources/client/ZenBlog/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+	<link href="resources/client/ZenBlog/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+	<!-- Swiper -->
+	<link href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css" rel="stylesheet"/>
+	<!-- Template Main CSS Files -->
+	<link href="resources/client/ZenBlog/assets/css/main.css" rel="stylesheet">
+	<link href="resources/client/ZenBlog/assets/css/variables.css" rel="stylesheet">
+	<!-- 주소 검색 -->
+	<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+	<style>
+		.resultDiv{ height: 55px; font-size: larger !important; display: flex; align-items: center;}
+		.inputLabel{ font-size: larger !important; display: flex; align-items: center; justify-content: center;}
+		.resultInput{ font-size: larger !important; display: flex; align-items: center; justify-content: flex-end;}
+		.selectOption{ border-radius:0; text-align: center; font-size: large;}
+		.check {width:15px; height:15px;}
+		.rowDivForm {height: 700px;}
+		.payBtn { width:100%; height:70px; font-size: x-large; background-color: black; color: white; border-radius: 0;}
+		.deliDiv { display: flex; justify-content: space-between;}
+		.confirmDiv {border-bottom:1px solid silver; margin-bottom:10px;}
+	</style>
 </head>
 <body class="hold-transition sidebar-collapse layout-top-nav">
 	<div class="wrapper">
@@ -327,21 +323,21 @@
 		<%@ include file="../footer.jsp" %>
 	</div>
 
-<script src="resources/client/ZenBlog/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script  src="resources/util/plugins/sweetalert/jquery-lates.min.js"></script>
-<script src="resources/util/plugins/sweetalert/sweetalert2.js"></script>
-
-<!-- Template Main JS File -->
-<script src="resources/client/ZenBlog/assets/js/main.js"></script>
-<!-- sweetAlert (alert/confirm/toast) -->
-<script src="resources/util/js/sweetalert.js"></script>
-<!-- PortOne SDK -->
-<script src="https://cdn.iamport.kr/v1/iamport.js"></script>
-<!-- iamport.payment.js -->
-<script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.5.js"></script>
-
-<script src="resources/client/js/post.js"></script>
-<script src="resources/client/js/orderRegister.js"></script>
-<script src="resources/client/js/orderReady.js"></script>
+	<script src="resources/client/ZenBlog/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<script  src="resources/util/plugins/sweetalert/jquery-lates.min.js"></script>
+	<script src="resources/util/plugins/sweetalert/sweetalert2.js"></script>
+	
+	<!-- Template Main JS File -->
+	<script src="resources/client/ZenBlog/assets/js/main.js"></script>
+	<!-- sweetAlert (alert/confirm/toast) -->
+	<script src="resources/util/js/sweetalert.js"></script>
+	<!-- PortOne SDK -->
+	<script src="https://cdn.iamport.kr/v1/iamport.js"></script>
+	<!-- iamport.payment.js -->
+	<script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.5.js"></script>
+	
+	<script src="resources/client/js/post.js"></script>
+	<script src="resources/client/js/orderRegister.js"></script>
+	<script src="resources/client/js/orderReady.js"></script>
 </body>
 </html>

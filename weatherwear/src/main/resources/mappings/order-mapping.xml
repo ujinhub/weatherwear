@@ -2,19 +2,23 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 	 			
 <mapper namespace="OrderDAO">
+<!-- 
+		관리자_주문 리스트 조회
+-->
 	<select id="getOrderList" resultType="hashMap">
 		SELECT od.orderId, od.orderDate, od.clientId, od.couponId,
 			cl.clientName, cl.clientNum, di.deliverNum,
 	        ad.addressName, ad.addressNum, ad.addressPostNum, ad.address1, ad.address2, ad.addressMemo,
-	        pr.productName, pr.productId, SUBSTRING(oi.optionId, LENGTH(pr.productId)+1) as optionName, oi.orderProCnt, oi.orderTotal, oi.orderStatus, 
-	        od.orderPrice, od.usedPoint, COALESCE(ci.couponPrice, 0) AS couponPrice, pi.paymentMethod, pi.paymentDate, pi.paymentStatus, pi.paymentId,
+	        pr.productName, pr.productId, SUBSTRING(oi.optionId, LENGTH(pr.productId)+1) as optionName, 
+	        oi.orderProCnt, oi.orderTotal, oi.orderStatus, od.orderPrice, od.usedPoint, oi.optionId,
+	        COALESCE(ci.couponPrice, 0) AS couponPrice, pi.paymentMethod, pi.paymentDate, pi.paymentStatus, pi.paymentId,
 	    	sw.*, rf.*
 		FROM orders od
 		LEFT JOIN orders_info oi ON (od.orderId=oi.orderId)
 		LEFT JOIN client cl ON (od.clientId=cl.clientId)
 		LEFT JOIN client_address ad ON (od.clientId=ad.clientId AND od.addressId=ad.addressId)
 		LEFT JOIN payment_info pi ON (od.orderId=pi.orderId)
-		LEFT JOIN deliver_info di ON (od.orderId=di.orderId)
+		LEFT JOIN deliver_info di ON (od.orderId=di.orderId AND oi.optionId=di.optionId)
 		LEFT JOIN coupon_info ci ON (od.couponId=ci.couponId)
 		LEFT JOIN product pr ON (SUBSTRING(oi.optionId, 1, LENGTH(pr.productId))=pr.productId)
 		LEFT JOIN swap sw ON (od.orderId = sw.orderId AND oi.optionId = sw.optionId)
@@ -29,6 +33,9 @@
 				</if>
 			</if>
 		</trim>
+		<if test="orderby == 'newOrder'">
+			WHERE oi.orderStatus="결제완료"
+		</if>
 		<if test="orderby == 'swap'">
 			WHERE oi.orderStatus IN ("교환진행중", "교환요청")
 		</if>
@@ -41,16 +48,18 @@
 					od.clientId ASC , od.orderId DESC
 				</when>
 				<when test="orderby == 'orderStatus'">
-					CASE WHEN oi.orderStatus = '상품준비중' THEN 1
-						WHEN oi.orderStatus = '배송준비중' THEN 2
-						WHEN oi.orderStatus = '배송보류' THEN 3
-						WHEN oi.orderStatus = '배송대기' THEN 4
-						WHEN oi.orderStatus = '배송중' THEN 5
-						WHEN oi.orderStatus = '배송완료' THEN 6
-						WHEN oi.orderStatus = '교환진행중' THEN 7
-						WHEN oi.orderStatus = '환불진행중' THEN 8
-						WHEN oi.orderStatus = '교환완료' THEN 9
-						WHEN oi.orderStatus = '환불완료' THEN 10
+					CASE WHEN oi.orderStatus = '결제완료' THEN 1
+						 WHEN oi.orderStatus = '상품준비중' THEN 2
+						 WHEN oi.orderStatus = '배송준비중' THEN 3
+						 WHEN oi.orderStatus = '배송보류' THEN 4
+						 WHEN oi.orderStatus = '배송대기' THEN 5
+						 WHEN oi.orderStatus = '배송중' THEN 6
+						 WHEN oi.orderStatus = '배송완료' THEN 7
+						 WHEN oi.orderStatus = '교환진행중' THEN 8
+						 WHEN oi.orderStatus = '환불진행중' THEN 9
+						 WHEN oi.orderStatus = '교환완료' THEN 10
+						 WHEN oi.orderStatus = '환불완료' THEN 11
+						 WHEN oi.orderStatus = '구매확정' THEN 12
 					END
 				</when>
 				<otherwise>
@@ -60,6 +69,9 @@
 		LIMIT #{startList}, #{listSize};
 	</select>
 	
+<!-- 
+		관리자_주문 리스트 개수 조회	
+-->
 	<select id="getOrderListCnt" resultType="int">
 		SELECT count(*)
 		FROM orders_info oi
@@ -89,6 +101,9 @@
 		, od.orderId
 	</select>
 	
+<!-- 
+		주문 상태 수정
+-->
 	<update id="updateOrderStatus" parameterType="java.util.List">
 		<foreach collection="list" item="order" index="index">
 			UPDATE orders_info SET orderStatus=#{ order.changeValue }
@@ -96,17 +111,26 @@
 		</foreach>
 	</update>
 	
+<!-- 
+		송장번호 수정
+-->
 	<update id="updateDeliverNum" parameterType="java.util.List">
 		<foreach collection="list" item="order" index="index">
 			UPDATE deliver_info SET deliverNum=#{ order.changeValue }
-			WHERE orderId=#{ order.orderId };
+			WHERE orderId=#{ order.orderId } AND optionId=#{ order.optionId };
 		</foreach>
 	</update>
 	
+
+<!-- 
+		배송지 등록/수정	
+-->
 	<insert id="insertAddress" parameterType="hashMap">
-		INSERT INTO client_address (addressId, clientId, addressTitle, addressName, addressNum, addressPostNum, address1, address2, addressMemo, addressBase, cookieId)
-		VALUES(#{ addressInfo.addressId }, #{ addressInfo.clientId }, #{ addressInfo.addressTitle }, #{ addressInfo.addressName }, REPLACE(#{ addressInfo.addressNum  }, '-', ''), 
-				#{ addressInfo.addressPostNum }, #{ addressInfo.address1 }, #{ addressInfo.address2 }, #{ addressInfo.addressMemo }, #{ addressInfo.addressBase }, #{ cookieId })
+		INSERT INTO client_address (addressId, clientId, addressTitle, addressName, addressNum, addressPostNum, 
+									address1, address2, addressMemo, addressBase, cookieId)
+		VALUES(#{ addressInfo.addressId }, #{ addressInfo.clientId }, #{ addressInfo.addressTitle }, #{ addressInfo.addressName }, 
+					REPLACE(#{ addressInfo.addressNum  }, '-', ''), #{ addressInfo.addressPostNum }, #{ addressInfo.address1 }, 
+					#{ addressInfo.address2 }, #{ addressInfo.addressMemo }, #{ addressInfo.addressBase }, #{ cookieId })
 		ON DUPLICATE KEY UPDATE
 			addressTitle=#{ addressInfo.addressTitle }, 
 			addressName=#{ addressInfo.addressName }, 
@@ -119,55 +143,72 @@
 			cookieId=#{ cookieId };
 	</insert>
 	
+<!-- 
+		기본 배송 정보 수정	
+-->
 	<update id="updateBaseAddress" parameterType="hashMap">
 		UPDATE client_address SET addressBase='N' WHERE clientId=#{ addressInfo.clientId } AND addressId != #{ addressInfo.addressId }
 	</update>
 	
+<!-- 
+		장바구니 삭제
+-->
+	<delete id="deleteCart" parameterType="hashMap">
+		DELETE FROM cart WHERE cartId IN 
+			<foreach collection="cartIdList" item="cartId" open="(" separator="," close=")">
+				#{ cartId }
+			</foreach>
+	</delete>
+	
+<!-- 
+		신규 주문 등록
+-->
 	<insert id="insertOrder" parameterType="hashMap" useGeneratedKeys="true" keyProperty="orderId" keyColumn="orderId">					
 		INSERT INTO orders(orderId, clientId, addressId, optionIdList, orderEmail, orderPrice, usedPoint, couponId, cookieId, cookiePwd)
 		VALUES(#{ orderId }, #{ orderInfo.clientId }, #{ addressInfo.addressId }, #{ orderInfo.optionIdList }, #{ orderInfo.orderEmail },
 				#{ orderInfo.orderPrice }, #{ orderInfo.usedPoint }, #{ orderInfo.couponId }, #{ cookieId }, #{ orderInfo.cookiePwd });
 	</insert>
 	
-	<delete id="deleteCart" parameterType="hashMap">
-		DELETE FROM cart WHERE 
-			<if test="cookieId == null">
-				clientId=#{ orderInfo.clientId } 
-			</if>
-			<if test="cookieId != null">
-				cookieId=#{ cookieId }
-			</if>
-		AND cartId IN 
-			<foreach collection="cartIdList" item="cartId" open="(" separator="," close=")">
-				#{ cartId }
-			</foreach>
-	</delete>
-	
+<!-- 
+		신규 주문 상세 정보 등록
+-->
 	<insert id="insertOrderInfo" parameterType="hashMap">
 		INSERT INTO orders_info(orderId, optionId, orderProCnt, orderTotal, orderStatus)
 		VALUES
 			<foreach collection="orderInfoList" item="order" open="(" separator="), (" close=")">
-				#{ orderId }, #{ order.optionId }, #{ order.orderProCnt }, #{ order.orderTotal }, '상품준비중'
+				#{ orderId }, #{ order.optionId }, #{ order.orderProCnt }, #{ order.orderTotal }, '결제완료'
 			</foreach>
 	</insert>
 	
+<!-- 
+		회원 포인트 수정
+-->
 	<update id="updateClientPoint" parameterType="hashMap">
 		UPDATE client
 		SET clientPoint = clientPoint - #{ orderInfo.usedPoint }
 		WHERE clientId = #{ orderInfo.clientId }
 	</update>
 	
+<!-- 
+		쿠폰 상태 변경
+-->
 	<update id="updateCouponList" parameterType="hashMap">
 		UPDATE coupon_list 
 		SET couponStatus="사용완료"
 		WHERE clientId=#{ usedCouponInfo.clientId } AND couponId=#{ usedCouponInfo.couponId };
 	</update>
 	
+<!-- 
+		결제정보 등록
+-->
 	<insert id="insertPayment" parameterType="hashMap">
 		INSERT INTO payment_info(paymentId, orderId, paymentMethod, paymentStatus)
 		VALUES(#{ paymentId }, #{ orderId }, #{ paymentMethod }, #{ paymentStatus })
 	</insert>
 	
+<!-- 
+		주문 상세 조회
+-->
 	<select id="getOrderInfo" parameterType="hashMap" resultType="hashMap">
 		SELECT od.*, ad.*, pi.*, cl.*, cp.*
 		FROM orders od
@@ -178,8 +219,12 @@
 		WHERE od.orderId = #{ orderId }
 	</select>
 	
+<!-- 
+		주문 상세 리스트 조회
+-->
 	<select id="getOrderInfoList" parameterType="hashMap" resultType="hashMap">
-		SELECT oi.*, pro.productName, pro.productId, pri.productPrice, CONCAT(pm.imageDir, pm.imageName) AS mainImage, op.*, re.reviewId, re.reviewStatus
+		SELECT oi.*, pro.productName, pro.productId, pri.productPrice, 
+				CONCAT(pm.imageDir, pm.imageName) AS mainImage, op.*, re.reviewId, re.reviewStatus
 		FROM orders_info oi
 		LEFT JOIN product pro ON (SUBSTRING(oi.optionId, 1, 9)=pro.productId)
 		LEFT JOIN product_price pri ON (pro.productId = pri.productId)
@@ -189,6 +234,9 @@
 		WHERE oi.orderId=#{ orderId }
 	</select>
 	
+<!-- 
+		상품 재고 수정
+-->
 	<update id="updateProductStock" parameterType="hashMap">
 		<foreach collection="orderInfoList" item="order" separator=";">
 		UPDATE option_info
@@ -197,21 +245,38 @@
 		</foreach> 
 	</update>
 	
+<!-- 
+		주문 상태 변경(상품 주문 정보)
+-->
 	<update id="updateOrderInfo" parameterType="hashMap">
 		UPDATE orders_info
 		SET orderStatus=#{ orderStatus }
 		WHERE orderId=#{ order.orderId } AND optionId=#{ order.optionId }
 	</update>
 	
+<!-- 
+		교환/환불 정보 등록
+-->
 	<insert id="insertSwapRefund" parameterType="hashMap">
 		INSERT INTO 
-			<if test="requestWhat == 'refund'">refund(refundId, orderId, optionId, refundReason, refundWay, refundCost, refundCostMtd, refundStatus, refundEmail, refundRegDate, refundKeyword, bankId, refundBankNum)</if>
-			<if test="requestWhat == 'swap'">swap(swapId, orderId, optionId, swapReason, swapWay, swapCost, swapCostMtd, swapStatus, swapEmail, swapRegDate, swapKeyword)</if>
-		VALUES(#{ id }, #{ orderId }, #{ optionId }, #{ reason }, #{ deliverWay }, #{ cost }, #{ costMtd }, #{ status }, #{ email }, CURRENT_TIMESTAMP(), #{ keyword }
+			<if test="requestWhat == 'refund'">
+				refund(refundId, orderId, optionId, refundReason, refundWay, refundCost, 
+						refundCostMtd, refundStatus, refundEmail, refundRegDate, refundKeyword, 
+						bankId, refundBankNum)
+			</if>
+			<if test="requestWhat == 'swap'">
+				swap(swapId, orderId, optionId, swapReason, swapWay, swapCost, swapCostMtd, 
+						swapStatus, swapEmail, swapRegDate, swapKeyword)
+			</if>
+		VALUES(#{ id }, #{ orderId }, #{ optionId }, #{ reason }, #{ deliverWay }, #{ cost }, #{ costMtd }, 
+				#{ status }, #{ email }, CURRENT_TIMESTAMP(), #{ keyword }
 			<if test="requestWhat == 'refund'"> , #{ bankId }, #{ refundBankNum }</if>
 		);
 	</insert>
 	
+<!-- 
+		교환/환불 정보 수정	
+-->
 	<update id="updateSwapRefund" parameterType="hashMap">
 		UPDATE ${ requestWhat } 
 		SET
@@ -219,9 +284,12 @@
 			<if test="requestWhat == 'swap'">swapStatus = #{ status } WHERE swapId = #{ id }</if>
 	</update>
 	
-<!-- 나의 주문 내역 -->
+<!-- 
+		마이페이지 주문 리스트 조회
+-->
 	<select id="getMyOrderList" parameterType="hashMap" resultType="hashMap">
-		SELECT oi.orderId, oi.orderProCnt, oi.orderStatus, oi.orderTotal, op.optionColor, op.optionSize, oi.optionId, o.orderDate, p.productId, p.productName, CONCAT(pi.ImageDir, pi.ImageName) as image
+		SELECT oi.orderId, oi.orderProCnt, oi.orderStatus, oi.orderTotal, op.optionColor, op.optionSize, 
+				oi.optionId, o.orderDate, p.productId, p.productName, CONCAT(pi.ImageDir, pi.ImageName) as image
 		FROM orders_info oi 
 		JOIN orders o ON oi.orderId = o.orderId
 		JOIN option_info op ON oi.optionId = op.optionId
@@ -237,6 +305,9 @@
 		LIMIT #{search.startList}, #{search.listSize};
 	</select>
 	
+<!-- 
+		마이페이지 주문 리스트 개수 조회
+-->
 	<select id="getMyOrderListCnt" parameterType="hashMap" resultType="int">
 		SELECT count(*)
 		FROM orders
@@ -248,8 +319,64 @@
 		</if>
 	</select>
 	
+<!-- 
+		주문 상제 정보 삭제
+-->
 	<delete id="deleteOrderInfo" parameterType="String">
 		DELETE orders_info WHERE orderId=#{ orderId };
 		DELETE orders WHERE orderId=#{ orderId };
 	</delete>
+	
+<!-- 
+		비회원 주문 조회
+-->
+	<select id="checkUnKnownOrderInfo" parameterType="hashMap" resultType="order">
+		SELECT * 
+		FROM orders od
+		JOIN client_address ca ON (od.addressId = ca.addressId)
+		WHERE ca.addressName = #{ name } AND od.orderId = #{ num }
+	</select>
+	
+<!-- 
+		배송 정보 등록
+-->
+	<insert id="insertDeliverInfo" parameterType="hashMap">
+		INSERT INTO deliver_info(orderId, optionId, deliveryId, deliverType, deliverPrice, deliverDate)
+		VALUES
+		<foreach collection="orderInfoList" item="order" separator=",">
+			(#{ orderId }, #{ order.optionId },  #{ deliverInfo.deliveryId }, #{ deliverInfo.deliverType }, (SELECT deliveryPrice FROM delivery where deliveryId=#{ deliverInfo.deliveryId }), null)
+		</foreach>
+	</insert>
+	
+<!-- 
+		배송 완료 후 2주 지난 배송정보 조회
+-->
+	<select id="checkOrderDate" resultType="String">
+		<![CDATA[SELECT di.orderId
+		FROM deliver_info di
+		JOIN orders_info oi ON (di.orderId = oi.orderId)
+		WHERE deliverDate < DATE_SUB(CURDATE(), INTERVAL 14 DAY) 
+		AND oi.orderStatus = "배송완료"]]>
+	</select>
+	
+<!-- 
+		구매 확정 변경
+-->
+	<update id="updateOrderDate" parameterType="list">
+		UPDATE orders_info SET orderStatus="구매확정"
+		WHERE orderId IN (
+			<foreach collection="list" item="orderId" separator=",">
+				#{ orderId }
+			</foreach>
+		)
+	</update>
+	
+<!-- 
+		교환/환불 이미지 조회
+ -->
+ 	<select id="getSwapRefundImage" parameterType="String" resultType="String">
+ 		SELECT CONCAT(imageDir, imageName) AS image
+ 		FROM client_image
+ 		WHERE imageBy = #{ imageBy }
+ 	</select>
 </mapper>

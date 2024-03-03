@@ -4,7 +4,6 @@ pageEncoding="UTF-8"%>
 <header id="header" class="header d-flex align-items-center fixed-top">
 	<div class="container-fluid container-xl d-flex align-items-center justify-content-between">
 		<a href="main.do" class="logo d-flex align-items-center">
-<!-- 			<img src="resources/client/images/logo_pull.png" alt="mainLogo"> -->
 			<h1>WeatherWear</h1>
 		</a>
 		<nav id="navbar" class="navbar">

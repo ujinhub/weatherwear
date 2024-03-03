@@ -4,7 +4,7 @@
  $(document).ready(function(){
  	// summernote 실행
 	$('#summernote').summernote({
-		height: 300
+		height: 1800
 	});
  
 	const optionDiv = document.querySelector("#option-div");
@@ -127,13 +127,11 @@
 
 			// sendingmultiple : 여러 파일을 동시에 업로드시, 첫 전송 직전에 발생
 			this.on('sendingmultiple', function(file, xhr, formData) {
-				playToast('sending', 'info');
 				console.log('보내는 중');
 			});
 			
 			// successmultiple : 다중 파일 업로드 성공한 경우
 			this.on('successmultiple', function(file, responseText) {
-				playToast('Success to Upload', 'success');
 			});
 			
 			this.on('error', function(file, errorMessage) {
@@ -149,7 +147,14 @@
 			// 업로드된 파일 삭제
 			this.on('removedfile', function(data) {
 				console.log("data : " + data.name);
-				playToast('Remove File', 'success');
+				if(myDropzone.getQueuedFiles().length === 0 && myDropzone.getUploadingFiles().length ===0){
+					document.querySelector(".baseImgDiv").style.display="flex";
+				}
+			});
+			
+			this.on("addedfile", function(){
+				console.log("123");
+				document.querySelector(".baseImgDiv").style.display="none";
 			});
 		}
  	});
@@ -251,7 +256,7 @@ function submit(type){
 			} 
 			
 			if(res.code == 1) {
-				let successAction = "location.href='productInfo.mdo?productId='" + productId;
+				let successAction = "location.href='productInfo.mdo?productId=" + productId + "'";
 				playConfirm(res.message, res.data, "success", "상품 상세로 이동", "상품 관리페이지로", successAction, "location.href='productList.mdo'");
 			}
 		},
@@ -309,7 +314,7 @@ function update(){
 	let checkList = [];
 	let selectedList = document.querySelectorAll("input[type='checkbox']:checked");
 	let productSell = $("#productSell_value").val();
-	
+
 	if(selectedList.length < 1){
 		playToast("변경할 데이터를 선택해주세요", 'warning');
 		return;

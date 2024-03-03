@@ -13,10 +13,9 @@ public interface QnaService {
 	int updateQnaAnswer(QnaVO vo);					// 문의 답글 등록/수정하기
 	int deleteQnaAnswer(QnaVO vo);					// 문의 답글 삭제하기
 	
-	List<QnaVO> getMyQnaList(HashMap<String, Object> param);
-	int getMyQnaListCnt(String clientId);
-	
-	int insertQna(QnaVO vo);
-	int deleteQna(QnaVO vo);
-	int updateQna(QnaVO vo);
+	List<QnaVO> getMyQnaList(HashMap<String, Object> param);	// 마이페이지 문의내역 조회
+	int getMyQnaListCnt(String clientId);			// 마이페이지 문의내역 개수 조회
+	int insertQna(QnaVO vo);						// 문의 등록
+	int deleteQna(QnaVO vo);						// 문의 삭제
+	int updateQna(QnaVO vo);						// 문의 수정
 }

@@ -1,26 +1,25 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>WeatherWear 관리자</title>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-<!-- Font Awesome -->
-<link href="resources/admin/AdminLTE/plugins/fontawesome-free/css/all.min.css" rel="stylesheet">
-<!-- Theme style -->
-<link href="resources/admin/AdminLTE/dist/css/adminlte.min.css" rel="stylesheet">
-<style>
-	.orderStatus_select {width: 130px !important;}
-	.option_select {width: 100px !important;}
-	.deliveryNum_select {display: none;}
-	.check {width:20px; height:20px;}
-</style>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>WeatherWear 관리자</title>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+	<!-- Font Awesome -->
+	<link href="resources/admin/AdminLTE/plugins/fontawesome-free/css/all.min.css" rel="stylesheet">
+	<!-- Theme style -->
+	<link href="resources/admin/AdminLTE/dist/css/adminlte.min.css" rel="stylesheet">
+	<style>
+		.orderStatus_select {width: 130px !important;}
+		.option_select {width: 100px !important;}
+		.deliveryNum_select {display: none;}
+		.check {width:20px; height:20px;}
+	</style>
 </head>
 <body class="hold-transition sidebar-collapse layout-top-nav">
 	<div class="wrapper">
@@ -87,6 +86,7 @@
 												</select>&nbsp;&nbsp;&nbsp;
 												<div class="input-group-sm orderStatus_select">
 													<select class="form-control orderStatus_select" id="orderStatus_value">
+														<option value="결제완료">결제완료</option>
 														<option value="상품준비중">상품준비중</option>
 														<option value="배송준비중">배송준비중</option>
 														<option value="배송보류">배송보류</option>
@@ -118,7 +118,7 @@
 												<col width="150px"/><!-- 주문상태 -->
 												<col width="200px"/><!-- 주문일자 -->
 												<col width="150px"/><!-- 회원번호 -->
-												<col width="100px"/><!-- 구매자이름 -->
+												<col width="150px"/><!-- 구매자이름 -->
 												<col width="150px"/><!-- 구매자연락처 -->
 												<col width="500px"/><!-- 주문상품 -->
 												<col width="150px"/><!-- 주문옵션 -->
@@ -167,13 +167,13 @@
 													<tr>
 														<td class="checklist"><input type="checkbox" value="${item.orderId}_${item.productId}_${item.optionName}" class="check"></td>
 														<td>${item.orderId}</td>
-														<td id="status_${ item.orderId }" onclick="checkInfo('${ item.orderId }', '${ item.refundId }', '${ item.swapId }')">
+														<td id="status_${ item.orderId }" onclick="checkInfo('${ item.orderId }', '${ item.optionId }', '${ item.refundId }', '${ item.swapId }')">
 															${item.orderStatus}
-															<input type="hidden" id="optionId_${ item.orderId }" value="${ item.optionId }">
-															<input type="hidden" id="clientId_${ item.orderId }" value="${ item.clientId }">
-															<input type="hidden" id="clientNum_${ item.orderId }" value="${ item.clientNum }">
+															<input type="hidden" id="optionId_${ item.orderId }_${ item.optionId }" value="${ item.optionId }">
+															<input type="hidden" id="clientId_${ item.orderId }_${ item.optionId }" value="${ item.clientId }">
+															<input type="hidden" id="clientNum_${ item.orderId }_${ item.optionId }" value="${ item.clientNum }">
 															<c:if test="${ item.refundId != null || item.refundId == '' }">
-																<input type="hidden" id="refundId_${ item.orderId }" value="${ item.refundId }">
+																<input type="hidden" id="refundId_${ item.orderId }_${ item.optionId }" value="${ item.refundId }">
 																<input type="hidden" id="refundReason_${ item.refundId }" value="${ item.refundReason }">
 																<input type="hidden" id="refundKeyword_${ item.refundId }" value="${ item.refundKeyword }">
 																<input type="hidden" id="refundWay_${ item.refundId }" value="${ item.refundWay }">
@@ -186,7 +186,7 @@
 																<input type="hidden" id="refundEmail_${ item.refundId }" value="${ item.refundEmail }">
 															</c:if>
 															<c:if test="${ item.swapId != null || item.swapId == '' }">
-																<input type="hidden" id="swapId_${ item.orderId }" value="${ item.swapId }">
+																<input type="hidden" id="swapId_${ item.orderId }_${ item.optionId }" value="${ item.swapId }">
 																<input type="hidden" id="swapReason_${ item.swapId }" value="${ item.swapReason }">
 																<input type="hidden" id="swapKeyword_${ item.swapId }" value="${ item.swapKeyword }">
 																<input type="hidden" id="swapWay_${ item.swapId }" value="${ item.swapWay }">
@@ -198,15 +198,24 @@
 															</c:if>
 														</td>
 														<td>${item.orderDate}</td>
-														<td>${item.clientId}</td>
-														<td>${item.clientName}</td>
-														<td>${fn:substring(item.clientNum,0,3)}-${fn:substring(item.clientNum,3,7)}-${fn:substring(item.clientNum,7,11)}</td>
+														<c:choose>														
+														<c:when test="${ item.clientId != null && item.clientId != ''}">
+															<td>${item.clientId}</td>
+															<td>${item.clientName}</td>
+															<td>${fn:substring(item.clientNum,0,3)}-${fn:substring(item.clientNum,3,7)}-${fn:substring(item.clientNum,7,11)}</td>
+														</c:when>
+														<c:otherwise>
+															<td>비회원</td>
+															<td>${item.addressName}</td>
+															<td>${fn:substring(item.addressNum,0,3)}-${fn:substring(item.addressNum,3,7)}-${fn:substring(item.addressNum,7,11)}</td>
+														</c:otherwise>
+														</c:choose>
 														<td>${item.productName}</td>
 														<td>${item.optionName}</td>
 														<td>${item.orderProCnt}</td>
 														<td><fmt:formatNumber value="${item.orderTotal}" pattern="###,###"/></td>
 														<td>${item.addressName}</td>
-														<td>${item.addressNum}</td>
+														<td>${fn:substring(item.addressNum,0,3)}-${fn:substring(item.addressNum,3,7)}-${fn:substring(item.addressNum,7,11)}</td>
 														<td><input type="text" value="${item.deliverNum}"></td>
 														<td>${item.addressPostNum}</td>
 														<td>${item.address1}</td>
@@ -265,22 +274,24 @@
 		</div>		
 		<%@ include file="../footer.jsp" %>
 	</div>
-<!-- jQuery -->
-<script src="resources/admin/AdminLTE/plugins/jquery/jquery.min.js"></script>
-<script	src="resources/util/plugins/sweetalert/jquery-lates.min.js"></script>
-<script src="resources/util/plugins/sweetalert/sweetalert2.js"></script>
-<!-- Bootstrap 4 -->
-<script src="resources/admin/AdminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-<!-- Sheet JS (Excel)-->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.14.3/xlsx.full.min.js"></script>
-<!--FileSaver savaAs 이용 (Excel)-->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.min.js"></script>
-<!-- sweetAlert (alert/confirm/toast) -->
-<script src="resources/util/js/sweetalert.js"></script>
-
-<script src="resources/util/js/paging.js"></script>
-<script src="resources/util/js/checkbox.js"></script>
-<script src="resources/util/js/saveExcel.js"></script>
-<script src="resources/admin/js/manageOrderList.js"></script>
+	
+	<!-- jQuery -->
+	<script src="resources/admin/AdminLTE/plugins/jquery/jquery.min.js"></script>
+	<script	src="resources/util/plugins/sweetalert/jquery-lates.min.js"></script>
+	<script src="resources/util/plugins/sweetalert/sweetalert2.js"></script>
+	<!-- Bootstrap 4 -->
+	<script src="resources/admin/AdminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<!-- Sheet JS (Excel)-->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.14.3/xlsx.full.min.js"></script>
+	<!--FileSaver savaAs 이용 (Excel)-->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.min.js"></script>
+	<!-- sweetAlert (alert/confirm/toast) -->
+	<script src="resources/util/js/sweetalert.js"></script>
+	
+	<script src="resources/util/js/paging.js"></script>
+	<script src="resources/util/js/checkbox.js"></script>
+	<script src="resources/util/js/saveExcel.js"></script>
+	<script src="resources/admin/js/manageOrderList.js"></script>
+	<script src="resources/admin/js/common.js"></script>
 </body>
 </html>

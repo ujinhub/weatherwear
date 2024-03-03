@@ -3,15 +3,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>WeatherWear 관리자</title>
-
-<!-- Font Awesome -->
-<link href="resources/admin/AdminLTE/plugins/fontawesome-free/css/all.min.css" rel="stylesheet">
-<!-- Theme style -->
-<link href="resources/admin/AdminLTE/dist/css/adminlte.min.css" rel="stylesheet">
-<!-- summernote -->
-<link href="resources/util/plugins/summernote/summernote-lite.css" rel="stylesheet">
+	<meta charset="UTF-8">
+	<title>WeatherWear 관리자</title>
+	<!-- Font Awesome -->
+	<link href="resources/admin/AdminLTE/plugins/fontawesome-free/css/all.min.css" rel="stylesheet">
+	<!-- Theme style -->
+	<link href="resources/admin/AdminLTE/dist/css/adminlte.min.css" rel="stylesheet">
+	<!-- summernote -->
+	<link href="resources/util/plugins/summernote/summernote-lite.css" rel="stylesheet">
 </head>
 <body class="hold-transition sidebar-collapse layout-top-nav">
 	<div class="wrapper">
@@ -100,74 +99,78 @@
 		<%@ include file="../footer.jsp" %>
 	</div>
 	
-<!-- jQuery -->
-<script src="resources/admin/AdminLTE/plugins/jquery/jquery.min.js"></script>
-<!-- Bootstrap 4 -->
-<script src="resources/admin/AdminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-<!-- jQuery-validation -->
-<script src="resources/admin/AdminLTE/plugins/jquery-validation/jquery.validate.min.js"></script>
-<script src="resources/admin/AdminLTE/plugins/jquery-validation/additional-methods.min.js"></script>
-<!-- AdminLTE App -->
-<script src="resources/admin/AdminLTE/dist/js/adminlte.js"></script>
-<!-- summernote -->
-<script src="resources/util/plugins/summernote/summernote-lite.js"></script>
-
-<script src="resources/util/js/summernote.js"></script>
-<script src="resources/admin/js/common.js"></script>
-<script>
-	$(function() {
-		$('#termsRegForm').validate({
-			rules: {
-				termTitle: {
-					required: true,
+	<!-- jQuery -->
+	<script src="resources/admin/AdminLTE/plugins/jquery/jquery.min.js"></script>
+	<script	src="resources/util/plugins/sweetalert/jquery-lates.min.js"></script>
+	<script src="resources/util/plugins/sweetalert/sweetalert2.js"></script>
+	<!-- Bootstrap 4 -->
+	<script src="resources/admin/AdminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<!-- jQuery-validation -->
+	<script src="resources/admin/AdminLTE/plugins/jquery-validation/jquery.validate.min.js"></script>
+	<script src="resources/admin/AdminLTE/plugins/jquery-validation/additional-methods.min.js"></script>
+	<!-- AdminLTE App -->
+	<script src="resources/admin/AdminLTE/dist/js/adminlte.js"></script>
+	<!-- summernote -->
+	<script src="resources/util/plugins/summernote/summernote-lite.js"></script>
+	<!-- sweetAlert (alert/confirm/toast) -->
+	<script src="resources/util/js/sweetalert.js"></script>
+	
+	<script src="resources/util/js/summernote.js"></script>
+	<script src="resources/admin/js/common.js"></script>
+	<script>
+		$(function() {
+			$('#termsRegForm').validate({
+				rules: {
+					termTitle: {
+						required: true,
+					},
+					inputApplyDate: {
+						convertType: true,
+					},
+					inputEndDate: {
+						convertType: true,
+					}
 				},
-				inputApplyDate: {
-					convertType: true,
+				messages: {
+					termTitle: {
+						required: "제목을 입력해주세요.",
+					},
+					inputApplyDate: {
+						convertType: "적용일자를 입력해주세요.",
+					},
+					inputEndDate: {
+						convertType: "만료일자를 입력해주세요.",
+					},
 				},
-				inputEndDate: {
-					convertType: true,
+				errorElement: 'span',
+				errorPlacement: function(error, element) {
+					error.addClass('invalid-feedback');
+					element.closest('.form-group div').append(error);
+				},
+				highlight: function(element, errorClass, validClass) {
+					$(element).addClass('is-invalid');
+				},
+				unhighlight: function(element, errorClass, validClass) {
+					$(element).removeClass('is-invalid');
 				}
-			},
-			messages: {
-				termTitle: {
-					required: "제목을 입력해주세요.",
-				},
-				inputApplyDate: {
-					convertType: "적용일자를 입력해주세요.",
-				},
-				inputEndDate: {
-					convertType: "만료일자를 입력해주세요.",
-				},
-			},
-			errorElement: 'span',
-			errorPlacement: function(error, element) {
-				error.addClass('invalid-feedback');
-				element.closest('.form-group div').append(error);
-			},
-			highlight: function(element, errorClass, validClass) {
-				$(element).addClass('is-invalid');
-			},
-			unhighlight: function(element, errorClass, validClass) {
-				$(element).removeClass('is-invalid');
-			}
+			});
+			
+			$.validator.addMethod("convertType", function(value, element) {
+				var date = new Date(value);
+				
+				var year = date.getFullYear().toString();
+				var month = ("0" + (date.getMonth() + 1)).slice(-2);
+				var day = ("0" + date.getDate()).slice(-2);
+				var hour = ("0" + date.getHours()).slice(-2);
+				var minute = ("0" + date.getMinutes()).slice(-2);
+				var second = ("0" + date.getSeconds()).slice(-2);
+				
+				var timestamp = year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second;
+				$(element).prev().val(timestamp);
+				
+				return true;
+			});
 		});
-		
-		$.validator.addMethod("convertType", function(value, element) {
-			var date = new Date(value);
-			
-			var year = date.getFullYear().toString();
-			var month = ("0" + (date.getMonth() + 1)).slice(-2);
-			var day = ("0" + date.getDate()).slice(-2);
-			var hour = ("0" + date.getHours()).slice(-2);
-			var minute = ("0" + date.getMinutes()).slice(-2);
-			var second = ("0" + date.getSeconds()).slice(-2);
-			
-			var timestamp = year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second;
-			$(element).prev().val(timestamp);
-			
-			return true;
-		});
-	});
-</script>
+	</script>
 </body>
 </html>

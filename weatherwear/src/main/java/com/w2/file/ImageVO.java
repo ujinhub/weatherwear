@@ -11,13 +11,13 @@ public class ImageVO {
 	private String ImageId;		// 이미지번호
 	private String ImageName;	// 이미지이름(이미지번호 + 확장자)
 	private String ImageDir;	// 이미지경로
-	private String ImageStatus;
+	private String ImageStatus;	// 이미지상세
 		/*
 		 * product: 대표, 상세, (추가)
 		 * admin : 공지, 메인, 기타 
 		 * client : 문의, 리뷰, 환불
 		 */
-	private String ImageBy;		
+	private String ImageBy;		// 이미지정보
 		/*
 		 * product: productId
 		 * admin: adminId

@@ -37,6 +37,7 @@ import com.w2.clientAddress.service.ClientAddressService;
 import com.w2.coupon.service.CouponService;
 import com.w2.file.service.ImageService;
 import com.w2.order.OrderInfoVO;
+import com.w2.order.OrderVO;
 import com.w2.order.service.OrderService;
 import com.w2.util.ClientCookie;
 import com.w2.util.RandomString;
@@ -68,18 +69,54 @@ public class ClientOrderController {
 	@Autowired
 	private JavaMailSender mailSender;
 	
+	/**
+	 * 비회원 주문 조회 화면 호출
+	 * @return
+	 */
 	@RequestMapping("noClientOrder.do")
 	public String noClientOrderView() {
 		return "order/noClientOrder";
 	}
 
-	@RequestMapping("ttt.do")
-	public String ttt(@Param("ID")String id) {
-		return "test";
+	/** 
+	 * 비회원 주문 조회
+	 * @param name
+	 * @param num
+	 * @param pwd
+	 * @param model
+	 * @param session
+	 * @return
+	 */
+	@PostMapping("noClientOrderProc.do")
+	public String noClientOrderProc(String name, String num, String pwd, Model model, HttpSession session) {
+		
+		HashMap<String, String> checkInfo = new HashMap<String, String>();
+		checkInfo.put("name", name);
+		checkInfo.put("num", num);
+		
+		OrderVO orderInfo = orderService.checkUnKnownOrderInfo(checkInfo);
+		
+		if(orderInfo == null) {
+			model.addAttribute("msg", "일치하는 주문 정보가 없습니다.");
+			return "order/noClientOrder";
+		} else if(orderInfo.getCookiePwd().equals(pwd)) {
+			session.setAttribute("cookieId", orderInfo.getCookieId());
+			return "redirect:orderInfo.do?orderId="+orderInfo.getOrderId();
+		}
+		
+		model.addAttribute("msg", "비밀번호가 일치하지 않습니다.");
+		return "order/noClientOrder";
 	}
 	
 	/**
 	 * 주문 화면 호출
+	 * @param cartList
+	 * @param cartOk
+	 * @param request
+	 * @param response
+	 * @param session
+	 * @param model
+	 * @param cartvo
 	 * @return
 	 */
 	@RequestMapping("orderRegister.do")
@@ -120,6 +157,12 @@ public class ClientOrderController {
 	
 	/**
 	 * 주문 상세 페이지 호출
+	 * @param orderId
+	 * @param request
+	 * @param response
+	 * @param session
+	 * @param model
+	 * @param cartvo
 	 * @return
 	 */
 	@RequestMapping("orderInfo.do")
@@ -129,7 +172,14 @@ public class ClientOrderController {
 		return "order/orderInfo";
 	}
 	
-	/** 주문 추가 */
+	/** 
+	 * 주문 추가 
+	 * @param data
+	 * @param session
+	 * @param request
+	 * @param response
+	 * @return
+	 */
 	@ResponseBody
 	@PostMapping("orderRegisterProc.do")
 	public ResponseDTO<String> orderRegisterProc(@RequestBody Map<String, Object> data, HttpSession session, HttpServletRequest request, HttpServletResponse response) {
@@ -158,13 +208,29 @@ public class ClientOrderController {
 			int result = orderService.insertImsiOrder(data);
 			orderId = (String)data.get("orderId");
 			if(result > 0) {
-				code = 1;
-				resultCode = "success";
-				msg = "주문이 완료되었습니다.";
+				result = orderService.insertDeliverInfo(data);
+				if(result > 0) {
+					code = 1;
+					resultCode = "success";
+					msg = "주문이 완료되었습니다.";
+					if(session.getAttribute("userInfo") != null) {
+						ClientVO user = (ClientVO)session.getAttribute("userInfo");
+						user = clientService.getClient(user);
+						session.setAttribute("userInfo", user);
+					}
+				} else {
+					code = -1;
+					resultCode = "fail";
+					msg = "배송정보 등록 중 오류가 발생했습니다.";
+				}
 			} else {
 				code = -1;
 				resultCode = "fail";
 				msg = "주문중 오류가 발생했습니다.";
+			}
+			
+			if(code == -1) {
+				orderService.deleteCancleOrderInfo(orderId);
 			}
 		} catch (Exception e) {
 			code = -1;
@@ -175,7 +241,11 @@ public class ClientOrderController {
 		return new ResponseDTO<String>(statusCode, code, resultCode, msg, orderId);
 	}
 	
-	/** 주문 정보 취소 */
+	/** 
+	 * 주문 정보 취소 
+	 * @param orderId
+	 * @return
+	 */
 	@ResponseBody
 	@PostMapping("deleteCancleOrderInfo.do")
 	public ResponseDTO<String> deleteCancleOrderInfo(String orderId) {
@@ -205,16 +275,28 @@ public class ClientOrderController {
 	}
 	
 	
-	/** 결제 정보 등록 */
+	/** 
+	 * 결제 정보 등록 
+	 * @param data
+	 * @param session
+	 * @return
+	 * @throws IOException
+	 */
 	@ResponseBody
 	@PostMapping("paymentInsert.do")
-	public ResponseDTO<String> paymentInsert(@RequestBody Map<String, Object> data) throws IOException {
+	public ResponseDTO<String> paymentInsert(@RequestBody Map<String, Object> data, HttpSession session) throws IOException {
 		Integer statusCode = HttpStatus.OK.value();
 		int code = 0;
 		String resultCode;
 		String msg;
 		String orderId = (String)data.get("orderId");
 
+		if(session.getAttribute("userInfo") == null) {
+			data.put("cookieId", (String)session.getAttribute("cookieId"));
+		} else {
+			data.put("clientId", (String)((ClientVO)session.getAttribute("userInfo")).getClientId());
+		}
+		
 		try {
 			int result = orderService.insertPayment(data);
 			if(result > 0) {
@@ -271,7 +353,15 @@ public class ClientOrderController {
 		}
 	}
 
-	/** 주문 수정 */
+	/** 
+	 * 주문 수정 
+	 * @param order
+	 * @param orderStatus
+	 * @param session
+	 * @param request
+	 * @param response
+	 * @return
+	 */
 	@ResponseBody
 	@PostMapping("updateOrder.do")
 	public ResponseDTO<OrderInfoVO> updateOrder(OrderInfoVO order, String orderStatus, HttpSession session, HttpServletRequest request, HttpServletResponse response) {
@@ -311,7 +401,25 @@ public class ClientOrderController {
 		return new ResponseDTO<OrderInfoVO>(statusCode, code, resultCode, msg, order);
 	}
 
-	/** 교환, 환불 요청 */
+	/** 
+	 * 교환, 환불 요청 
+	 * @param requestWhat
+	 * @param orderId
+	 * @param optionId
+	 * @param reason
+	 * @param email
+	 * @param deliverWay
+	 * @param cost
+	 * @param costMtd
+	 * @param status
+	 * @param bankId
+	 * @param refundBankNum
+	 * @param keyword
+	 * @param session
+	 * @param request
+	 * @param response
+	 * @return
+	 */
 	@ResponseBody
 	@PostMapping("insertSwapRefund.do")
 	public ResponseDTO<String> insertSwapRefund(String requestWhat, String orderId, String optionId, String reason, String email, 
@@ -370,7 +478,14 @@ public class ClientOrderController {
 		return new ResponseDTO<String>(statusCode, code, resultCode, msg, id);
 	}
 	
-	/** 리뷰 등록 */
+	/** 
+	 * 리뷰 등록 
+	 * @param review
+	 * @param session
+	 * @param request
+	 * @param response
+	 * @return
+	 */
 	@ResponseBody
 	@PostMapping("insertReview.do")
 	public ResponseDTO<String> insertReview(ReviewVO review, HttpSession session, HttpServletRequest request, HttpServletResponse response) {
@@ -404,7 +519,12 @@ public class ClientOrderController {
 		return new ResponseDTO<String>(statusCode, code, resultCode, msg, id);
 	}
 	
-	/** 리뷰 조회 */
+	/** 
+	 * 리뷰 조회 
+	 * @param reviewId
+	 * @param session
+	 * @return
+	 */
 	@ResponseBody
 	@PostMapping("getReviewInfo.do")
 	public ResponseDTO<HashMap<String, Object>> getReviewInfo(String reviewId, HttpSession session) {
@@ -431,41 +551,9 @@ public class ClientOrderController {
 		}
 		return new ResponseDTO<HashMap<String, Object>>(statusCode, code, resultCode, msg, result);
 	}
-	
-	/** 리뷰 삭제 */
-	@ResponseBody
-	@PostMapping("deleteReview.do")
-	public ResponseDTO<String> deleteReview(String reviewId, HttpSession session) {
-		Integer statusCode = HttpStatus.OK.value();
-		int code = 0;
-		String resultCode;
-		String msg;
-
-		ClientVO client = (ClientVO)session.getAttribute("userInfo");
-		ReviewVO review = reviewService.getReviewInfo(reviewId);
-		if(review.getClientId().equals(client.getClientId())) {
-			int result = reviewService.deleteReview(reviewId);
-			if(result > 0) {
-				result = imageService.deleteReviewImage(review.getOrderId() + "_" + review.getOptionId());
-				code = 1;
-				resultCode = "success";
-				msg = "리뷰가 삭제되었습니다.";
-			} else {
-				code = -1;
-				resultCode = "fail";
-				msg = "오류가 발생했습니다.";
-			}
-		} else {
-			code = -1;
-			resultCode = "fail";
-			msg = "오류가 발생했습니다.";
-		}
-		return new ResponseDTO<String>(statusCode, code, resultCode, msg, reviewId);
-	}
 
 	@PostMapping("sendMail.do")
 	public void sendMail(@RequestBody Map<String, Object> data) {
-		System.err.println(">>>>>>>>>>>>>> 메일보낸다 : " + data);
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy년 M월 d일");
 		
 		List<HashMap<String, String>> orderInfoList = (List<HashMap<String, String>>)data.get("orderInfoList");
@@ -476,37 +564,37 @@ public class ClientOrderController {
 			if(i<orderInfoList.size()-1) {
 				orderListString += ", <br>";
 			}
-		}
 		
-		data.put("orderString", orderListString);
-		
-		MimeMessagePreparator preparator = new MimeMessagePreparator() {
-			StringBuffer content = new StringBuffer()
-								.append("<p><img src='https://hyeongabucket.s3.ap-northeast-2.amazonaws.com/main/logo.png' width='237px' onclick=\"location.href='http://localhost:8080/w2/main.do'\"></p><p>&nbsp;</p>")
-								.append("<h1><span style=\"font-family: 'Nanum Gothic';\"><b>웨더웨어 주문 완료</b></span></h1>")
-								.append("<div style='witdh:80%;'><hr><p><span style=\"font-family: 'Nanum Gothic';\">안녕하세요.</span></p>")
-								.append("<p><span style=\"font-family: 'Nanum Gothic';\">주문하신 내역입니다.</span><span style=\"font-family: 'Nanum Gothic';\"></span></p>")
-								.append("<hr>")
-								.append("<p><span style=\"font-family: 'Nanum Gothic';\">주문번호 : <b>" + ((HashMap<String,String>)data.get("paymentInfo")).get("orderId") + "</b></span></p>")
-								.append("<p><span style=\"font-family: 'Nanum Gothic';\">결제금액 : <b>" + ((HashMap<String,String>)data.get("orderInfo")).get("orderPrice") + "</b></span></p>")
-								.append("<p><span style=\"font-family: 'Nanum Gothic';\">결제방식 : <b>" + ((HashMap<String,String>)data.get("paymentInfo")).get("paymentMethod") + "</b></span></p>")
-								.append("<p><span style=\"font-family: 'Nanum Gothic';\">결제상태 : <b>" + ((HashMap<String,String>)data.get("paymentInfo")).get("paymentStatus") + "</b></span></p>")
-								.append("<p><span style=\"font-family: 'Nanum Gothic';\">상품정보 <br><b>" + (String)data.get("orderString") + "</b></span></p>")
-								.append("<hr></div>");
-			@Override
-			public void prepare(MimeMessage mimeMessage) throws Exception {
-				mimeMessage.setFrom(new InternetAddress("weatherwear493@gmail.com", "WeatherWear", "UTF-8"));
-				mimeMessage.setSubject("[웨더웨어] 주문하신 내역입니다.");
-				mimeMessage.setRecipients(Message.RecipientType.TO, InternetAddress.parse(((HashMap<String,String>)data.get("orderInfo")).get("orderEmail")));
-				mimeMessage.setContent(content.toString(), "text/html;charset=UTF-8");
-				mimeMessage.setReplyTo(InternetAddress.parse(((HashMap<String,String>)data.get("orderInfo")).get("orderEmail")));
+			data.put("orderString", orderListString);
+			
+			MimeMessagePreparator preparator = new MimeMessagePreparator() {
+				StringBuffer content = new StringBuffer()
+									.append("<p><img src='https://hyeongabucket.s3.ap-northeast-2.amazonaws.com/main/logo.png' width='237px' onclick=\"location.href='http://localhost:8080/w2/main.do'\"></p><p>&nbsp;</p>")
+									.append("<h1><span style=\"font-family: 'Nanum Gothic';\"><b>웨더웨어 주문 완료</b></span></h1>")
+									.append("<div style='witdh:80%;'><hr><p><span style=\"font-family: 'Nanum Gothic';\">안녕하세요.</span></p>")
+									.append("<p><span style=\"font-family: 'Nanum Gothic';\">주문하신 내역입니다.</span><span style=\"font-family: 'Nanum Gothic';\"></span></p>")
+									.append("<hr>")
+									.append("<p><span style=\"font-family: 'Nanum Gothic';\">주문번호 : <b>" + ((HashMap<String,String>)data.get("paymentInfo")).get("orderId") + "</b></span></p>")
+									.append("<p><span style=\"font-family: 'Nanum Gothic';\">결제금액 : <b>" + ((HashMap<String,String>)data.get("orderInfo")).get("orderPrice") + "</b></span></p>")
+									.append("<p><span style=\"font-family: 'Nanum Gothic';\">결제방식 : <b>" + ((HashMap<String,String>)data.get("paymentInfo")).get("paymentMethod") + "</b></span></p>")
+									.append("<p><span style=\"font-family: 'Nanum Gothic';\">결제상태 : <b>" + ((HashMap<String,String>)data.get("paymentInfo")).get("paymentStatus") + "</b></span></p>")
+									.append("<p><span style=\"font-family: 'Nanum Gothic';\">상품정보 <br><b>" + (String)data.get("orderString") + "</b></span></p>")
+									.append("<hr></div>");
+				@Override
+				public void prepare(MimeMessage mimeMessage) throws Exception {
+					mimeMessage.setFrom(new InternetAddress("weatherwear493@gmail.com", "WeatherWear", "UTF-8"));
+					mimeMessage.setSubject("[웨더웨어] 주문하신 내역입니다.");
+					mimeMessage.setRecipients(Message.RecipientType.TO, InternetAddress.parse(((HashMap<String,String>)data.get("orderInfo")).get("orderEmail")));
+					mimeMessage.setContent(content.toString(), "text/html;charset=UTF-8");
+					mimeMessage.setReplyTo(InternetAddress.parse(((HashMap<String,String>)data.get("orderInfo")).get("orderEmail")));
+				}
+			};
+			
+			try {
+				mailSender.send(preparator);
+			} catch(Exception e) {
+				e.printStackTrace();
 			}
-		};
-		
-		try {
-			mailSender.send(preparator);
-		} catch(Exception e) {
-			e.printStackTrace();
 		}
 	}
 }

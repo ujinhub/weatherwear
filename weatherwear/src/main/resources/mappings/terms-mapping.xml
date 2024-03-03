@@ -2,6 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 	 			
 <mapper namespace="TermsDAO">
+<!-- 
+		약관 리스트 조회
+-->
 	<select id="getTermsList" resultType="terms">
 		SELECT row_number() over(ORDER BY termRegDate) as termIdx, t.*
 		FROM terms t
@@ -32,6 +35,9 @@
 		LIMIT #{startList}, #{listSize};
 	</select>
 	
+<!-- 
+		약관 리스트 개수 조회
+-->
 	<select id="getTermsListCnt" resultType="int">
 		SELECT count(*)
 		FROM terms
@@ -50,28 +56,43 @@
 		</trim>
 	</select>
 	
+<!-- 
+		약관 상세 조회
+-->
 	<select id="getTerms" resultType="terms">
 		SELECT *
 		FROM terms
 		WHERE termId = #{termId}
 	</select>
 	
+<!-- 
+		약관 등록
+-->
 	<insert id="insertTerms">
 		INSERT INTO terms
 		VALUES(#{termId}, #{termTitle}, #{termContent}, #{termNecessary}, default, #{termEndDate}, default, #{termApplyDate})
 	</insert>
 	
+<!-- 
+		약관 변경
+-->
 	<update id="updateTerms">
 		UPDATE terms
 		SET termTitle = #{termTitle}, termContent = #{termContent}, termNecessary = #{termNecessary}, termEndDate = #{termEndDate}, termApplyDate = #{termApplyDate}
 		WHERE termId = #{termId}
 	</update>
 	
+<!-- 
+		약관 삭제
+-->
 	<delete id="deleteTerms">
 		DELETE FROM terms
 		WHERE termId = #{termId}
 	</delete>
 	
+<!-- 
+		약관 동의 여부 등록
+-->
 	<insert id="insertTermsAgree" parameterType="list">
 		INSERT INTO tm_agree(termId, clientId, termAgreeStatus, tmermAgreeDate)
 		VALUES 
@@ -80,6 +101,9 @@
 		</foreach>
 	</insert>
 	
+<!-- 
+		약관 동의 정보 조회
+-->
 	<select id="getTermsAgree" resultType="terms">
 		SELECT ta.*, t.*
 		FROM tm_agree ta

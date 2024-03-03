@@ -16,52 +16,52 @@ public class QnaServiceImpl implements QnaService {
 	@Autowired
 	private QnaDAO qnaDao;
 	
-	@Override
+	@Override	// 문의 목록 가져오기 (관리자)
 	public List<QnaVO> getQnaList(Search search) {
 		return qnaDao.getQnaList(search);
 	}
 
-	@Override
+	@Override	// 문의 목록 개수 가져오기 (관리자)
 	public int getQnaListCnt(Search search) {
 		return qnaDao.getQnaListCnt(search);
 	}
 
-	@Override
+	@Override	// 문의 정보 가져오기
 	public QnaVO getQna(QnaVO vo) {
 		return qnaDao.getQna(vo);
 	}
 
-	@Override
+	@Override	// 문의 답글 등록/수정하기
 	public int updateQnaAnswer(QnaVO vo) {
 		return qnaDao.updateQnaAnswer(vo);
 	}
 
-	@Override
+	@Override	// 문의 답글 삭제하기
 	public int deleteQnaAnswer(QnaVO vo) {
 		return qnaDao.deleteQnaAnswer(vo);
 	}
 
-	@Override
+	@Override	// 마이페이지 문의내역 조회
 	public List<QnaVO> getMyQnaList(HashMap<String, Object> param) {
 		return qnaDao.getMyQnaList(param);
 	}
 
-	@Override
+	@Override	// 마이페이지 문의내역 개수 조회
 	public int getMyQnaListCnt(String clientId) {
 		return qnaDao.getMyQnaListCnt(clientId);
 	}
 
-	@Override
+	@Override	// 문의 등록
 	public int insertQna(QnaVO vo) {
 		return qnaDao.insertQna(vo);
 	}
 
-	@Override
+	@Override	// 문의 삭제
 	public int deleteQna(QnaVO vo) {
 		return qnaDao.deleteQna(vo);
 	}
 
-	@Override
+	@Override	// 문의 수정
 	public int updateQna(QnaVO vo) {
 		return qnaDao.updateQna(vo);
 	}

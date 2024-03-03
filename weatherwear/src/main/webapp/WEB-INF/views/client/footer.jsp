@@ -2,7 +2,6 @@
 pageEncoding="UTF-8"%>
 	
 <footer id="footer" class="footer">
-
 	<div class="footer-content">
 		<div class="container">
 			<div class="row g-5">

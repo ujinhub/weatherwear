@@ -66,7 +66,7 @@ function modify(num){
 		} 
 		url_type = 'redoClient.mdo';
 	} else {
-		alert("오류가 발생했습니다. 다시 시도해주세요");
+		playalert("오류가 발생했습니다. 다시 시도해주세요");
 		return;
 	}
 	getInfo();
@@ -84,12 +84,12 @@ function modify(num){
 		},
 		success: function(res) {
 			if(res.code == -1) {
-				alert(res.message);
+				playalert(res.message);
 				return;
 			} 
 			
 			if(res.code == 1) {
-				alert(res.message);
+				playalert(res.message);
 				window.location.reload();
 			}
 		},

@@ -33,6 +33,7 @@ import com.w2.board.TermsVO;
 import com.w2.board.service.TermsService;
 import com.w2.client.ClientVO;
 import com.w2.client.service.ClientService;
+import com.w2.coupon.service.CouponService;
 import com.w2.product.service.ProductService;
 import com.w2.util.ClientCookie;
 import com.w2.util.RandomString;
@@ -53,6 +54,8 @@ public class ClientController {
 	private TermsService termsService;
 	@Autowired
 	private ClientService clientService;
+	@Autowired
+	private CouponService couponService;
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
 	@Autowired
@@ -76,8 +79,9 @@ public class ClientController {
 	
 	/**
 	 * 로그인 프로세스
-	 * @param vo: 사용자 정보
+	 * @param vo
 	 * @param request
+	 * @param response
 	 * @param model
 	 * @return
 	 */
@@ -149,6 +153,12 @@ public class ClientController {
 	
 	/**
 	 * 회원가입 화면 호출
+	 * @param model
+	 * @param page
+	 * @param range
+	 * @param searchType
+	 * @param keyword
+	 * @param search
 	 * @return
 	 */
 	@RequestMapping("clientRegister.do")
@@ -172,7 +182,13 @@ public class ClientController {
 		return "clientInfo/clientRegister";
 	}
 	
-	/** 회원가입 */
+	/** 
+	 * 회원가입 
+	 * @param client
+	 * @param terms
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping("clientRegProc.do") 
 	public String clientRegProc(ClientVO client, TermsVO terms, Model model) {
 		String emailCheck = "N"; String clientId = client.getClientId();
@@ -200,17 +216,20 @@ public class ClientController {
 
 		clientService.insertClient(client); 
 		termsService.insertTermsAgree(termsList);
-  
+		couponService.insertCoupon(client);
+		
 		sendRegisterMail(client);
 		
 		model.addAttribute("regMsg", "회원가입이 완료되었습니다.\\n회원 가입 축하 기념 포인트 2000원 적립되었습니다.\\n로그인 후 이용하시기 바랍니다.");
   
 		return "login";
 	}
-	 
 	
 	/**
 	 * 회원 탈퇴
+	 * @param vo
+	 * @param model
+	 * @return
 	 */
 	@RequestMapping("clientWithdraw.do")
 	public String clientWithdraw(ClientVO vo, Model model) {
@@ -224,8 +243,8 @@ public class ClientController {
 	
 	/**
 	 * 아이디 / 비밀번호 일치 확인
-	 * @param vo: 관리자 정보	
-	 * @param chkType: 체크 대상 (adminId: 아이디, adminPwd: 비밀번호)
+	 * @param vo
+	 * @param chkType
 	 * @return
 	 */
 	@ResponseBody
@@ -250,6 +269,7 @@ public class ClientController {
 	
 	/**
 	 * 아이디찾기 화면 호출
+	 * @param model
 	 * @return
 	 */
 	@RequestMapping("findClientId.do")
@@ -260,8 +280,8 @@ public class ClientController {
 	
 	/**
 	 * 비밀번호찾기 화면 호출
+	 * @param model
 	 * @return
-	 * 
 	 */
 	@RequestMapping("findClientPwd.do")
 	public String findClientPwd(Model model) {
@@ -328,7 +348,13 @@ public class ClientController {
 		return "clientInfo/findClientInfo";
 	}
 	
-	/** 위시리스트 상품 추가 */
+	/** 
+	 * 위시리스트 상품 추가 
+	 * @param session
+	 * @param checkList
+	 * @return
+	 * @throws IOException
+	 */
 	@ResponseBody
 	@PostMapping("wishListInsert.do")
 	public ResponseDTO<String> wishListInsert(HttpSession session, @RequestBody List<String> checkList) throws IOException {
@@ -350,7 +376,6 @@ public class ClientController {
 			Map<String, Object> client = new HashMap<String, Object>();
 			client.put("productList", checkList);
 			client.put("clientId", user.getClientId());
-			System.err.println("client : " + client);
 
 			try {
 				result = productService.insertWishList(client);
@@ -379,7 +404,13 @@ public class ClientController {
 		return new ResponseDTO<String>(statusCode, code, resultCode, msg, data);
 	}
 	
-	/** 위시리스트 상품 삭제 */
+	/** 
+	 * 위시리스트 상품 삭제 
+	 * @param session
+	 * @param checkList
+	 * @return
+	 * @throws IOException
+	 */
 	@ResponseBody
 	@PostMapping("wishListDelete.do")
 	public ResponseDTO<String> wishListDelete(HttpSession session, @RequestBody List<String> checkList) throws IOException {
@@ -388,9 +419,6 @@ public class ClientController {
 		int code;
 		String resultCode;
 		String msg;
-		
-		System.err.println("========================wishListDelete");
-		System.err.println(checkList);
 		
 		// 비로그인 상태인 경우
 		if(session.getAttribute("userInfo") == null) {
@@ -425,6 +453,7 @@ public class ClientController {
 	
 	/**
 	 * 회원가입 축하 : 이메일 
+	 * @param vo
 	 */
 	private void sendRegisterMail(ClientVO vo) {
 
@@ -469,6 +498,8 @@ public class ClientController {
 	
 	/** 
 	 * 임시 비밀번호 발급 : 이메일 
+	 * @param receiveMail
+	 * @param tempPwd
 	 */
 	private void sendTempMail(String receiveMail, String tempPwd) {
 		

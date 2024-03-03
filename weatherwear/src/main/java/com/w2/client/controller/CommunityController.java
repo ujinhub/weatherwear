@@ -28,6 +28,10 @@ public class CommunityController {
 	@Autowired
 	private ReviewService reviewService;
 	
+	/**
+	 * 커뮤니티 화면 호출
+	 * @return
+	 */
 	@RequestMapping("community.do")
 	public String communityView() {
 		return "community/community";
@@ -116,12 +120,12 @@ public class CommunityController {
 	
 	/**
 	 * 문의글 비밀번호 체크
+	 * @param vo
+	 * @return
 	 */
 	@ResponseBody
 	@RequestMapping("checkQnaPwd.do")
 	public ResponseDTO<Boolean> checkQnaPwd(QnaVO vo) {
-		System.err.println(vo);
-		
 		Integer statusCode = HttpStatus.OK.value();
 		int code = 0;
 		String resultCode = null;
@@ -188,6 +192,12 @@ public class CommunityController {
 		return "community/reviewList";
 	}
 	
+	/**
+	 * 리뷰 정보 조회
+	 * @param model
+	 * @param vo
+	 * @return
+	 */
 	@RequestMapping("reviewInfo.do")
 	public String reviewInfo(Model model, ReviewVO vo) {
 		

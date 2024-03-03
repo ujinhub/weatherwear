@@ -1,17 +1,15 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>WeatherWear 관리자</title>
-
-<!-- Font Awesome -->
-<link href="resources/admin/AdminLTE/plugins/fontawesome-free/css/all.min.css" rel="stylesheet">
-<!-- Theme style -->
-<link href="resources/admin/AdminLTE/dist/css/adminlte.min.css" rel="stylesheet">
+	<meta charset="UTF-8">
+	<title>WeatherWear 관리자</title>
+	<!-- Font Awesome -->
+	<link href="resources/admin/AdminLTE/plugins/fontawesome-free/css/all.min.css" rel="stylesheet">
+	<!-- Theme style -->
+	<link href="resources/admin/AdminLTE/dist/css/adminlte.min.css" rel="stylesheet">
 </head>
 <body class="hold-transition sidebar-collapse layout-top-nav">
 	<div class="wrapper">
@@ -138,31 +136,35 @@
 		<%@ include file="../footer.jsp" %>
 	</div>
 	
-<!-- jQuery -->
-<script src="resources/admin/AdminLTE/plugins/jquery/jquery.min.js"></script>
-<!-- Bootstrap 4 -->
-<script src="resources/admin/AdminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-<script src="resources/admin/js/common.js"></script>
-<script src="resources/util/js/pagingNoOrderBy.js"></script>
-<script>
-	$(function() {
-		$('#searchType').change(function() {
-			$('#keyword').remove();
-			
-			var el;
-			if($(this).val() == 'gradeId') {
-				el = '<select id="keyword" class="form-control float-right">'
-						+ '<option value="manager">매니저</option>'
-						+ '<option value="admin">관리자</option>'
-						+ '</select>';
-			} else {
-				el = '<input type="text" id="keyword" class="form-control float-right" placeholder="Search">';
-			}
-
-			$('#searchType').after(el);
+	<!-- jQuery -->
+	<script src="resources/admin/AdminLTE/plugins/jquery/jquery.min.js"></script>
+	<script	src="resources/util/plugins/sweetalert/jquery-lates.min.js"></script>
+	<script src="resources/util/plugins/sweetalert/sweetalert2.js"></script>
+	<!-- Bootstrap 4 -->
+	<script src="resources/admin/AdminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<!-- sweetAlert (alert/confirm/toast) -->
+	<script src="resources/util/js/sweetalert.js"></script>
+	
+	<script src="resources/admin/js/common.js"></script>
+	<script src="resources/util/js/pagingNoOrderBy.js"></script>
+	<script>
+		$(function() {
+			$('#searchType').change(function() {
+				$('#keyword').remove();
+				
+				var el;
+				if($(this).val() == 'gradeId') {
+					el = '<select id="keyword" class="form-control float-right">'
+							+ '<option value="manager">매니저</option>'
+							+ '<option value="admin">관리자</option>'
+							+ '</select>';
+				} else {
+					el = '<input type="text" id="keyword" class="form-control float-right" placeholder="Search">';
+				}
+	
+				$('#searchType').after(el);
+			});
 		});
-	});
-</script>
+	</script>
 </body>
 </html>

@@ -145,10 +145,19 @@ function checkSubmit(){
 		"address1": address1,
 		"address2": address2,
 		"addressMemo": addressMemo,
-		"addressBase": addressBase
+		"addressBase": addressBase,
 	};
 	dataInfo["addressInfo"] = addressInfo;
 	dataInfo["addressBase"] = addressBase;
+
+	// 송장 기본정보
+	let deliverInfo = {
+		"deliveryId": "CJGLS",
+		"search": "CJGLS",
+		"deliverType": "신규",
+		"deliverPrice": parseInt($("input[name='deliveryPrice']").val())
+	};
+	dataInfo["deliverInfo"] = deliverInfo;
 
 	//주문정보
 	let orderInfo = {
@@ -231,7 +240,8 @@ function checkSubmit(){
 									"paymentMethod": sqlPayMethod,
 									"paymentDate": rsp.paid_at,
 									"paymentStatus": paymentStatus,
-									"amount": rsp.amount
+									"amount": rsp.amount,
+									"cartIdList": cartIdList,
 								}
 								
 								$.ajax({
@@ -258,7 +268,17 @@ function checkSubmit(){
 										}
 										
 										if(res.code == -1){
-											playToast(res.message, "error");
+											$.ajax({
+												url: "canclePayment.do",
+												type: "POST",
+												async: true,
+												dataType: "json",
+												data: { "paymentId" : rsp.imp_uid},
+												contentType: "application/json",
+												success: function(){
+													playToast(res.message, "error");
+												}
+											});
 										}
 									},
 									error : function(error){

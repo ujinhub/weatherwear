@@ -67,6 +67,7 @@ public class OrderController {
 	public void orderUpdate(Model model, HttpServletResponse response, 
 					@RequestBody List<Map<String, String>> checkList, @RequestParam("modifyType")String modifyType) throws IOException {
 		int code = -1;
+		System.err.println("checkList : " + checkList);
 		
 		if(modifyType.equals("orderStatus")) {
 			code = orderService.updateOrderStatus(checkList);
@@ -78,7 +79,16 @@ public class OrderController {
 		response.getWriter().write(String.valueOf(code));
 	}
 
-	/** 교환, 환불 처리완료 */
+	/**
+	 * 교환, 환불 처리완료 
+	 * @param requestWhat
+	 * @param id
+	 * @param status
+	 * @param session
+	 * @param request
+	 * @param response
+	 * @return
+	 */
 	@ResponseBody
 	@PostMapping("updateSwapRefundStatus.mdo")
 	public ResponseDTO<String> updateSwapRefundStatus(String requestWhat, String id, String status, HttpSession session, HttpServletRequest request, HttpServletResponse response) {
@@ -111,4 +121,16 @@ public class OrderController {
 		
 		return new ResponseDTO<String>(statusCode, code, resultCode, msg, id);
 	}
+	
+	@ResponseBody
+	@PostMapping("getSwapRefundImage.mdo")
+	public ResponseDTO<List<String>> getSwapRefundImage(String imageBy) {
+		Integer statusCode = HttpStatus.OK.value();
+		int code = 0;
+		
+		List<String> result = orderService.getSwapRefundImage(imageBy);
+		
+		return  new ResponseDTO<List<String>>(statusCode, code, null, null, result);
+	}
+	
 }

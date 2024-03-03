@@ -34,6 +34,10 @@ public class CartController {
 	
 	/**
 	 * 장바구니 화면 호출
+	 * @param request
+	 * @param session
+	 * @param model
+	 * @param cartvo
 	 * @return
 	 */
 	@RequestMapping("cart.do")
@@ -54,7 +58,14 @@ public class CartController {
 		return "cart";
 	}
 	
-	/** 장바구니에 상품 추가 */
+	/** 
+	 * 장바구니에 상품 추가
+	 * @param productList
+	 * @param session
+	 * @param request
+	 * @param response
+	 * @throws IOException
+	 */
 	@PostMapping("cartInsert.do")
 	public void cartInsert(@RequestBody List<CartVO> productList, HttpSession session, HttpServletRequest request, HttpServletResponse response) throws IOException {
 		
@@ -62,20 +73,54 @@ public class CartController {
 		if(session.getAttribute("userInfo") == null) {
 			String ckId = ClientCookie.setCookie(request, response);
 			productList.get(0).setCookieId(ckId);
-			System.err.println("ckId : " + ckId);
-			System.err.println("productList : " + productList);
 		} else { // 로그인 상태인 경우
 			ClientVO client = (ClientVO) session.getAttribute("userInfo");
 			productList.get(0).setClientId(client.getClientId());
 		}
 		
 		int result = cartService.insertCart(productList);
-
+		System.err.println("result : " + result);
 		response.setContentType("application/json");
 		response.getWriter().write(String.valueOf(result));
 	}
 	
-	/** 장바구니 수량 변경 */
+	/** 
+	 * 바로 주문하기
+	 * @param productList
+	 * @param session
+	 * @param request
+	 * @param response
+	 * @throws IOException
+	 */
+	@PostMapping("buyNowProduct.do")
+	public void buyNowProduct(@RequestBody List<CartVO> productList, HttpSession session, HttpServletRequest request, HttpServletResponse response) throws IOException {
+		
+		// 비로그인 상태인 경우
+		if(session.getAttribute("userInfo") == null) {
+			String ckId = ClientCookie.setCookie(request, response);
+			productList.get(0).setCookieId(ckId);
+		} else { // 로그인 상태인 경우
+			ClientVO client = (ClientVO) session.getAttribute("userInfo");
+			productList.get(0).setClientId(client.getClientId());
+		}
+		
+		CartVO cart = new CartVO();
+		
+		int result = cartService.insertCart(productList);
+		
+		response.setContentType("application/json");
+		response.getWriter().write(String.valueOf(productList.get(0).getCartId()));
+	}
+	
+	/** 
+	 * 장바구니 수량 변경
+	 * @param data
+	 * @param session
+	 * @param cartvo
+	 * @param request
+	 * @param response
+	 * @throws IOException
+	 */
 	@PostMapping("cartUpdate.do")
 	public void cartUpdate(@RequestBody Map<String, String> data, HttpSession session, CartVO cartvo, HttpServletRequest request, HttpServletResponse response) throws IOException {
 		setUser(session, request, response, cartvo);
@@ -87,7 +132,16 @@ public class CartController {
 		setResponse(response, result, "application/json");
 	}
 	
-	/** 장바구니 상품 삭제 */
+	/** 
+	 * 장바구니 상품 삭제
+	 * @param checkList
+	 * @param session
+	 * @param cartvo
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws IOException
+	 */
 	@ResponseBody
 	@PostMapping("cartDelete.do")
 	public ResponseDTO<String> cartDelete(@RequestBody List<String> checkList, HttpSession session, CartVO cartvo, HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -116,7 +170,14 @@ public class CartController {
 		return new ResponseDTO<String>(statusCode, code, resultCode, msg, null);
 	}
 	
-	// 사용자 확인(회원/비회원)
+	/** 
+	 * 사용자 확인(회원/비회원)
+	 * @param session
+	 * @param request
+	 * @param response
+	 * @param cartvo
+	 * @return
+	 */
 	public CartVO setUser(HttpSession session, HttpServletRequest request, HttpServletResponse response, CartVO cartvo) {
 		// 비로그인 상태인 경우
 		if(session.getAttribute("userInfo") == null) {

@@ -16,17 +16,17 @@ public class DeliveryServiceImple implements DeliveryService {
 	@Autowired
 	private DeliveryDAO deliveryDAO;
 	
-	@Override
-	public List<HashMap<String, Object>> getProductList(Search search) {
+	@Override	// 택배사 목록 조회
+	public List<HashMap<String, Object>> getDeliveryList(Search search) {
 		return deliveryDAO.getDeliveryList(search);
 	}
 
-	@Override
-	public int getProductListCnt(Search search) {
+	@Override	// 택배사 목록 개수 조회
+	public int getDeliveryListCnt(Search search) {
 		return deliveryDAO.getDeliveryListCnt(search);
 	}
 
-	@Override
+	@Override	// 택배사 신규 등록
 	public int insertDelivery(DeliveryVO deli) {
 		if(deliveryDAO.checkDelivery(deli.getDeliveryId()) > 0) {
 			return -2;
@@ -34,12 +34,12 @@ public class DeliveryServiceImple implements DeliveryService {
 		return deliveryDAO.insertDelivery(deli);
 	}
 
-	@Override
+	@Override	// 택배사 수정
 	public int updateDelivery(DeliveryVO deli) {
 		return deliveryDAO.updateDelivery(deli);
 	}
 
-	@Override
+	@Override	// 택배사 삭제
 	public int deleteDelivery(String deliveryId) {
 		return deliveryDAO.deleteDelivery(deliveryId);
 	}

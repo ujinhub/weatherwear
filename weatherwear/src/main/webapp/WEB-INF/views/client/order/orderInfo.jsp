@@ -5,53 +5,48 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>WeatherWear 사용자</title>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<!-- Google Fonts -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com">
-<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500&amp;family=Inter:wght@400;500&amp;family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&amp;display=swap" rel="stylesheet">
-
-<!-- Vendor CSS Files -->
-<link href="resources/client/ZenBlog/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-<link href="resources/client/ZenBlog/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-
-<!-- dropZone -->
-<link rel="stylesheet" href="resources/util/plugins/dropzone/dist/dropzone.min.css"/>
-<link rel="stylesheet" href="resources/util/plugins/dropzone/custom.css">
-<link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" type="text/css" />
-
-<!-- Swiper -->
-<link href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css" rel="stylesheet"/>
-
-<!-- Template Main CSS Files -->
-<link href="resources/client/ZenBlog/assets/css/main.css" rel="stylesheet">
-<link href="resources/client/ZenBlog/assets/css/variables.css" rel="stylesheet">
-
-<!-- 주소 검색 -->
-<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-<style>
-	.resultDiv{ height: 55px; font-size: larger !important; display: flex; align-items: center;}
-	.inputLabel{ font-size: larger !important; display: flex; align-items: center; justify-content: center;}
-	.resultInput{ font-size: larger !important; display: flex; align-items: center; justify-content: flex-end;}
-	.selectOption{ border-radius:0; text-align: center; font-size: large;}
-	.check {width:15px; height:15px;}
-	.payBtn { width:100%; height:70px; font-size: x-large; background-color: black; color: white; border-radius: 0;}
-	.deliDiv { display: flex; justify-content: space-between;}
-	.confirmDiv {border-bottom:1px solid silver; margin-bottom:10px;}
-	.info {font-size: large;}
-	.imagePreviewDiv {
-		padding: 5px 5px 5px 5px;
-		button {display:none; position:relative;}
-		&:hover {button{display:block;}}
-	}
-	#dropzone { display: flex; flex-direction: row; flex-wrap: wrap; justify-content: center;}
-	.previewImg { display: flex; flex-direction: column; align-content: center; justify-content: center;}
-	.custom-radio { display:flex; justify-content: space-evenly;}
-</style>
-<link href="resources/client/css/review.css" rel="stylesheet">
+	<meta charset="UTF-8">
+	<title>WeatherWear 사용자</title>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<!-- Google Fonts -->
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com">
+	<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500&amp;family=Inter:wght@400;500&amp;family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&amp;display=swap" rel="stylesheet">
+	<!-- Vendor CSS Files -->
+	<link href="resources/client/ZenBlog/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+	<link href="resources/client/ZenBlog/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+	<!-- dropZone -->
+	<link rel="stylesheet" href="resources/util/plugins/dropzone/dist/dropzone.min.css"/>
+	<link rel="stylesheet" href="resources/util/plugins/dropzone/custom.css">
+	<link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" type="text/css" />
+	<!-- Swiper -->
+	<link href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css" rel="stylesheet"/>
+	<!-- Template Main CSS Files -->
+	<link href="resources/client/ZenBlog/assets/css/main.css" rel="stylesheet">
+	<link href="resources/client/ZenBlog/assets/css/variables.css" rel="stylesheet">
+	<!-- 주소 검색 -->
+	<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+	<style>
+		.resultDiv{ height: 55px; font-size: larger !important; display: flex; align-items: center;}
+		.inputLabel{ font-size: larger !important; display: flex; align-items: center; justify-content: center;}
+		.resultInput{ font-size: larger !important; display: flex; align-items: center; justify-content: flex-end;}
+		.selectOption{ border-radius:0; text-align: center; font-size: large;}
+		.check {width:15px; height:15px;}
+		.payBtn { width:100%; height:70px; font-size: x-large; background-color: black; color: white; border-radius: 0;}
+		.deliDiv { display: flex; justify-content: space-between;}
+		.confirmDiv {border-bottom:1px solid silver; margin-bottom:10px;}
+		.info {font-size: large;}
+		.imagePreviewDiv {
+			padding: 5px 5px 5px 5px;
+			button {display:none; position:relative;}
+			&:hover {button{display:block;}}
+		}
+		#dropzone { display: flex; flex-direction: row; flex-wrap: wrap; justify-content: center;}
+		.previewImg { display: flex; flex-direction: column; align-content: center; justify-content: center;}
+		.custom-radio { display:flex; justify-content: space-evenly;}
+	</style>
+	<link href="resources/client/css/review.css" rel="stylesheet">
 </head>
 <body class="hold-transition sidebar-collapse layout-top-nav">
 	<div class="wrapper">
@@ -72,6 +67,17 @@
 						</script>
 						</c:when>
 						<c:when test="${ userInfo.clientId == null && cookieId != orderInfo.cookieId }">
+						<div style="height:800px;"></div>
+						<script>
+							$(document).ready(function(){
+								playToast("잘못된 접근입니다. 메인 페이지로 이동합니다.", "error");
+								setTimeout(function(){
+									location.href="main.do";
+								}, 1000);
+							})
+						</script>
+						</c:when>
+						<c:when test="${ orderInfo == null }">
 						<div style="height:800px;"></div>
 						<script>
 							$(document).ready(function(){
@@ -169,14 +175,14 @@
 													<input type="hidden" name="orderStatus_${ pro.optionId }" value="${ pro.orderStatus }">
 												</span><br>
 												<c:choose>
-													<c:when test="${ pro.orderStatus=='상품준비중' || pro.orderStatus=='배송준비중' || pro.orderStatus=='배송보류' || pro.orderStatus=='배송대기'}">
+													<c:when test="${ pro.orderStatus=='결제완료' || pro.orderStatus=='상품준비중' || pro.orderStatus=='배송준비중' || pro.orderStatus=='배송보류' || pro.orderStatus=='배송대기'}">
 														<div class="row">
 															<div class="col-md-4">
 																<input type="button" value="취소요청" class="form-control" class="cancleBtn" id="cancleBtn" onclick="cancleOrder('${ pro.orderId }_${ pro.optionId }')">
 															</div>
 														</div>
 													</c:when>
-													<c:when test="${ pro.orderStatus=='배송중' || pro.orderStatus=='배송완료'}">
+													<c:when test="${ pro.orderStatus=='배송중' || pro.orderStatus=='배송완료' }">
 														<div class="row">
 															<c:choose>
 																<c:when test="${ pro.reviewId == null }">
@@ -186,9 +192,11 @@
 																	<div class="col-md-4">
 																		<input type="button" value="환불요청" class="form-control" class="refundBtn" id="refundBtn" onclick="refundOrder('${ pro.orderId }_${ pro.optionId }')">
 																	</div>
+																	<c:if test="${ orderInfo.clientName != null}">
 																	<div class="col-md-4">
 																		<input type="button" value="리뷰작성" class="form-control" class="reviewWriteBtn" id="reviewWriteBtn" onclick="reviewWrite('${pro.productId}', '${pro.orderId}', '${pro.optionId}', '${pro.productName}', '${pro.mainImage}', '${pro.orderProCnt}', '${pro.optionColor}', '${pro.optionSize}' )">
 																	</div>
+																	</c:if>
 																</c:when>
 																<c:when test="${ pro.reviewId != null && pro.reviewStatus != '삭제'}">
 																	<div class="col-md-4">
@@ -196,6 +204,15 @@
 																	</div>
 																</c:when>
 															</c:choose>
+														</div>
+													</c:when>
+													<c:when test="${ pro.orderStatus=='구매확정' }">
+														<div class="row">
+															<c:if test="${ pro.reviewId != null }">
+																<div class="col-md-4">
+																	<input type="button" value="리뷰보기" class="form-control" class="reviewWriteBtn" id="reviewViewBtn" onclick="reviewView('${ pro.reviewId }', '${pro.productName}', '${pro.mainImage}', '${pro.orderProCnt}', '${pro.optionColor}', '${pro.optionSize}' )">
+																</div>
+															</c:if>
 														</div>
 													</c:when>
 													<c:when test="${ pro.orderStatus=='교환중' || pro.orderStatus=='교환완료'}"></c:when>
@@ -208,7 +225,7 @@
 				<!-- 상품마다 반복 끝 -->
 									</c:forEach>
 								</div><br>
-			<c:if test="${ userInfo != null }">
+								<c:if test="${ userInfo != null }">
 								<div class="php-email-form">
 									<div class="form-group">
 										<h3>할인</h3>
@@ -234,7 +251,7 @@
 										<div class="form-group col-md-2 resultDiv" id="discountPrice"><fmt:formatNumber pattern="#,###,###" value="${ orderInfo.usedPoint + orderInfo.couponPrice }"/> </div>
 									</div>
 								</div>
-				</c:if>
+								</c:if>
 							</div>
 						</div>
 					</div>
@@ -292,32 +309,32 @@
 	</div>
 	<div class="modal-backdrop fade" style="display:none"></div>
 
-<script src="resources/client/ZenBlog/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script  src="resources/util/plugins/sweetalert/jquery-lates.min.js"></script>
-<script src="resources/util/plugins/sweetalert/sweetalert2.js"></script>
+	<script src="resources/client/ZenBlog/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<script  src="resources/util/plugins/sweetalert/jquery-lates.min.js"></script>
+	<script src="resources/util/plugins/sweetalert/sweetalert2.js"></script>
+	
+	<!-- Template Main JS File -->
+	<script src="resources/client/ZenBlog/assets/js/main.js"></script>
+	<!-- sweetAlert (alert/confirm/toast) -->
+	<script src="resources/util/js/sweetalert.js"></script>
+	<!-- PortOne SDK -->
+	<script src="https://cdn.iamport.kr/v1/iamport.js"></script>
+	
+	<script src="resources/util/js/modal.js"></script>
+	<!-- dropzone -->
+	<script src="resources/util/plugins/dropzone/dist/dropzone.min.js"></script>
+	
+	<script src="resources/client/js/post.js"></script>
+	<script src="resources/client/js/orderInfo.js"></script>
 
-<!-- Template Main JS File -->
-<script src="resources/client/ZenBlog/assets/js/main.js"></script>
-<!-- sweetAlert (alert/confirm/toast) -->
-<script src="resources/util/js/sweetalert.js"></script>
-<!-- PortOne SDK -->
-<script src="https://cdn.iamport.kr/v1/iamport.js"></script>
-
-<script src="resources/util/js/modal.js"></script>
-<!-- dropzone -->
-<script src="resources/util/plugins/dropzone/dist/dropzone.min.js"></script>
-
-<script src="resources/client/js/post.js"></script>
-<script src="resources/client/js/orderInfo.js"></script>
-
-<!-- 포스팅 - 이미지/동영상 dropzone 영역 -->
-<div id="dropzone-preview" class="row" style="display:flex;">
-	<div class="row imagePreviewDiv"style="width: 50%;">
-		<div class="h-auto rounded-3 previewImg">
-			<img data-dz-thumbnail="data-dz-thumbnail" class="w-full h-auto rounded-3 block" src="#" alt="Dropzone-Image"/>
-			<button data-dz-remove="data-dz-remove" class="btn btn-sm btn-danger deleteBtn">삭제</button>
+	<!-- 포스팅 - 이미지/동영상 dropzone 영역 -->
+	<div id="dropzone-preview" class="row" style="display:flex;">
+		<div class="row imagePreviewDiv"style="width: 50%;">
+			<div class="h-auto rounded-3 previewImg">
+				<img data-dz-thumbnail="data-dz-thumbnail" class="w-full h-auto rounded-3 block" src="#" alt="Dropzone-Image"/>
+				<button data-dz-remove="data-dz-remove" class="btn btn-sm btn-danger deleteBtn">삭제</button>
+			</div>
 		</div>
 	</div>
-</div>
 </body>
 </html>

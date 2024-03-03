@@ -1,32 +1,32 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>WeatherWear 관리자</title>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
-
-<!-- Font Awesome -->
-<link href="resources/admin/AdminLTE/plugins/fontawesome-free/css/all.min.css" rel="stylesheet">
-<!-- Theme style -->
-<link href="resources/admin/AdminLTE/dist/css/adminlte.min.css" rel="stylesheet">
-<!-- dropZone -->
-<link rel="stylesheet" href="resources/util/plugins/dropzone/dist/dropzone.min.css"/>
-<link rel="stylesheet" href="resources/util/plugins/dropzone/custom.css">
-<link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" type="text/css" />
-<!-- include summernote css/js -->
-<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.css" rel="stylesheet">
-<style>
-	#option-div { display: none;}
-</style>
+	<meta charset="UTF-8">
+	<title>WeatherWear 관리자</title>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+	
+	<!-- Font Awesome -->
+	<link href="resources/admin/AdminLTE/plugins/fontawesome-free/css/all.min.css" rel="stylesheet">
+	<!-- Theme style -->
+	<link href="resources/admin/AdminLTE/dist/css/adminlte.min.css" rel="stylesheet">
+	<!-- dropZone -->
+	<link rel="stylesheet" href="resources/util/plugins/dropzone/dist/dropzone.min.css"/>
+	<link rel="stylesheet" href="resources/util/plugins/dropzone/custom.css">
+	<link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" type="text/css" />
+	<!-- include summernote css/js -->
+	<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.css" rel="stylesheet">
+	<style>
+		#option-div { display: none;}
+		.baseImgDiv { width: 100%; display:flex; justify-content: center;}
+	</style>
 </head>
 <body class="hold-transition sidebar-collapse layout-top-nav">
 	<div class="wrapper">
@@ -64,7 +64,7 @@
 										<input type="hidden" id="lastId" name="lastId" value="${ productId }">
 										<input type="hidden" id="productId" name="productId" value="W2OT${ productId }">
 										<input type="hidden" id="imageBy" name="imageBy" value="W2OT${ productId }">
-										<div id="mainImage" class="dz-message needsclick">
+										<div id="mainImage" class="dz-message needsclick baseImgDiv">
 											<span class="text" style="display:flex; align-items:center; flex-direction:column;">
 												<img src="resources/util/image/dropzone_camera.png" alt="Camera" />
 												<code>메인 이미지를 등록하세요</code><br>
@@ -189,21 +189,23 @@
 		</div>		
 		<%@ include file="../footer.jsp" %>
 	</div>
-<!-- jQuery -->
-<script src="resources/admin/AdminLTE/plugins/jquery/jquery.min.js"></script>
-<script	src="resources/util/plugins/sweetalert/jquery-lates.min.js"></script>
-<script src="resources/util/plugins/sweetalert/sweetalert2.js"></script>
-<!-- jQuery UI 1.11.4 -->
-<script src="resources/admin/AdminLTE/plugins/jquery-ui/jquery-ui.min.js"></script>
-<!-- Bootstrap 4 -->
-<script src="resources/admin/AdminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-<!-- Summernote -->
-<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
-<!-- dropzone -->
-<script src="resources/util/plugins/dropzone/dist/dropzone.min.js"></script>
-<!-- sweetAlert (alert/confirm/toast) -->
-<script src="resources/util/js/sweetalert.js"></script>
-
-<script src="resources/admin/js/manageProduct.js"></script>
+		
+	<!-- jQuery -->
+	<script src="resources/admin/AdminLTE/plugins/jquery/jquery.min.js"></script>
+	<script	src="resources/util/plugins/sweetalert/jquery-lates.min.js"></script>
+	<script src="resources/util/plugins/sweetalert/sweetalert2.js"></script>
+	<!-- jQuery UI 1.11.4 -->
+	<script src="resources/admin/AdminLTE/plugins/jquery-ui/jquery-ui.min.js"></script>
+	<!-- Bootstrap 4 -->
+	<script src="resources/admin/AdminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<!-- Summernote -->
+	<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
+	<!-- dropzone -->
+	<script src="resources/util/plugins/dropzone/dist/dropzone.min.js"></script>
+	<!-- sweetAlert (alert/confirm/toast) -->
+	<script src="resources/util/js/sweetalert.js"></script>
+	
+	<script src="resources/admin/js/manageProduct.js"></script>
+	<script src="resources/admin/js/common.js"></script>
 </body>
 </html>

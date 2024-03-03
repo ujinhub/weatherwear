@@ -150,7 +150,6 @@ public class CouponController {
 		String resultCode;
 		String message;
 
-		System.err.println("couponId : " + couponId);
 		try {
 			int result = couponService.deleteCoupon(couponId);
 			

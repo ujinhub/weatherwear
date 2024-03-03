@@ -12,4 +12,5 @@ public interface AdminService {
 	int insertAdmin(AdminVO vo);				// 관리자 정보 등록
 	int updateAdmin(AdminVO vo);				// 관리자 정보 수정
 	int deleteAdmin(AdminVO vo);				// 관리자 정보 삭제
+	void setLogDate(AdminVO vo);				// 최종 로그인 일자 변경
 }

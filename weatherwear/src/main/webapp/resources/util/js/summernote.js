@@ -115,10 +115,8 @@
 			data: JSON.stringify(imList),
 			contentType: "application/json",
 			success: function(res){
-				alert("success imageInsert");
 			},
 			error : function(error){
-				alert("fail imageInsert");
 			}
 		});
  	}

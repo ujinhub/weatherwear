@@ -45,6 +45,7 @@ function count(num, name) {
 	
 	if (cnt < 1) {
 		cnt = 0;
+		odTotal = 0;
 		$("div[name='" + name + "']").remove();
 	} else if(cnt > stCnt){
 		cnt = stCnt;
@@ -199,6 +200,32 @@ function addCart(){
 		contentType: "application/json",
 		success: function(response){
 			playConfirm("장바구니에 상품이 담겼습니다.", "장바구니로 이동하시겠습니까?", "success", "장바구니로 이동", "계속 쇼핑하기", "location.href='cart.do'", 'window.location.reload()');
+		},
+		error : function(error){
+			playToast("오류가 발생했습니다.", 'error');
+		}
+	});
+}
+
+// 바로 구매하기
+function orderNow(){
+	// cartVO 객체를 가지는 리스트
+	let productId = $("input[name='productId']").val();
+	let list = addList(productId);
+	
+	if(list == null || list == ""){
+		playToast("상품을 선택해주세요", 'warning');
+		return;
+	}
+	
+	$.ajax({
+		url: "/w2/buyNowProduct.do",
+		type: "POST",
+		async: true,
+		data: JSON.stringify(list),
+		contentType: "application/json",
+		success: function(response){
+			location.href="orderRegister.do?cartList="+response;
 		},
 		error : function(error){
 			playToast("오류가 발생했습니다.", 'error');

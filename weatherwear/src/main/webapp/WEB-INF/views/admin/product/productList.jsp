@@ -1,23 +1,22 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>WeatherWear 관리자</title>
-<style>
-	a { color:black !important; }
-	.click:hover { cursor: pointer;}
-	.tdContent {display:flex; justify-content: center; height: 70px; align-items: center;}
-	.check {width:20px; height:20px;}
-	.productPrice_select{display: none;}
-</style>
-<!-- Font Awesome -->
-<link href="resources/admin/AdminLTE/plugins/fontawesome-free/css/all.min.css" rel="stylesheet">
-<!-- Theme style -->
-<link href="resources/admin/AdminLTE/dist/css/adminlte.min.css" rel="stylesheet">
+	<meta charset="UTF-8">
+	<title>WeatherWear 관리자</title>
+	<!-- Font Awesome -->
+	<link href="resources/admin/AdminLTE/plugins/fontawesome-free/css/all.min.css" rel="stylesheet">
+	<!-- Theme style -->
+	<link href="resources/admin/AdminLTE/dist/css/adminlte.min.css" rel="stylesheet">
+	<style>
+		a { color:black !important; }
+		.click:hover { cursor: pointer;}
+		.tdContent {display:flex; justify-content: center; height: 70px; align-items: center;}
+		.check {width:20px; height:20px;}
+		.productPrice_select{display: none;}
+	</style>
 </head>
 <body class="hold-transition sidebar-collapse layout-top-nav">
 	<div class="wrapper">
@@ -77,16 +76,12 @@
 											<div class="input-group input-group-sm">
 												<select class="form-control option_select" onchange="change(this)" id="modifyType">
 													<option value="productSell">판매상태</option>
-													<option value="productPrice">판매가</option>
 												</select>&nbsp;&nbsp;&nbsp;
 												<div class="input-group-sm productSell_select">
 													<select class="form-control productSell_select" id="productSell_value">
 														<option value="Y">판매중</option>
 														<option value="N">판매중지</option>
 													</select>
-												</div>
-												<div class="input-group-sm productPrice_select">
-													<input type="text" name="productPrice_value" class="form-control float-right" placeholder="판매가">
 												</div>
 												<div class="input-group-append">
 													<button id="add-new-event" type="button" class="btn btn-sm btn-outline-primary" onclick="update()">수정하기</button>
@@ -173,17 +168,18 @@
 		<%@ include file="../footer.jsp" %>
 	</div>
 
-<!-- jQuery -->
-<script src="resources/admin/AdminLTE/plugins/jquery/jquery.min.js"></script>
-<script	src="resources/util/plugins/sweetalert/jquery-lates.min.js"></script>
-<script src="resources/util/plugins/sweetalert/sweetalert2.js"></script>
-<!-- Bootstrap 4 -->
-<script src="resources/admin/AdminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-<!-- sweetAlert (alert/confirm/toast) -->
-<script src="resources/util/js/sweetalert.js"></script>
-
-<script src="resources/util/js/paging.js"></script>
-<script src="resources/util/js/checkbox.js"></script>
-<script src="resources/admin/js/manageProduct.js"></script>
+	<!-- jQuery -->
+	<script src="resources/admin/AdminLTE/plugins/jquery/jquery.min.js"></script>
+	<script	src="resources/util/plugins/sweetalert/jquery-lates.min.js"></script>
+	<script src="resources/util/plugins/sweetalert/sweetalert2.js"></script>
+	<!-- Bootstrap 4 -->
+	<script src="resources/admin/AdminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<!-- sweetAlert (alert/confirm/toast) -->
+	<script src="resources/util/js/sweetalert.js"></script>
+	
+	<script src="resources/util/js/paging.js"></script>
+	<script src="resources/util/js/checkbox.js"></script>
+	<script src="resources/admin/js/manageProduct.js"></script>
+	<script src="resources/admin/js/common.js"></script>
 </body>
 </html>

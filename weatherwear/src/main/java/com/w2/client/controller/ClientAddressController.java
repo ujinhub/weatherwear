@@ -18,7 +18,11 @@ public class ClientAddressController {
 	@Autowired
 	ClientAddressService addressService;
 
-	/** 주소록 조회 */
+	/** 
+	 * 주소록 조회
+	 * @param clientId
+	 * @return
+	 */
 	@ResponseBody
 	@PostMapping("getAddressList.do")
 	public ResponseDTO<List<ClientAddressVO>> getAddressList(String clientId) {
@@ -40,7 +44,11 @@ public class ClientAddressController {
 		return new ResponseDTO<List<ClientAddressVO>>(statusCode, code, resultCode, msg, addressList);
 	}
 
-	/** 주소 적용 */
+	/** 
+	 * 주소 적용 
+	 * @param addressId
+	 * @return
+	 */
 	@ResponseBody
 	@PostMapping("getAddressInfo.do")
 	public ResponseDTO<ClientAddressVO> getAddressInfo(String addressId) {
@@ -62,7 +70,11 @@ public class ClientAddressController {
 		return new ResponseDTO<ClientAddressVO>(statusCode, code, resultCode, msg, addressInfo);
 	}
 
-	/** 주소 삭제 */
+	/** 
+	 * 주소 삭제 
+	 * @param addressId
+	 * @return
+	 */
 	@ResponseBody
 	@PostMapping("deleteAddress.do")
 	public ResponseDTO<Integer> deleteAddress(String addressId) {

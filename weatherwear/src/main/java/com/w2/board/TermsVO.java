@@ -25,5 +25,4 @@ public class TermsVO {
 	private String termAgreeStatus;		// 약관 동의 여부 (Y/N)
 	private Timestamp tmermAgreeDate;	// 약관 동의일
 	private Timestamp termAgreeChDate;	// 약관 동의 변경일
-	
 }

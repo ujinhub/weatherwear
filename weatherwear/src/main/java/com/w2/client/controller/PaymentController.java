@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,7 +18,6 @@ import com.siot.IamportRestClient.exception.IamportResponseException;
 import com.siot.IamportRestClient.request.CancelData;
 import com.siot.IamportRestClient.response.IamportResponse;
 import com.siot.IamportRestClient.response.Payment;
-import com.w2.order.service.OrderService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -41,6 +39,13 @@ public class PaymentController {
 		return "test";
 	}
 	
+	/**
+	 * 금액 비교
+	 * @param imp_uid
+	 * @return
+	 * @throws IamportResponseException
+	 * @throws IOException
+	 */
 	@ResponseBody
 	@RequestMapping("verifyIamport.do")
 	public IamportResponse<Payment> paymentByImpUid(@Param("imp_uid") String imp_uid) throws IamportResponseException, IOException {
@@ -50,7 +55,40 @@ public class PaymentController {
 		return result;
 	}
 
-	/** 결제 취소 */
+	/**
+	 * 결제 오류 시 결제 취소
+	 * @param paymentId
+	 * @throws IamportResponseException
+	 * @throws IOException
+	 */
+	@PostMapping("canclePayment.do")
+	public void canclePayment(String paymentId) throws IamportResponseException, IOException {
+		iamportClient = new IamportClient(apiKey, secretKey);
+		CancelData cancel_data = new CancelData(paymentId, true);
+
+		try {
+            IamportResponse<Payment> payment_response = iamportClient.cancelPaymentByImpUid(cancel_data);
+        } catch (IamportResponseException e) {
+            switch (e.getHttpStatusCode()) {
+                case 401:
+                    //TODO
+                    break;
+                case 500:
+                    //TODO
+                    break;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+	}
+	
+	/** 
+	 * 결제 취소(관리자)
+	 * @param refundPrice
+	 * @param totalPrice
+	 * @param paymentId
+	 * @return
+	 */
 	@ResponseBody
 	@PostMapping("refundPriceProc.do")
 	public Map<String, Object> refundPriceProc(int refundPrice, int totalPrice, String paymentId) {
@@ -86,7 +124,6 @@ public class PaymentController {
 				result.put("msg", "환불 처리 중 문제가 발생했습니다.");
 			}
 		} catch (IamportResponseException e) {
-			System.err.println(e.getMessage());
 			
 			result.put("code", -1);
 			result.put("resultCode", "fail");
@@ -105,30 +142,4 @@ public class PaymentController {
 		}
 		return result;
 	}
-	
-	/*
-		String test_already_cancelled_imp_uid = "imp_497911164010";
-        CancelData cancel_data = new CancelData(test_already_cancelled_imp_uid, true); //imp_uid를 통한 전액취소
-
-        try {
-            IamportResponse<Payment> payment_response = client.cancelPaymentByImpUid(cancel_data);
-            System.err.println("getMessage : " + payment_response.getMessage());
-            System.err.println("getResponse : " + payment_response.getResponse());
-            setPayment(payment_response.getResponse());
-
-        } catch (IamportResponseException e) {
-            System.err.println(e.getMessage());
-
-            switch (e.getHttpStatusCode()) {
-                case 401:
-                    //TODO
-                    break;
-                case 500:
-                    //TODO
-                    break;
-            }
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-	 */
 }

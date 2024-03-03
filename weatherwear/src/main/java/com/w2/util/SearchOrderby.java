@@ -8,7 +8,7 @@ import lombok.ToString;
 @Setter
 @ToString
 public class SearchOrderby extends Pagination {
-	private String searchType;
-	private String keyword;
-	private String orderby;
+	private String searchType;		// 조회타입
+	private String keyword;			// 검색어
+	private String orderby;			// 정렬방식
 }

@@ -2,6 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 	 			
 <mapper namespace="QnaDAO">
+<!-- 
+		문의 리스트 조회
+-->
 	<select id="getQnaList" resultType="qna">
 		SELECT row_number() over(ORDER BY qnaDate) as qnaIdx, q.*
 		FROM qna q
@@ -44,6 +47,9 @@
 		LIMIT #{startList}, #{listSize};
 	</select>
 	
+<!-- 
+		문의 리스트 개수 조회
+-->
 	<select id="getQnaListCnt" resultType="int">
 		SELECT count(*)
 		FROM qna
@@ -84,25 +90,36 @@
 		</trim>
 	</select>
 	
+<!-- 
+		문의 상세 조회
+-->
 	<select id="getQna" resultType="qna">
 		SELECT *
 		FROM qna
 		WHERE qnaId = #{qnaId}
 	</select>
 	
+<!-- 
+		문의 답글 등록
+-->
 	<update id="updateQnaAnswer">
 		UPDATE qna
 		SET qnaStatus = #{qnaStatus}, qnaAnswer = #{qnaAnswer}, qnaAnswerDate = default
 		WHERE qnaId = #{qnaId}
 	</update>
 	
+<!-- 
+		문의 답글 삭제
+-->
 	<update id="deleteQnaAnswer">
 		UPDATE qna
 		SET qnaStatus = #{qnaStatus}, qnaAnswer = #{qnaAnswer}, qnaAnswerDate = #{qnaAnswerDate}
 		WHERE qnaId = #{qnaId}
 	</update>
 	
-<!-- 나의 문의 목록 (페이징) - 권유진 추가 -->
+<!-- 
+		마이페이지 문의 리스트 조회
+-->
 	<select id="getMyQnaList" parameterType="hashmap" resultType="qna">
 		SELECT *
 		FROM qna
@@ -111,22 +128,34 @@
 		LIMIT #{search.startList}, #{search.listSize}
 	</select>
 	
+<!-- 
+		마이페이지 문의 리스트 개수 조회
+-->
 	<select id="getMyQnaListCnt" parameterType="String" resultType="int">
 		SELECT COUNT(*)
 		FROM qna
 		WHERE clientId = #{clientId}
 	</select>
 	
+<!-- 
+		문의 등록
+-->
 	<insert id="insertQna">
 		INSERT INTO qna(qnaId, clientId, qnaTitle, qnaContent, qnaSecCheck, qnaSecPwd, qnaStatus, qnaType)
 		VALUES(#{qnaId}, #{clientId}, #{qnaTitle}, #{qnaContent}, #{qnaSecCheck}, #{qnaSecPwd}, #{qnaStatus}, #{qnaType})
 	</insert>
 	
+<!-- 
+		문의 삭제
+-->
 	<delete id="deleteQna">
 		DELETE FROM qna
 		WHERE qnaId = #{qnaId}
 	</delete>
 	
+<!-- 
+		문의 수정
+-->
 	<update id="updateQna">
 		UPDATE qna
 		SET qnaTitle = #{qnaTitle}, qnaContent = #{qnaContent}, qnaType = #{qnaType}

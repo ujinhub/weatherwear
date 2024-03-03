@@ -17,7 +17,6 @@ function moveWishList(){
 	});
 	
 	insertWishList(productList);
-	deleteSelect('addWishList');
 }
 
 // 선택 상품 주문
@@ -134,7 +133,6 @@ function deleteAll(){
 	
 	
 	$(".check").click(function(){
-		
 		if(this.checked){
 			// 첫 화면시 모두 추가되어 있는 상태
 			if(checkList.length == $(".checklist .check").length){
@@ -149,8 +147,12 @@ function deleteAll(){
 		}
 		
 		if($(".check:checked").length < $(".checklist .check").length){
+			$("#checkAll").removeClass("uncheckAll").removeClass("active").addClass("checkAll");
+			$("#checkAll").text("전체선택");
 			$("#checkAll").prop("checked", false);
 		} else {
+			$("#checkAll").removeClass("checkAll").addClass("uncheckAll").addClass("active");
+			$("#checkAll").text("전체해제");
 			$("#checkAll").prop("checked", true);
 		}
 		setPrice();

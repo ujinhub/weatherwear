@@ -10,9 +10,9 @@ import lombok.ToString;
 @Setter
 @ToString
 public class PaymentVO {
-	private String paymentId;
-	private String orderId;
-	private String paymentMethod;
-	private String paymentStatus;
-	private Date paymentDate;
+	private String paymentId;		// 결제정보 번호
+	private String orderId;			// 주문 번호
+	private String paymentMethod;	// 결제 방법
+	private String paymentStatus;	// 결제 상태
+	private Date paymentDate;		// 결제 일자
 }

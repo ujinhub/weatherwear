@@ -5,15 +5,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>WeatherWear 관리자</title>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-<!-- Font Awesome -->
-<link href="resources/admin/AdminLTE/plugins/fontawesome-free/css/all.min.css" rel="stylesheet">
-<!-- Theme style -->
-<link href="resources/admin/AdminLTE/dist/css/adminlte.min.css" rel="stylesheet">
+	<meta charset="UTF-8">
+	<title>WeatherWear 관리자</title>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+	<!-- Font Awesome -->
+	<link href="resources/admin/AdminLTE/plugins/fontawesome-free/css/all.min.css" rel="stylesheet">
+	<!-- Theme style -->
+	<link href="resources/admin/AdminLTE/dist/css/adminlte.min.css" rel="stylesheet">
 </head>
 <body class="hold-transition sidebar-collapse layout-top-nav">
 	<div class="wrapper">
@@ -50,9 +50,9 @@
 									<div class="card-tools">
 										<!-- Search -->
 										<div class="input-group input-group-sm">
-											<select id="orderType" class="form-control">
+											<select id="searchType" class="form-control">
 												<option value="deliveryId">번호</option>
-												<option value="deliveryComName">이름</option>
+												<option value="deliveryComName">회사이름</option>
 											</select>
 											<input type="text" id="keyword" class="form-control float-right" placeholder="Search">
 											<div class="input-group-append">
@@ -147,21 +147,23 @@
 		<%@ include file="../footer.jsp" %>
 	</div>
 	<div class="modal-backdrop fade" style="display:none"></div>
-<!-- jQuery -->
-<script src="resources/admin/AdminLTE/plugins/jquery/jquery.min.js"></script>
-<script	src="resources/util/plugins/sweetalert/jquery-lates.min.js"></script>
-<script src="resources/util/plugins/sweetalert/sweetalert2.js"></script>
-<!-- Bootstrap 4 -->
-<script src="resources/admin/AdminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-<!-- Modal -->
-<script src="resources/admin/AdminLTE/plugins/sweetalert2/sweetalert2.min.js"></script>
-<script src="resources/admin/AdminLTE/dist/js/adminlte.min.js?v=3.2.0"></script>
-<!-- sweetAlert (alert/confirm/toast) -->
-<script src="resources/util/js/sweetalert.js"></script>
-
-<script src="resources/util/js/pagingNoOrderBy.js"></script>
-<script src="resources/util/js/modal.js"></script>
-<script src="resources/util/js/checkbox.js"></script>
-<script src="resources/admin/js/manageDelivery.js"></script>
+		
+	<!-- jQuery -->
+	<script src="resources/admin/AdminLTE/plugins/jquery/jquery.min.js"></script>
+	<script	src="resources/util/plugins/sweetalert/jquery-lates.min.js"></script>
+	<script src="resources/util/plugins/sweetalert/sweetalert2.js"></script>
+	<!-- Bootstrap 4 -->
+	<script src="resources/admin/AdminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<!-- Modal -->
+	<script src="resources/admin/AdminLTE/plugins/sweetalert2/sweetalert2.min.js"></script>
+	<script src="resources/admin/AdminLTE/dist/js/adminlte.min.js?v=3.2.0"></script>
+	<!-- sweetAlert (alert/confirm/toast) -->
+	<script src="resources/util/js/sweetalert.js"></script>
+	
+	<script src="resources/util/js/pagingNoOrderBy.js"></script>
+	<script src="resources/util/js/modal.js"></script>
+	<script src="resources/util/js/checkbox.js"></script>
+	<script src="resources/admin/js/manageDelivery.js"></script>
+	<script src="resources/admin/js/common.js"></script>
 </body>
 </html>

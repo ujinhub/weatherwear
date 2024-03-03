@@ -94,9 +94,6 @@ public class QnaController {
 			client.setClientId(vo.getClientId());
 			
 			client = clientService.getClientEmail(client);
-//			System.err.println(client);
-//			if(client.getClientEmailCheck().equals("Y")) {
-//				System.err.println("메일전송");
 			
 			// 메일 전송
 			sendAnswerMail(vo, client.getClientEmail());

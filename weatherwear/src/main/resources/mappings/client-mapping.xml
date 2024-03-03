@@ -2,6 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 	 			
 <mapper namespace="ClientDAO">
+<!-- 
+		회원 리스트 조회
+-->
 	<select id="getClientList" resultType="client">
 		SELECT row_number() over(ORDER BY clientRegDate) as clientIdx, c.*, w.*
 		FROM client c
@@ -24,6 +27,9 @@
 		LIMIT #{startList}, #{listSize}
 	</select>
 	
+<!-- 
+		회원 리스트 개수 조회
+-->
 	<select id="getClientListCnt" resultType="int">
 		SELECT count(*)
 		FROM client
@@ -42,12 +48,18 @@
 		</trim>
 	</select>
 	
+<!-- 
+		회원 확인
+-->
 	<select id="checkClient" resultType="client">
 		SELECT *
 		FROM client
 		WHERE clientId = #{clientId}
 	</select>
 	
+<!-- 
+		회원 정보 조회
+-->
 	<select id="getClient" resultType="client">
 		SELECT *
 		FROM client
@@ -55,18 +67,27 @@
 		AND clientId NOT IN (SELECT withdrawId FROM withdraw_info)
 	</select>
 	
+<!-- 
+		회원 이메일 조회
+-->
 	<select id="getClientEmail" resultType="client">
 		SELECT clientEmail, clientEmailCheck
 		FROM client
 		WHERE clientId = #{clientId}
 	</select>
 	
+<!-- 
+		회원 이메일 리스트 조회
+-->
 	<select id="getClientEmailList" resultType="client">
 		SELECT *
 		FROM client
 		WHERE clientEmailCheck = 'Y'
 	</select>
 	
+<!-- 
+		회원 정보 조회
+-->
 	<select id="getClientFindInfo" parameterType="map" resultType="client">
 		SELECT *
 		FROM client
@@ -84,12 +105,18 @@
 		AND clientName = #{clientName}
 	</select>
 	
+<!-- 
+		회원 비밀번호 변경
+-->
 	<update id="updateClientPwd" parameterType="client">
 		UPDATE client
 		SET clientPwd = #{clientPwd}
 		WHERE clientId = #{clientId}
 	</update>
 	
+<!-- 
+		회원 정보 수정
+-->
 	<update id="updateClient">
 		UPDATE client
 		SET clientEmail = #{clientEmail}, clientNum = #{clientNum}
@@ -102,35 +129,50 @@
 		WHERE clientId = #{clientId}
 	</update>
 	
+<!-- 
+		위시리스트 조회
+-->
 	<select id="getWishList" parameterType="hashmap" resultType="String">
 		SELECT clientMarkList
 		FROM client
 		WHERE clientId = #{clientId}
 	</select>
 			
-<!-- 마지막 로그인 일자 업데이트 -이지형 추가 -->
+<!-- 
+		마지막 로그인 일자 업데이트
+-->
 	<update id="setLogDate" parameterType="String">
 		UPDATE client SET clientLogDate = CURRENT_TIMESTAMP WHERE clientId = #{ clientId }
 	</update>
 
-<!-- 로그인 시 쿠키 정보 아이디로 변경하기 -이지형 추가 -->
+<!-- 
+		로그인 시 쿠키 정보 아이디로 변경하기
+-->
 	<update id="changeCookieSetId" parameterType="Map">
 		UPDATE cart
 		SET cookieId = null, cookieLimit = null, clientId = #{ clientId }
 		WHERE cookieId = #{ cookieId }
 	</update>
 	
-<!-- 회원가입/탈퇴 - 권유진 추가 -->
+<!-- 
+		회원가입/탈퇴
+-->
 	<insert id="insertClient">
 		INSERT INTO client(clientId, clientPwd, clientName, clientNum, clientEmail, clientEmailCheck, clientPoint, clientBirth)
 		VALUES(#{clientId}, #{clientPwd}, #{clientName}, #{clientNum}, #{clientEmail}, #{clientEmailCheck}, #{clientPoint}, #{clientBirth})
 	</insert>
 	
+<!-- 
+		회원 탈퇴
+-->
 	<insert id="insertWithdraw">
 		INSERT INTO withdraw_info(withdrawId)
 		VALUES(#{clientId})
 	</insert>
 	
+<!-- 
+		탈퇴 회원 문의 내역 삭제
+-->
 	<delete id="deleteWithdrawQna">
 		DELETE FROM qna
 		WHERE clientId = #{clientId}

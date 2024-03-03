@@ -12,6 +12,9 @@
 		<result property="productId" column="productId" />
 	</resultMap>
 
+<!-- 
+		상품 리스트 조회
+-->
 	<select id="getProductList" resultType="product">
 		SELECT p.*, CONCAT(pm.imageDir, pm.imageName) as mainImage, pr.productPrice
 		FROM product p
@@ -46,9 +49,13 @@
 		</trim>
 		ORDER BY ${ orderby } 
 			<if test="orderby == 'productRegDate'">DESC</if>
+			<if test="orderby == 'productCnt'">DESC</if>
 		LIMIT #{startList}, #{listSize};
 	</select>
 	
+<!-- 
+		상품 리스트 개수 조회
+-->
 	<select id="getProductListCnt" resultType="int">
 		SELECT count(*)
 		FROM product
@@ -82,6 +89,9 @@
 		ORDER BY ${ orderby }
 	</select>
 	
+<!-- 
+		상품 상세 조회
+-->
 	<select id="getProduct" resultType="hashmap">
 		SELECT p.*, pr.*, CONCAT(pm.imageDir, pm.imageName) as mainImage
 		FROM product p
@@ -90,6 +100,9 @@
 		WHERE p.productId=#{ productId }
 	</select>
 	
+<!-- 
+		상품 옵션 조회
+-->
 	<select id="getOptionInfo" resultType="hashmap">
 		SELECT GROUP_CONCAT(DISTINCT optionColor SEPARATOR ',') as optionColorList, 
 				GROUP_CONCAT(DISTINCT optionSize SEPARATOR ',') as optionSizeList
@@ -97,31 +110,43 @@
 		WHERE productId=#{ productId }
 	</select>
 	
+<!-- 
+		상품 옵션 리스트 조회
+-->
 	<select id="getOptionList" resultMap="optionInfoResult">
 		SELECT optionColor, optionSize, stockCnt
 		FROM option_info
 		WHERE productId=#{ productId }
 	</select>
 	
+<!-- 
+		상품 상세 이미지 리스트 조회
+-->
 	<select id="getDetailImage" resultType="hashmap">
 		SELECT CONCAT(imageDir, imageName) as detailImage
 		FROM product_image
 		WHERE imageBy=#{ productId } AND imageStatus='상세'
 	</select>
 	
-<!-- 상품 등록 -->
+<!-- 
+		상품 등록 
+-->
 	<insert id="insertProduct" parameterType="product" useGeneratedKeys="true" keyProperty="productId">
 		INSERT INTO product(productId, productName, productContent, productCate, productSell) 
 		VALUES(#{ productId }, #{ productName }, #{ productContent }, #{ productCate }, 'Y')
 	</insert>
 	
-<!-- 가격 등록 -->	
+<!-- 
+		가격 등록 
+-->	
 	<insert id="insertPrice" parameterType="hashmap">
 		INSERT INTO product_price(productId, productPrimeCost) 
 		VALUES(#{ product.productId }, #{ productPrimeCost })
 	</insert>
 	
-<!-- 옵션 등록 -->
+<!-- 
+		옵션 등록 
+-->
 	<insert id="insertOption" parameterType="list">
 		INSERT INTO option_info(productId, optionColor, optionSize, stockCnt)
 		VALUES
@@ -130,27 +155,36 @@
 		</foreach>
 	</insert>
 
-<!-- 상품 수정 -->
+<!-- 
+		상품 수정 
+-->
 	<update id="updateProduct" parameterType="product">
 		UPDATE product
 		SET productName=#{ productName }, productContent=#{ productContent }
 		WHERE productId=#{ productId }
 	</update>
 	
-<!-- 가격 수정 -->	
+<!-- 
+		가격 수정 
+-->	
 	<update id="updatePrice" parameterType="hashmap">
 		UPDATE product_price
 		SET productPrimeCost=#{ productPrimeCost } 
 		WHERE productId=#{ product.productId }
 	</update>
 
-<!-- 상품상태 수정 -->
+<!-- 
+		상품상태 수정 
+-->
 	<update id="updateStatus" parameterType="hashmap">
 		UPDATE product
 		SET productSell=#{ productSell }
 		WHERE productId=#{ productId }
 	</update>
-<!-- 옵션 수정 -->
+	
+<!-- 
+		옵션 수정 
+-->
 	<update id="updateOption" parameterType="list">
 		UPDATE option_info
 		SET 
@@ -162,21 +196,30 @@
 		WHERE productId=#{ productId }
 	</update>
 	
-<!-- 옵션 삭제 -->
+<!-- 
+		옵션 삭제 
+-->
 	<delete id="deleteOption">
 		DELETE FROM option_info WHERE productId=#{ productId }
 	</delete>
 	
-<!-- 상품가격 삭제 -->
+<!-- 
+		상품가격 삭제 
+-->
 	<delete id="deletePrice">
 		DELETE FROM product_price WHERE productId=#{ productId }
 	</delete>
 	
-<!-- 상품 삭제 -->
+<!-- 
+		상품 삭제 
+-->
 	<delete id="deleteProduct">
 		DELETE FROM product WHERE productId=#{ productId }
 	</delete>
 
+<!-- 
+		메인페이지 상품 리스트 조회
+-->
 	<select id="getMainProductList" parameterType="String" resultType="product">
 		SELECT p.*, CONCAT(pm.imageDir, pm.imageName) as mainImage, pr.productPrice
 		FROM product p
@@ -190,6 +233,9 @@
 		LIMIT 0,8;
 	</select>
 	
+<!-- 
+		위시리스트에 존재하는지 확인
+-->
 	<select id="checkWishList" parameterType="hashmap" resultType="String">
 		SELECT clientMarkList FROM client
 		WHERE  clientId=#{ clientId } AND clientMarkList LIKE CONCAT('%', 
@@ -199,7 +245,9 @@
 			'%');
 	</select>
 	
-<!-- 위시리스트 추가 -->
+<!-- 
+		위시리스트 추가 
+-->
 	<update id="insertWishList" parameterType="hashmap">
 		<foreach collection="productList" item="product" index="index">
 			UPDATE client
@@ -212,7 +260,9 @@
 		</foreach>
 	</update>
 	
-<!-- 위시리스트 삭제 -->
+<!-- 
+		위시리스트 삭제 
+-->
 	<update id="deleteWishList" parameterType="hashmap">
 		<foreach collection="productList" item="productId" index="index">
 		UPDATE client
@@ -223,7 +273,9 @@
 		</foreach>
 	</update>
 	
-<!-- 상품 정보 가져오기 (위시리스트, 최근본상품) - 권유진 추가 -->
+<!-- 
+		상품 정보 가져오기 (위시리스트, 최근본상품)
+-->
 	<select id="getProductInfo" parameterType="String" resultType="hashmap">
 		SELECT p.productId, p.productName, p.productSell, r.productPrice, CONCAT(i.ImageDir, i.ImageName) as image
 		FROM product p
@@ -231,5 +283,4 @@
 		JOIN product_image i ON (p.productId = i.ImageBy AND i.ImageStatus = '대표')
 		WHERE p.productId = #{productId};
 	</select>
-	
 </mapper>

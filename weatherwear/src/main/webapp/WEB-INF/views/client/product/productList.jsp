@@ -4,30 +4,27 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>WeatherWear 사용자</title>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<!-- Google Fonts -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com">
-<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500&amp;family=Inter:wght@400;500&amp;family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&amp;display=swap" rel="stylesheet">
-
-<!-- Vendor CSS Files -->
-<link href="resources/client/ZenBlog/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-<link href="resources/client/ZenBlog/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-
-<!-- Template Main CSS Files -->
-<link href="resources/client/ZenBlog/assets/css/main.css" rel="stylesheet">
-<link href="resources/client/ZenBlog/assets/css/variables.css" rel="stylesheet">
-
-<style>
-.mb-2 { width: 210px; height: 50px; overflow: hidden}
-.col-lg-3 { height: 440px; padding-left: 5%;}
-.productName { width: 100%; }
-.productList { display: flex; flex-direction: row; flex-wrap: wrap;}
-.productOne { height: 470px; display: flex; flex-direction: column; align-items: center;}
-</style>
+	<meta charset="UTF-8">
+	<title>WeatherWear 사용자</title>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<!-- Google Fonts -->
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com">
+	<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500&amp;family=Inter:wght@400;500&amp;family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&amp;display=swap" rel="stylesheet">
+	<!-- Vendor CSS Files -->
+	<link href="resources/client/ZenBlog/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+	<link href="resources/client/ZenBlog/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+	<!-- Template Main CSS Files -->
+	<link href="resources/client/ZenBlog/assets/css/main.css" rel="stylesheet">
+	<link href="resources/client/ZenBlog/assets/css/variables.css" rel="stylesheet">
+	<style>
+		.mb-2 { width: 210px; height: 50px; overflow: hidden}
+		.col-lg-3 { height: 440px; padding-left: 5%;}
+		.productName { width: 100%; }
+		.productList { display: flex; flex-direction: row; flex-wrap: wrap;}
+		.productOne { height: 470px; display: flex; flex-direction: column; align-items: center;}
+	</style>
 </head>
 <body class="hold-transition sidebar-collapse layout-top-nav">
 	<div class="wrapper">
@@ -40,10 +37,6 @@
 							<c:if test="${ param.searchType != null  && param.searchType != 'productName' && param.searchType != 'productRegDate'}">
 								<h3 class="category-title">Category: ${ param.searchType }</h3>
 							</c:if>
-<!-- 							<select name="searchType" class="form-control" id="listSize" onchange="page(1)" style="width:90%;"> -->
-<%-- 								<option id="productRegDate" value="productRegDate" <c:if test="${search.orderby == 'productRegDate'}">selected="selected"</c:if>>최신순</option> --%>
-<%-- 								<option id="productName" value="productName" <c:if test="${search.orderby == 'productName'}">selected="selected"</c:if>>상품명순</option> --%>
-<!-- 							</select><br> -->
 							<!-- ProductList -->
 							<div class="productList row">
 								<c:forEach var="item" items="${productList}" varStatus="status">
@@ -85,16 +78,7 @@
 									</c:if>
 								</div>
 							</div>
-<!-- 								<div class="card-footer">		 -->
-<!-- 									<div class="card-title input-group-sm"> -->
-<!-- 										<select name="searchType" class="form-control" id="listSize" onchange="page(1)"> -->
-<%-- 											<option value="20" <c:if test="${pagination.getListSize() == 20}">selected="selected"</c:if>>20개</option> --%>
-<%-- 											<option value="40" <c:if test="${pagination.getListSize() == 40}">selected="selected"</c:if>>40개</option> --%>
-<!-- 										</select> -->
-<!-- 									</div> -->
-<!-- 								</div> -->
 						</div>
-						
 						<!-- Category -->
 						<div class="col-md-2">
 							<div class="aside-block">
@@ -117,17 +101,15 @@
 		<%@ include file="../footer.jsp" %>
 	</div>
 
-<script src="resources/client/ZenBlog/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script  src="resources/util/plugins/sweetalert/jquery-lates.min.js"></script>
-<script src="resources/util/plugins/sweetalert/sweetalert2.js"></script>
-
-<!-- Template Main JS File -->
-<script src="resources/client/ZenBlog/assets/js/main.js"></script>
-
-<!-- sweetAlert (alert/confirm/toast) -->
-<script src="resources/util/js/sweetalert.js"></script>
-
-<script src="resources/util/js/paging.js"></script>
-
+	<script src="resources/client/ZenBlog/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<script  src="resources/util/plugins/sweetalert/jquery-lates.min.js"></script>
+	<script src="resources/util/plugins/sweetalert/sweetalert2.js"></script>
+	
+	<!-- Template Main JS File -->
+	<script src="resources/client/ZenBlog/assets/js/main.js"></script>
+	<!-- sweetAlert (alert/confirm/toast) -->
+	<script src="resources/util/js/sweetalert.js"></script>
+	
+	<script src="resources/util/js/paging.js"></script>
 </body>
 </html>

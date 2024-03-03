@@ -28,6 +28,6 @@ public class ClientVO {
 	private int clientBuyCnt;			// 누적 구매 금액
 	
 	// 탈퇴 회원 정보
-	private String withdrawId;
-	private Timestamp withdrawDate;
+	private String withdrawId;			// 탈퇴 회원 아이디
+	private Timestamp withdrawDate;		// 탈퇴 요청 일자
 }

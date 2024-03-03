@@ -101,18 +101,11 @@ public class TermsController {
 	
 	@RequestMapping("sendTermsMail.mdo")
 	public void sendTermsMail(TermsVO vo) {
-		System.err.println("=======================sendTermsMail\n" + vo);
-		
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy년 M월 d일");
-		
 		List<ClientVO> emailList = clientService.getClientEmailList();
-		System.err.println(emailList);
 		
 		for(int i = 0; i < emailList.size(); i++) {
 			String receiveMail = emailList.get(i).getClientEmail();
-			
-			// 테스트
-			//if(receiveMail.equals("yeogiogae@gmail.com")) {
 			
 			MimeMessagePreparator preparator = new MimeMessagePreparator() {
 				
@@ -151,8 +144,6 @@ public class TermsController {
 			} catch(Exception e) {
 				e.printStackTrace();
 			}
-			
-			//}
 		}
 	}
 }

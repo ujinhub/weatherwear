@@ -382,14 +382,14 @@ function registerReview(){
 		success: function(res){
 			if(res.code == 1){
 				if(orderStatus == "배송중"){
-					orderStatus = "배송완료";
-					playAjax();
 				} else {
 					playToast("리뷰가 등록되었습니다", "success");
-					setTimeout(function(){
-						window.location.reload();
-					}, 1500);
 				}
+				orderStatus = "구매확정";
+				playAjax();
+				setTimeout(function(){
+					window.location.reload();
+				}, 1500);
 			} else {
 				playToast("오류가 발생했습니다. 다시 시도해주세요.", "error");
 			}
@@ -482,7 +482,7 @@ function reviewView(reviewId, productName, mainImage, proCnt, optionColor, optio
 				}
 			}
 			reviewResult += "</div><br>";
-			reviewResult += "<div class='modal-footer justify-content-between'><button type='button' id='" + reviewId + "' class='form-control' data-dismiss='modal' onclick='deleteReview()' style='width:100px;'>삭제하기</button></div></div></div>";
+			reviewResult += "<div class='modal-footer justify-content-between'></div></div></div>";
 			
 			openModel(reviewResult);
 		},
@@ -504,38 +504,6 @@ function openImage(){
 		confirmButtonText: "닫기"
 	}).then(function() {
 		return;
-	});
-}
-
-// 리뷰 삭제
-function deleteReview(){
-	let reviewId = event.target.id;
-	playConfirm("리뷰를 삭제하시겠습니까?", null, "question", "삭제하기", "취소하기", "deleteReviewProc('" + reviewId + "')", "playToast('취소하셨습니다.', null)");
-}
-
-function deleteReviewProc(reviewId){
-	console.log("reviewId : " + reviewId);
-	$.ajax({
-		url: "deleteReview.do",
-		type: "POST",
-		async: true,
-		dataType: "json",
-		data: {
-			reviewId: reviewId
-		},
-		success: function(res){
-			if(res.code == 1){
-				playToast(res.message, "success");
-				setTimeout(function(){
-					window.location.reload();
-				}, 2000);
-			} else {
-				playToast("오류가 발생했습니다. 다시 시도해주세요.", "error");
-			}
-		},
-		error : function(error){
-			playToast("오류가 발생했습니다.", 'error');
-		}
 	});
 }
 
@@ -602,7 +570,6 @@ function playDropzone(){
  		init: function() {
 			var myDropzone = this;
 			document.querySelector(".baseImgDiv").style.display="none";
-			document.querySelector("#dropzone").style.justifyContent = "";
 			reviewStatus = '포토';
 			
 			// 업로드 대기중인 파일 처리
@@ -613,6 +580,7 @@ function playDropzone(){
 			// 업로드 대기중/업로드된 파일 모두 삭제
 			$('.cancelBtn').on('click', function(e) {
 				myDropzone.removeAllFiles(true);	
+				document.querySelector(".baseImgDiv").style.display="flex";
 			});
 			
 			// maxfilesexceeded : 업로드 개수를 초과하는 경우
@@ -641,6 +609,9 @@ function playDropzone(){
 			// 업로드된 파일 삭제
 			this.on('removedfile', function(data) {
 				console.log("data : " + data.name);
+				if(myDropzone.getQueuedFiles().length === 0 && myDropzone.getUploadingFiles().length ===0){
+					document.querySelector(".baseImgDiv").style.display="flex";
+				}
 			});
 		}
  	});

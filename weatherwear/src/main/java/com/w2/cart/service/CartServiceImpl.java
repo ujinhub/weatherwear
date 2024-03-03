@@ -15,32 +15,32 @@ public class CartServiceImpl implements CartService {
 	@Autowired
 	private CartDAO cartDAO;
 	
-	@Override
+	@Override	// 장바구니 목록 조회
 	public List<CartVO> getCartList(CartVO cartvo) {
 		return cartDAO.getCartList(cartvo);
 	}
 
-	@Override
+	@Override	// 장바구니 수량 변경
 	public int updateCart(CartVO cartvo) {
 		return cartDAO.updateCart(cartvo);
 	}
 
-	@Override
+	@Override	// 장바구니 삭제
 	public int deleteCart(List<String> checkList) {
 		return cartDAO.deleteCart(checkList);
 	}
 
-	@Override
+	@Override	// 장바구니 추가
 	public int insertCart(List<CartVO> productList) {
 		return cartDAO.insertCart(productList);
 	}
 	
-	@Override
+	@Override	// 재고 조회
 	public List<OptionVO> checkStock(List<CartVO> cartList) {
 		return cartDAO.checkStock(cartList);
 	}
 
-	@Override
+	@Override	// 장바구니 상품 개수 조회
 	public int getCartListCnt(String clientId) {
 		return cartDAO.getCartListCnt(clientId);
 	}

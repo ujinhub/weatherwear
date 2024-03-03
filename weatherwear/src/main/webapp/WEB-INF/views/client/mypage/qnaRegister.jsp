@@ -5,46 +5,39 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>WeatherWear 사용자</title>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<!-- Google Fonts -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com">
-<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500&amp;family=Inter:wght@400;500&amp;family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&amp;display=swap" rel="stylesheet">
-
-<!-- Theme style -->
-<link rel="stylesheet" href="resources/admin/AdminLTE/dist/css/adminlte.min.css">
-
-<!-- Vendor CSS Files -->
-<link href="resources/client/ZenBlog/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-<link href="resources/client/ZenBlog/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-
-<!-- Swiper -->
-<link href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css" rel="stylesheet"/>
-
-<!-- Template Main CSS Files -->
-<link href="resources/client/ZenBlog/assets/css/main.css" rel="stylesheet">
-<link href="resources/client/ZenBlog/assets/css/variables.css" rel="stylesheet">
-
-<!-- Font Awesome -->
-<link href="resources/admin/AdminLTE/plugins/fontawesome-free/css/all.min.css" rel="stylesheet">
-
-<!-- summernote -->
-<link href="resources/util/plugins/summernote/summernote-lite.css" rel="stylesheet">
-
-<style>
-.mg-1 { margin-top: 10px; margin-bottom: 10px; }
-.mg-2 { margin: 20px 0; }
-.mg-3 { margin: 30px 0 0; }
-.pd-1 { padding: 10px; }
-.table td {
-	vertical-align: middle;
-}
-.required .col-form-label:after { content: '\00a0\2713'; }
-.description { color: #6c757d; font-size: 15px; vertical-align: middle; }
-</style>
+	<meta charset="UTF-8">
+	<title>WeatherWear 사용자</title>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<!-- Google Fonts -->
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com">
+	<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500&amp;family=Inter:wght@400;500&amp;family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&amp;display=swap" rel="stylesheet">
+	<!-- Theme style -->
+	<link rel="stylesheet" href="resources/admin/AdminLTE/dist/css/adminlte.min.css">
+	<!-- Vendor CSS Files -->
+	<link href="resources/client/ZenBlog/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+	<link href="resources/client/ZenBlog/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+	<!-- Swiper -->
+	<link href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css" rel="stylesheet"/>
+	<!-- Template Main CSS Files -->
+	<link href="resources/client/ZenBlog/assets/css/main.css" rel="stylesheet">
+	<link href="resources/client/ZenBlog/assets/css/variables.css" rel="stylesheet">
+	<!-- Font Awesome -->
+	<link href="resources/admin/AdminLTE/plugins/fontawesome-free/css/all.min.css" rel="stylesheet">
+	<!-- summernote -->
+	<link href="resources/util/plugins/summernote/summernote-lite.css" rel="stylesheet">
+	<style>
+		.mg-1 { margin-top: 10px; margin-bottom: 10px; }
+		.mg-2 { margin: 20px 0; }
+		.mg-3 { margin: 30px 0 0; }
+		.pd-1 { padding: 10px; }
+		.table td {
+			vertical-align: middle;
+		}
+		.required .col-form-label:after { content: '\00a0\2713'; }
+		.description { color: #6c757d; font-size: 15px; vertical-align: middle; }
+	</style>
 </head>
 <body class="hold-transition sidebar-collapse layout-top-nav">
 	<div class="wrapper">
@@ -109,12 +102,6 @@
 									<textarea class="form-control" id="summernote" name="qnaContent"></textarea>
 								</div>
 							</div>
-<!-- 							<div class="form-group row"> -->
-<!-- 								<label for="qnaImage" class="col-sm-2 col-form-label">첨부파일</label> -->
-<!-- 								<div class="col-sm-10"> -->
-<!-- 									<input type="file" name="qnaImage" accept="image/jpeg,image/png" multiple> -->
-<!-- 								</div> -->
-<!-- 							</div> -->
 							<div class="form-group row">
 								<label for="qnaSecPwd" class="col-sm-2 col-form-label">비밀번호</label>
 								<div class="col-sm-3">
@@ -151,87 +138,59 @@
 		<%@ include file="../footer.jsp" %>
 	</div>
 
-<script src="resources/client/ZenBlog/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script  src="resources/util/plugins/sweetalert/jquery-lates.min.js"></script>
-<script src="resources/util/plugins/sweetalert/sweetalert2.js"></script>
-
-<!-- Template Main JS File -->
-<script src="resources/client/ZenBlog/assets/js/main.js"></script>
-
-<!-- sweetAlert (alert/confirm/toast) -->
-<script src="resources/util/js/sweetalert.js"></script>
-
-<!-- AdminLTE App -->
-<script src="resources/admin/AdminLTE/dist/js/adminlte.js"></script>
-
-<!-- jQuery-validation -->
-<script src="resources/admin/AdminLTE/plugins/jquery-validation/jquery.validate.min.js"></script>
-<script src="resources/admin/AdminLTE/plugins/jquery-validation/additional-methods.min.js"></script>
-
-<!-- summernote -->
-<script src="resources/util/plugins/summernote/summernote-lite.js"></script>
-
-<script src="resources/util/js/summernote.js"></script>
-
-<script>
-$(document).ready(function() {
-	$('#qnaRegForm').validate({
-		rules: {
-			qnaTitle: {
-				required: true,
-			},
-			qnaContent: {
-				required: true,
-			},
-			qnaSecPwd: {
-				required: "#yesSec:checked",
-			},
-		},
-		messages: {
-			qnaTitle: {
-				required: "",
-			},
-			qnaContent: {
-				required: "",
-			},
-			qnaSecPwd: {
-				required: "",
-			},
-		},
-		errorElement: 'span',
-		errorPlacement: function(error, element) {
-// 			error.addClass('invalid-feedback');
-// 			element.closest('.form-group div').append(error);
-		},
-		highlight: function(element, errorClass, validClass) {
-			$(element).addClass('is-invalid');
-		},
-		unhighlight: function(element, errorClass, validClass) {
-			$(element).removeClass('is-invalid');
-		},
-	}); 
+	<script src="resources/client/ZenBlog/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<script  src="resources/util/plugins/sweetalert/jquery-lates.min.js"></script>
+	<script src="resources/util/plugins/sweetalert/sweetalert2.js"></script>
 	
-// 	$('#summernote').summernote({
-//  		height: 500,
-//  		minHeight: null,
-//  		maxHeight: null,
-//  		focus: false,
-//  		lang: 'ko-KR',
-//  		toolbar: [
-//  					['fontname', ['fontname']],
-//  					['fontsize', ['fontsize']],
-//  					['style', ['bold', 'italic', 'underline', 'strikethrough', 'clear']],
-//  					['color', ['forecolor', 'color']],
-//  					['table', ['table']],
-//  					['para', ['ul', 'ol', 'paragraph']],
-//  					['height', ['height']],
-//  					['insert', ['link']],
-//  					['view', ['help']]
-//  				],
-//  		fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', '맑은 고딕', '궁서', '굴림체', '굴림', '돋움', '돋움체', '바탕체'],
-//  		fontSize: ['8', '9', '10', '11', '12', '14', '16', '18', '20', '22', '24', '28', '30', '36', '50', '72'],
-//  	});
-});
-</script>
+	<!-- Template Main JS File -->
+	<script src="resources/client/ZenBlog/assets/js/main.js"></script>
+	<!-- sweetAlert (alert/confirm/toast) -->
+	<script src="resources/util/js/sweetalert.js"></script>
+	<!-- AdminLTE App -->
+	<script src="resources/admin/AdminLTE/dist/js/adminlte.js"></script>
+	<!-- jQuery-validation -->
+	<script src="resources/admin/AdminLTE/plugins/jquery-validation/jquery.validate.min.js"></script>
+	<script src="resources/admin/AdminLTE/plugins/jquery-validation/additional-methods.min.js"></script>
+	<!-- summernote -->
+	<script src="resources/util/plugins/summernote/summernote-lite.js"></script>
+	
+	<script src="resources/util/js/summernote.js"></script>
+	<script>
+		$(document).ready(function() {
+			$('#qnaRegForm').validate({
+				rules: {
+					qnaTitle: {
+						required: true,
+					},
+					qnaContent: {
+						required: true,
+					},
+					qnaSecPwd: {
+						required: "#yesSec:checked",
+					},
+				},
+				messages: {
+					qnaTitle: {
+						required: "",
+					},
+					qnaContent: {
+						required: "",
+					},
+					qnaSecPwd: {
+						required: "",
+					},
+				},
+				errorElement: 'span',
+				errorPlacement: function(error, element) {
+				},
+				highlight: function(element, errorClass, validClass) {
+					$(element).addClass('is-invalid');
+				},
+				unhighlight: function(element, errorClass, validClass) {
+					$(element).removeClass('is-invalid');
+				},
+			}); 
+		});
+	</script>
 </body>
 </html>

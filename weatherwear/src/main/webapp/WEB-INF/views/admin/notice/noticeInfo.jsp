@@ -1,17 +1,15 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>WeatherWear 관리자</title>
-
-<!-- Font Awesome -->
-<link href="resources/admin/AdminLTE/plugins/fontawesome-free/css/all.min.css" rel="stylesheet">
-<!-- Theme style -->
-<link href="resources/admin/AdminLTE/dist/css/adminlte.min.css" rel="stylesheet">
-<!-- summernote -->
-<link href="resources/util/plugins/summernote/summernote-lite.css" rel="stylesheet">
+	<meta charset="UTF-8">
+	<title>WeatherWear 관리자</title>
+	<!-- Font Awesome -->
+	<link href="resources/admin/AdminLTE/plugins/fontawesome-free/css/all.min.css" rel="stylesheet">
+	<!-- Theme style -->
+	<link href="resources/admin/AdminLTE/dist/css/adminlte.min.css" rel="stylesheet">
+	<!-- summernote -->
+	<link href="resources/util/plugins/summernote/summernote-lite.css" rel="stylesheet">
 </head>
 <body class="hold-transition sidebar-collapse layout-top-nav">
 	<div class="wrapper">
@@ -91,52 +89,56 @@
 		<%@ include file="../footer.jsp" %>
 	</div>
 	
-<!-- jQuery -->
-<script src="resources/admin/AdminLTE/plugins/jquery/jquery.min.js"></script>
-<!-- Bootstrap 4 -->
-<script src="resources/admin/AdminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-<!-- jQuery-validation -->
-<script src="resources/admin/AdminLTE/plugins/jquery-validation/jquery.validate.min.js"></script>
-<script src="resources/admin/AdminLTE/plugins/jquery-validation/additional-methods.min.js"></script>
-<!-- AdminLTE App -->
-<script src="resources/admin/AdminLTE/dist/js/adminlte.js"></script>
-<!-- summernote -->
-<script src="resources/util/plugins/summernote/summernote-lite.js"></script>
-
-<script src="resources/admin/js/common.js"></script>
-<script src="resources/util/js/summernote.js"></script>
-<script>
-	$(function() {
-		$('#noticeUpdateForm').validate({
-			rules: {
-				noticeTitle: {
-					required: true,
+	<!-- jQuery -->
+	<script src="resources/admin/AdminLTE/plugins/jquery/jquery.min.js"></script>
+	<script	src="resources/util/plugins/sweetalert/jquery-lates.min.js"></script>
+	<script src="resources/util/plugins/sweetalert/sweetalert2.js"></script>
+	<!-- Bootstrap 4 -->
+	<script src="resources/admin/AdminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<!-- jQuery-validation -->
+	<script src="resources/admin/AdminLTE/plugins/jquery-validation/jquery.validate.min.js"></script>
+	<script src="resources/admin/AdminLTE/plugins/jquery-validation/additional-methods.min.js"></script>
+	<!-- AdminLTE App -->
+	<script src="resources/admin/AdminLTE/dist/js/adminlte.js"></script>
+	<!-- summernote -->
+	<script src="resources/util/plugins/summernote/summernote-lite.js"></script>
+	<!-- sweetAlert (alert/confirm/toast) -->
+	<script src="resources/util/js/sweetalert.js"></script>
+	
+	<script src="resources/admin/js/common.js"></script>
+	<script src="resources/util/js/summernote.js"></script>
+	<script>
+		$(function() {
+			$('#noticeUpdateForm').validate({
+				rules: {
+					noticeTitle: {
+						required: true,
+					}
+				},
+				messages: {
+					noticeTitle: {
+						required: "제목을 입력해주세요.",
+					}
+				},
+				errorElement: 'span',
+				errorPlacement: function(error, element) {
+					error.addClass('invalid-feedback');
+					element.closest('.form-group div').append(error);
+				},
+				highlight: function(element, errorClass, validClass) {
+					$(element).addClass('is-invalid');
+				},
+				unhighlight: function(element, errorClass, validClass) {
+					$(element).removeClass('is-invalid');
 				}
-			},
-			messages: {
-				noticeTitle: {
-					required: "제목을 입력해주세요.",
+			});
+			
+			$('#btnDelete').on('click', function() {
+				if(confirm('삭제하시겠습니까?')) {
+					location.href = "noticeDeleteProc.mdo?noticeId=" + $('#noticeId').val();
 				}
-			},
-			errorElement: 'span',
-			errorPlacement: function(error, element) {
-				error.addClass('invalid-feedback');
-				element.closest('.form-group div').append(error);
-			},
-			highlight: function(element, errorClass, validClass) {
-				$(element).addClass('is-invalid');
-			},
-			unhighlight: function(element, errorClass, validClass) {
-				$(element).removeClass('is-invalid');
-			}
+			});
 		});
-		
-		$('#btnDelete').on('click', function() {
-			if(confirm('삭제하시겠습니까?')) {
-				location.href = "noticeDeleteProc.mdo?noticeId=" + $('#noticeId').val();
-			}
-		});
-	});
-</script>
+	</script>
 </body>
 </html>

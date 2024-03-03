@@ -231,15 +231,9 @@ public class ProductController {
 	 * @param model
 	 * @return
 	 */
-	@PostMapping("ProductUpdateStatus.mdo")
+	@PostMapping("productUpdateStatus.mdo")
 	public void ProductUpdateStatus(Model model, HttpServletResponse response, @RequestBody List<Map<String, String>> checkList) throws IOException {
-		
-		Integer statusCode = HttpStatus.OK.value();
-		int code = -1;
-		String resultCode = "fail";
-		String message = "오류가 발생했습니다. 다시 시도해주세요";
-		
-		code = productService.updateProductStatus(checkList);
+		int code = productService.updateProductStatus(checkList);
 
 		response.setContentType("application/json");
 		response.getWriter().write(String.valueOf(code));

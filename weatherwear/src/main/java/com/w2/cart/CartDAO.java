@@ -13,24 +13,23 @@ public class CartDAO {
 
 	@Autowired
 	private SqlSessionTemplate sqlSessionTemplate;
-	
-	/** 장바구니에 담긴 상품 개수 가져오기 - 권유진 추가 */
-	public int getCartListCnt(String cilentId) {
-		return sqlSessionTemplate.selectOne("CartDAO.getCartListCnt", cilentId);
-	}
-	
+
+	/** 장바구니 목록 불러오기 */
 	public List<CartVO> getCartList(CartVO cartvo) {
 		return sqlSessionTemplate.selectList("CartDAO.getCartList", cartvo);
 	}
 
+	/** 장바구니 수량 변경 */
 	public int updateCart(CartVO cartvo) {
 		return sqlSessionTemplate.update("CartDAO.updateCart", cartvo);
 	}
 
+	/** 장바구니 삭제 */
 	public int deleteCart(List<String> checkList) {
 		return sqlSessionTemplate.delete("CartDAO.deleteCart", checkList);
 	}
 
+	/** 장바구니 추가 */
 	public int insertCart(List<CartVO> productList) {
 		String ckId = null;
 		String clientId = null;
@@ -72,13 +71,19 @@ public class CartDAO {
 		return 1;
 	}
 	
-	// 재고 확인
+	/** 재고 확인 */
 	public List<OptionVO> checkStock(List<CartVO> cartList) {
 		return sqlSessionTemplate.selectList("CartDAO.checkStock", cartList);
 	}
 
-	// 만료된 쿠키 확인
+	/** 만료된 쿠키 확인 */
 	public void checkCookieLimit() {
 		sqlSessionTemplate.delete("CartDAO.checkCookieLimit");
 	}
+	
+	/** 장바구니에 담긴 상품 개수 가져오기 */
+	public int getCartListCnt(String cilentId) {
+		return sqlSessionTemplate.selectOne("CartDAO.getCartListCnt", cilentId);
+	}
+	
 }

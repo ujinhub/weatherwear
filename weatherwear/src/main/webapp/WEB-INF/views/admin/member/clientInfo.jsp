@@ -1,17 +1,15 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>WeatherWear 관리자</title>
-
-<!-- Font Awesome -->
-<link href="resources/admin/AdminLTE/plugins/fontawesome-free/css/all.min.css" rel="stylesheet">
-<!-- Theme style -->
-<link href="resources/admin/AdminLTE/dist/css/adminlte.min.css" rel="stylesheet">
+	<meta charset="UTF-8">
+	<title>WeatherWear 관리자</title>
+	<!-- Font Awesome -->
+	<link href="resources/admin/AdminLTE/plugins/fontawesome-free/css/all.min.css" rel="stylesheet">
+	<!-- Theme style -->
+	<link href="resources/admin/AdminLTE/dist/css/adminlte.min.css" rel="stylesheet">
 </head>
 <body class="hold-transition sidebar-collapse layout-top-nav">
 	<div class="wrapper">
@@ -128,22 +126,9 @@
 												</div>
 											</div>
 										</c:forEach>
-<!-- 										<div class="form-group row"> -->
-<!-- 											<label class="col-sm-2 col-form-control">약관 동의 여부</label> -->
-<%-- 											<c:forEach var="item" items="${termsAgree}"> --%>
-<!-- 													<div class="row-cols-1"> -->
-<%-- 														<label class="col-sm-9 col-form-control">${item.termTitle}</label> --%>
-<%-- 													 	<input type="radio" name="${item.termId}" <c:if test="${item.termAgreeStatus == 'Y'}">checked</c:if>>동의  --%>
-<%-- 													 	<input type="radio" name="${item.termId}" <c:if test="${item.termAgreeStatus == 'N'}">checked</c:if>>미동의  --%>
-<!-- 													</div> -->
-<%-- 											</c:forEach> --%>
-<!-- 										</div> -->
 									</div>
 									
 									<div class="card-footer">
-<!-- 										<button type="button" id="btnDelete" class="btn btn-danger float-left">삭제</button> -->
-<!-- 										<button type="submit" id="btnUpdate" class="btn btn-info float-right">수정</button> -->
-<!--                  						<button type="reset" class="btn btn-default float-right">취소</button> -->
 									</div>
 								</form>
 							</div>
@@ -157,33 +142,35 @@
 		<%@ include file="../footer.jsp" %>
 	</div>
 	
-<!-- jQuery -->
-<script src="resources/admin/AdminLTE/plugins/jquery/jquery.min.js"></script>
-<!-- Bootstrap 4 -->
-<script src="resources/admin/AdminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-<!-- jQuery-validation -->
-<script src="resources/admin/AdminLTE/plugins/jquery-validation/jquery.validate.min.js"></script>
-<script src="resources/admin/AdminLTE/plugins/jquery-validation/additional-methods.min.js"></script>
-<!-- AdminLTE App -->
-<script src="resources/admin/AdminLTE/dist/js/adminlte.js"></script>
-
-<script src="resources/admin/js/common.js"></script>
-<script>
-$(function() {
-
+	<!-- jQuery -->
+	<script src="resources/admin/AdminLTE/plugins/jquery/jquery.min.js"></script>
+	<script	src="resources/util/plugins/sweetalert/jquery-lates.min.js"></script>
+	<script src="resources/util/plugins/sweetalert/sweetalert2.js"></script>
+	<!-- Bootstrap 4 -->
+	<script src="resources/admin/AdminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<!-- jQuery-validation -->
+	<script src="resources/admin/AdminLTE/plugins/jquery-validation/jquery.validate.min.js"></script>
+	<script src="resources/admin/AdminLTE/plugins/jquery-validation/additional-methods.min.js"></script>
+	<!-- AdminLTE App -->
+	<script src="resources/admin/AdminLTE/dist/js/adminlte.js"></script>
+	<!-- sweetAlert (alert/confirm/toast) -->
+	<script src="resources/util/js/sweetalert.js"></script>
 	
-	$('#btnDelete').on('click', function() {
-		if(confirm('삭제하시겠습니까?')) {
-			
-		}
+	<script src="resources/admin/js/common.js"></script>
+	<script>
+	$(function() {
+		$('#btnDelete').on('click', function() {
+			if(confirm('삭제하시겠습니까?')) {
+				
+			}
+		});
+		
+		$('#btnUpdate').on('click', function() {
+			if(confirm('수정하시겠습니까?')) {
+				
+			}
+		});
 	});
-	
-	$('#btnUpdate').on('click', function() {
-		if(confirm('수정하시겠습니까?')) {
-			
-		}
-	});
-});
-</script>
+	</script>
 </body>
 </html>

@@ -9,7 +9,7 @@ import lombok.ToString;
 @ToString
 public class DeliveryVO {
 	private String deliveryId;			// 택배회사번호
-	private String deliveryComName;	// 택배회사이름
+	private String deliveryComName;		// 택배회사이름
 	private String deliveryComNum;		// 택배회사연락처
 	private int deliveryPrice;			// 택배비
 	private String deliveryName;		// 담당자

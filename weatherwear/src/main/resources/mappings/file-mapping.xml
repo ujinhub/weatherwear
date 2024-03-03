@@ -17,6 +17,9 @@
 		</choose>
 	</sql>
 	
+<!-- 
+		이미지 등록
+-->
 	<insert id="insertImage" parameterType="hashMap">
 		INSERT INTO <include refid="setTable"/>(imageId, imageName, imageDir, imageBy, imageStatus)
 		VALUES 
@@ -25,6 +28,9 @@
 		</foreach>
 	</insert>
 	
+<!-- 
+		상품 대표 이미지 확인
+-->
 	<select id="checkImage" parameterType="image" resultType="String">
 		SELECT imageId 
 		FROM product_image
@@ -34,11 +40,17 @@
 		</if>
 	</select>
 	
+<!-- 
+		상품 이미지 삭제
+-->
 	<delete id="deleteProductImage" parameterType="image">
 		DELETE FROM product_image
 		WHERE imageBy = #{ imageBy } AND imageStatus = #{ imageStatus }
 	</delete>
 	
+<!-- 
+		리뷰 이미지 삭제
+-->
 	<delete id="deleteReviewImage" parameterType="String">
 		DELETE FROM client_image
 		WHERE imageBy = #{ imageBy } AND imageStatus ='리뷰'

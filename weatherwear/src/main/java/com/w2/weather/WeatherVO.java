@@ -8,10 +8,10 @@ import lombok.ToString;
 @Setter
 @ToString
 public class WeatherVO {
-	private String weatherDate;
-	private String province;
-	private double temp_min;
-	private double temp_max;
-	private int weather_id;
-	private String weatherday;
+	private String weatherDate;		// 날짜
+	private String province;		// 지역
+	private double temp_min;		// 최저 온도
+	private double temp_max;		// 최고 온도
+	private int weather_id;			// 대표 날씨
+	private String weatherday;		// 요일
 }

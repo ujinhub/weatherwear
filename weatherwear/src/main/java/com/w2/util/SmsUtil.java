@@ -21,7 +21,11 @@ public class SmsUtil {
 	@Value("${api.secretKey}")
 	private String SECRETKEY;	
 	
-	// user(name_이름, text_문자, to_전화번호)
+	/**
+	 * user(name_이름, text_문자, to_전화번호)
+	 * @param toList
+	 * @return
+	 */
 	public HashMap<String, JSONObject> sentMessage(List<HashMap<String, String>> toList) {
 		Coolsms coolsms = new Coolsms(APIKEY, SECRETKEY);
 		HashMap<String, String> setMessage = new HashMap<String, String>();
@@ -29,7 +33,6 @@ public class SmsUtil {
 		
 		setMessage.put("from", FROM_NUMBER);
 		for(HashMap<String, String> user : toList) {
-			System.err.println("user : " + user);
 			setMessage.put("text", (String)user.get("text"));
 			setMessage.put("to", (String)user.get("to").replace("-","").replace("/", ""));
 			if(((String)user.get("text")).length() < 45) {
@@ -44,7 +47,6 @@ public class SmsUtil {
 			//이름_전화번호 : result
 			resultMap.put((String)user.get("name") + "_" + (String)user.get("to"), result);
 			if((boolean)result.get("status") == true) {
-				System.err.println("성공 =====");
 				/**
 				 result.get("")
 				 	- group_id			: 그룹아이디
@@ -54,7 +56,6 @@ public class SmsUtil {
 				 	- error_count		: 다건 전송시 오류 수
 				 */
 			} else {
-				System.err.println("실패 =====");
 				/**
 				 result.get("")
 				 	- code			: REST API 에러코드
@@ -66,12 +67,15 @@ public class SmsUtil {
 	}
 	
 	
-	/** 단일 메세지 발송 예제 */
+	/** 
+	 * 단일 메세지 발송 예제
+	 * @return
+	 */
 	public String sentOneMessage() {
 		Coolsms coolsms = new Coolsms(APIKEY, SECRETKEY);
 		HashMap<String, String> set = new HashMap<String, String>();
 		set.put("from", FROM_NUMBER);	//발신번호
-		set.put("to", "01043492989");	// 수신번호
+		set.put("to", FROM_NUMBER);	// 수신번호
 		set.put("text", "한건발송예제 : SMS/한글:45자,영문:90자, 그 이상인 경우 LMS로 변환");
 		set.put("type", "sms");
 		
@@ -79,7 +83,6 @@ public class SmsUtil {
 		JSONObject result = coolsms.send(set);
 		
 		if((boolean)result.get("status") == true) {
-			System.err.println("성공 =====");
 			/**
 			 result.get("")
 			 	- group_id			: 그룹아이디
@@ -89,7 +92,6 @@ public class SmsUtil {
 			 	- error_count		: 다건 전송시 오류 수
 			 */
 		} else {
-			System.err.println("실패 =====");
 			/**
 			 result.get("")
 			 	- code			: REST API 에러코드
@@ -112,7 +114,6 @@ public class SmsUtil {
 		JSONObject result = coolsms.send(set);
 		
 		if((boolean)result.get("status") == true) {
-			System.err.println("성공 =====");
 			/**
 			 result.get("")
 			 	- group_id			: 그룹아이디
@@ -122,7 +123,6 @@ public class SmsUtil {
 			 	- error_count		: 다건 전송시 오류 수
 			 */
 		} else {
-			System.err.println("실패 =====");
 			/**
 			 result.get("")
 			 	- code			: REST API 에러코드

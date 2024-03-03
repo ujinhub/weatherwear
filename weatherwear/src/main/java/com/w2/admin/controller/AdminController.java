@@ -19,6 +19,7 @@ import com.w2.admin.service.AdminService;
 import com.w2.board.service.TermsService;
 import com.w2.client.ClientVO;
 import com.w2.client.service.ClientService;
+import com.w2.statistic.service.StatisticService;
 import com.w2.util.Search;
 
 @Controller
@@ -29,13 +30,14 @@ public class AdminController {
 	@Autowired
 	private ClientService clientService;
 	@Autowired
+	private StatisticService statisticService;
+	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
 	@Autowired
 	private TermsService termsService;
 
 	/**
 	 * 로그인 화면 호출
-	 * 
 	 * @return
 	 */
 	@RequestMapping("login.mdo")
@@ -65,7 +67,8 @@ public class AdminController {
 				// 로그인 성공
 				session.removeAttribute("msg");
 				session.setAttribute("adminInfo", admin);
-				return "main";
+				
+				return "redirect: main.mdo";
 			}
 		} else {
 			// 아이디 불일치
@@ -103,6 +106,7 @@ public class AdminController {
 	public String logoutProc(HttpServletRequest request) {
 		HttpSession session = request.getSession(false);
 		
+		adminService.setLogDate((AdminVO)session.getAttribute("adminInfo"));
 		session.invalidate();
 		
 		return "login";
@@ -110,7 +114,6 @@ public class AdminController {
 
 	/**
 	 * 메인 화면 호출
-	 * 
 	 * @return
 	 */
 	@RequestMapping("main.mdo")
@@ -125,6 +128,8 @@ public class AdminController {
 		}
 		
 		model.addAttribute("adminInfo", session.getAttribute("adminInfo"));
+		model.addAttribute("statisticInfo", statisticService.getStatisticInfo((AdminVO)session.getAttribute("adminInfo")));
+		
 		return "main";
 	}
 
@@ -160,11 +165,7 @@ public class AdminController {
 	@ResponseBody
 	@RequestMapping("adminCheck.mdo")
 	public boolean adminCheck(AdminVO vo, String chkType) {
-
-		System.err.println(vo + " " + chkType);
-		
 		AdminVO admin = adminService.getAdmin(vo);
-		System.err.println(admin);
 		if(chkType.equals("adminId")) {
 			// 아이디 중복 확인
 			if(admin != null) {

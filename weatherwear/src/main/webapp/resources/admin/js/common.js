@@ -16,7 +16,7 @@
  	});
  	
  	if(sessionLogin == '') {
- 		alert('장시간 미사용으로 자동 로그아웃 처리되었습니다.');
+ 		playalert('장시간 미사용으로 자동 로그아웃 처리되었습니다.');
  		location.href = 'login.mdo';
  	}
  });

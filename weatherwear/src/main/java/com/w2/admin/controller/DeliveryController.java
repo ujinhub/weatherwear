@@ -35,14 +35,14 @@ public class DeliveryController {
 		search.setKeyword(keyword);
 		
 		// 전체 게시글 개수
-		int listCnt = deliveryService.getProductListCnt(search);
+		int listCnt = deliveryService.getDeliveryListCnt(search);
 		
 		// 검색 페이지 정보
 		search.pageInfo(page, range, listCnt);
 		// 페이징
 		model.addAttribute("pagination", search);
 		// 화면 출력
-		model.addAttribute("deliveryList", deliveryService.getProductList(search));
+		model.addAttribute("deliveryList", deliveryService.getDeliveryList(search));
 		
 		return "delivery/deliveryList";
 	}

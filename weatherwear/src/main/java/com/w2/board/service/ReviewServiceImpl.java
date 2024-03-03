@@ -16,49 +16,38 @@ public class ReviewServiceImpl implements ReviewService {
 	@Autowired
 	private ReviewDAO reviewDao;
 	
-	@Override
+	@Override	// 리뷰 목록 조회
 	public List<ReviewVO> getReviewList(Search search) {
 		return reviewDao.getReviewList(search);
 	}
 
-	@Override
+	@Override	// 리뷰 목록 개수 조회
 	public int getReviewListCnt(Search search) {
 		return reviewDao.getReviewListCnt(search);
 	}
-
-	@Override
-	public ReviewVO getReview(ReviewVO vo) {
-		return reviewDao.getReview(vo);
-	}
 	
-	@Override
+	@Override	// 리뷰 등록
 	public int insertReview(ReviewVO vo) {
 		return reviewDao.insertReview(vo);
 	}
 
-	@Override
-	public List<ReviewVO> getMyReviewList(HashMap<String, Object> param) {
-		return reviewDao.getMyReviewList(param);
-	}
-
-	@Override
-	public int getMyReviewListCnt(String clientId) {
-		return reviewDao.getMyReviewListCnt(clientId);
-	}
-
-	@Override
+	@Override	// 리뷰 상세 조회
 	public ReviewVO getReviewInfo(String reviewId) {
 		return reviewDao.getReviewInfo(reviewId);
 	}
 
-	@Override
+	@Override	// 마이페이지 리뷰 조회
+	public List<ReviewVO> getMyReviewList(HashMap<String, Object> param) {
+		return reviewDao.getMyReviewList(param);
+	}
+
+	@Override	// 마이페이지 리뷰 개수 조회
+	public int getMyReviewListCnt(String clientId) {
+		return reviewDao.getMyReviewListCnt(clientId);
+	}
+
+	@Override	// 리뷰 이미지 조회
 	public List<String> getReviewImage(ReviewVO review) {
 		return reviewDao.getReviewImage(review);
 	}
-
-	@Override
-	public int deleteReview(String reviewId) {
-		return reviewDao.deleteReview(reviewId);
-	}
-
 }

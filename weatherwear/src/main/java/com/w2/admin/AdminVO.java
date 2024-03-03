@@ -18,4 +18,5 @@ public class AdminVO {
 	private String adminNum;		// 관리자 전화번호
 	private Timestamp adminRegDate;	// 관리자 등록일시
 	private String gradeId;			// 관리자 등급 (최고관리자: super, 매니저: manager)
+	private Timestamp adminLogDate; // 관리자 최종 로그인 일자
 }
