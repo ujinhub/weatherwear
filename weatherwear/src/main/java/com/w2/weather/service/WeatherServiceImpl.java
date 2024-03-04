@@ -45,7 +45,54 @@ public class WeatherServiceImpl implements WeatherService {
 
 	// 날씨 불러오기(메인페이지)
 	public HashMap<String, Object> getWeather(String province) {
-		return weatherDAO.getWeather(province);
+		HashMap<String, Object> dayList = new HashMap<String, Object>();
+		WeatherVO weathervo = new WeatherVO();
+		weathervo.setProvince(province);
+		
+		// 오늘 날짜
+		LocalDate today = LocalDate.now();
+		int year = today.getYear();
+		int month = today.getMonthValue();
+		int day = today.getDayOfMonth();
+		
+		dayList.put("province", province);
+		dayList.put("today", today.toString());
+		
+		for(int i=-2; i<3; i++) {
+			int dayOfMonth = LocalDate.of(year, month, 1).lengthOfMonth();
+			int targetDay = day + i;
+
+			if(targetDay > dayOfMonth) {
+				month = today.getMonthValue()+1;
+				day = 0;
+			}
+			
+			weathervo.setWeatherDate(LocalDate.of(year, month, (day+i)).toString());
+			HashMap<String, Object> oneday = weatherDAO.getWeather(weathervo);			
+			
+			if(oneday == null) {	// 날짜 정보 없는 경우
+				try {
+					setUrl(weathervo.getProvince());
+					oneday = weatherDAO.getWeather(weathervo);	
+				} catch (IOException e) {
+					e.printStackTrace();
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
+			} else if(oneday.get("weatherday") == null) {	// 요일 정보 없는 경우
+				LocalDate target = LocalDate.of(year, month, (day+i));
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEEE");
+				weathervo.setWeatherday(target.format(formatter));
+				weatherDAO.saveWeather(weathervo);
+				oneday = weatherDAO.getWeather(weathervo);
+			}
+			
+			//날짜 형식 변환
+			oneday.put("weatherdate", oneday.get("weatherDate").toString().replace("-", "."));
+			System.err.println(i + " : oneday : " + oneday);
+			dayList.put("day"+(3+i), oneday); // day1, day2, day3(today), day4, day5
+		}
+		return dayList;
 	}
 	
 	// 날씨 업데이트
