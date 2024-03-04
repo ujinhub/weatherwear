@@ -87,13 +87,12 @@ public class QnaController {
 	 */
 	@RequestMapping("qnaUpdateProc.mdo")
 	public String qnaUpdateProc(QnaVO vo) {
-		
 		if(vo.getQnaStatus().equals("답변대기")) {
 			vo.setQnaStatus("답변완료");
 			ClientVO client = new ClientVO();
 			client.setClientId(vo.getClientId());
 			
-			client = clientService.getClientEmail(client);
+			client = clientService.getClientEmailNum(client);
 			
 			// 메일 전송
 			sendAnswerMail(vo, client.getClientEmail());
@@ -101,7 +100,6 @@ public class QnaController {
 			// 문자 전송
 			sms.sentOneMessage(client.getClientNum(), "웨더웨어 1:1 문의에 대한 답변이 완료되었습니다.");
 				
-//			}
 		}
 		qnaService.updateQnaAnswer(vo);
 		return "forward:qnaInfo.mdo";
@@ -128,7 +126,7 @@ public class QnaController {
 		MimeMessagePreparator preparator = new MimeMessagePreparator() {
 			
 			StringBuffer content = new StringBuffer()
-								.append("<p><img src='https://hyeongabucket.s3.ap-northeast-2.amazonaws.com/main/logo.png' width='237px'</p><p>&nbsp;</p>")
+								.append("<p><img src='https://hyeongabucket.s3.ap-northeast-2.amazonaws.com/main/logo.png' width='237px'></p><p>&nbsp;</p>")
 								.append("<h1><span style=\"font-family: 'Nanum Gothic';\"><b>1:1 문의에 대한 답변이 완료되었습니다.</b></span></h1><hr>")
 								.append("<p><span style=\"font-family: 'Nanum Gothic';\">문의하신 내용은&nbsp;<b>웨더웨어 &gt; 1:1 문의내역&nbsp;</b>에서도 확인 가능합니다.</span></p>")
 								.append("<p><span style=\"font-family: 'Nanum Gothic';\">답변이 고객님께 충분한 도움이 되기를 바랍니다.</span></p><p>&nbsp;</p>")
@@ -144,6 +142,7 @@ public class QnaController {
 								.append(vo.getQnaContent())
 								.append("</td></tr><tr style=\"height: 17px;\"><td style=\"width: 3.04505%; height: 17px;\">답변내용</td><td style=\"width: 12.0639%; height: 17px;\">")
 								.append(vo.getQnaAnswer())
+								.append("<p><img src='https://hyeongabucket.s3.ap-northeast-2.amazonaws.com/main/logo.png' width='237px'</p><p>&nbsp;</p>")
 								.append("</td></tr></tbody></table>");
 			
 			@Override

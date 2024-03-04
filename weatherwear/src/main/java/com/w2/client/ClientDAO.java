@@ -31,8 +31,8 @@ public class ClientDAO {
 	}
 
 	/** 회원 이메일 조회 */
-	public ClientVO getClientEmail(ClientVO vo) {
-		return sqlSessionTemplate.selectOne("ClientDAO.getClientEmail", vo);
+	public ClientVO getClientEmailNum(ClientVO vo) {
+		return sqlSessionTemplate.selectOne("ClientDAO.getClientEmailNum", vo);
 	}
 
 	/** 회원 이메일 리스트 조회 */

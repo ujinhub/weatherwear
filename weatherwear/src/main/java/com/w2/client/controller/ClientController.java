@@ -506,7 +506,7 @@ public class ClientController {
 		MimeMessagePreparator preparator = new MimeMessagePreparator() {
 			
 			StringBuffer content = new StringBuffer()
-								.append("<p><img src='https://hyeongabucket.s3.ap-northeast-2.amazonaws.com/main/logo.png' width='237px'</p><p>&nbsp;</p>")
+								.append("<p><img src='https://hyeongabucket.s3.ap-northeast-2.amazonaws.com/main/logo.png' width='237px'></p><p>&nbsp;</p>")
 								.append("<h1><span style=\"font-family: 'Nanum Gothic';\"><b>임시 비밀번호 발급</b></span></h1><hr>")
 								.append("<p><span style=\"font-family: 'Nanum Gothic';\">비밀번호 찾기를 통한 임시 비밀번호입니다.</span></p><p>&nbsp;</p>")
 								.append("<p><span style=\"font-family: 'Nanum Gothic';\">로그인 후 &nbsp;<b>마이페이지 &gt; 정보수정&nbsp;</b>에서 비밀번호 변경을 해주세요.</span></p>")

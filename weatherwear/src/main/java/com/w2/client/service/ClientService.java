@@ -10,7 +10,7 @@ public interface ClientService {
 	List<ClientVO> getClientList(Search search);	// 회원 목록 조회
 	int getClientListCnt(Search search);			// 회원 목록 개수 조회
 	ClientVO getClient(ClientVO vo);				// 회원 정보 조회
-	ClientVO getClientEmail(ClientVO vo);			// 회원 이메일 정보 조회
+	ClientVO getClientEmailNum(ClientVO vo);		// 회원 이메일, 전화번호 정보 조회
 	List<ClientVO> getClientEmailList();			// 회원 이메일 리스트 조회
 	ClientVO getClientFindInfo(Map<String, Object> param);	// 아이디/비밀번호 찾기
 	int updateClientPwd(ClientVO vo);				// 비밀번호 변경

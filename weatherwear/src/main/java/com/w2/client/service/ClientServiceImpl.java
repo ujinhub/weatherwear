@@ -32,8 +32,8 @@ public class ClientServiceImpl implements ClientService {
 	}
 
 	@Override	// 회원 이메일 정보 조회
-	public ClientVO getClientEmail(ClientVO vo) {
-		return clientDao.getClientEmail(vo);
+	public ClientVO getClientEmailNum(ClientVO vo) {
+		return clientDao.getClientEmailNum(vo);
 	}
 
 	@Override	// 회원 이메일 리스트 조회

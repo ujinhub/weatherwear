@@ -24,6 +24,7 @@
 		.productName { width: 100%; }
 		.productList { display: flex; flex-direction: row; flex-wrap: wrap;}
 		.productOne { height: 470px; display: flex; flex-direction: column; align-items: center;}
+		.text-board { font-weight: bolder; }
 	</style>
 </head>
 <body class="hold-transition sidebar-collapse layout-top-nav">
@@ -84,12 +85,20 @@
 							<div class="aside-block">
 								<h3 class="aside-title">Categories</h3>
 								<ul class="aside-links list-unstyled">
-									<li><a href="productList.do"><i class="bi bi-chevron-right"></i> NEW</a></li>
-									<li><a href="productList.do?searchType=outer"><i class="bi bi-chevron-right"></i> OUTER</a></li>
-									<li><a href="productList.do?searchType=tops"><i class="bi bi-chevron-right"></i> TOPS</a></li>
-									<li><a href="productList.do?searchType=pants"><i class="bi bi-chevron-right"></i> PANTS</a></li>
-									<li><a href="productList.do?searchType=skirts"><i class="bi bi-chevron-right"></i> SKIRTS</a></li>
-									<li><a href="productList.do?searchType=dress"><i class="bi bi-chevron-right"></i> DRESS</a></li>
+									<c:choose>
+										<c:when test="${pagination.searchType == 'outer'}"><c:set var="type" value="outer"/></c:when>
+										<c:when test="${pagination.searchType == 'tops'}"><c:set var="type" value="tops"/></c:when>
+										<c:when test="${pagination.searchType == 'pants'}"><c:set var="type" value="pants"/></c:when>
+										<c:when test="${pagination.searchType == 'skirts'}"><c:set var="type" value="skirts"/></c:when>
+										<c:when test="${pagination.searchType == 'dress'}"><c:set var="type" value="dress"/></c:when>
+										<c:otherwise><c:set var="type" value="new"/></c:otherwise>
+									</c:choose>
+									<li <c:if test="${type == 'new'}">class="text-board"</c:if>><a href="productList.do"><i class="bi bi-chevron-right"></i> NEW</a></li>
+									<li <c:if test="${type == 'outer'}">class="text-board"</c:if>><a href="productList.do?searchType=outer"><i class="bi bi-chevron-right"></i> OUTER</a></li>
+									<li <c:if test="${type == 'tops'}">class="text-board"</c:if>><a href="productList.do?searchType=tops"><i class="bi bi-chevron-right"></i> TOPS</a></li>
+									<li <c:if test="${type == 'pants'}">class="text-board"</c:if>><a href="productList.do?searchType=pants"><i class="bi bi-chevron-right"></i> PANTS</a></li>
+									<li <c:if test="${type == 'skirts'}">class="text-board"</c:if>><a href="productList.do?searchType=skirts"><i class="bi bi-chevron-right"></i> SKIRTS</a></li>
+									<li <c:if test="${type == 'dress'}">class="text-board"</c:if>><a href="productList.do?searchType=dress"><i class="bi bi-chevron-right"></i> DRESS</a></li>
 								</ul>
 							</div>
 							<!-- End Categories -->

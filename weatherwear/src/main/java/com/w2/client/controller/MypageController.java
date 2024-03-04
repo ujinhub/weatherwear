@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.mail.Message;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,6 +16,8 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -55,6 +60,8 @@ public class MypageController {
 	private ProductService productService;
 	@Autowired
 	private OrderService orderService;
+	@Autowired
+	private JavaMailSender mailSender;
 	
 	/**
 	 * 마이페이지 화면 호출
@@ -393,8 +400,47 @@ public class MypageController {
 		vo.setQnaStatus("답변대기");
 		
 		qnaService.insertQna(vo);
+		sendQnaMail(qnaService.getQna(vo));
 		
 		return "redirect:myqnaList.do";
+	}
+	
+	private void sendQnaMail(QnaVO vo) {
+		
+		MimeMessagePreparator preparator = new MimeMessagePreparator() {
+			
+			StringBuffer content = new StringBuffer()
+								.append("<p><img src='https://hyeongabucket.s3.ap-northeast-2.amazonaws.com/main/logo.png' width='237px'></p><p>&nbsp;</p>")
+								.append("<h1><span style=\"font-family: 'Nanum Gothic';\"><b>1:1 문의 글이 등록되었습니다.</b></span></h1><hr>")
+								.append("<table style=\"border-collapse: collapse; width: 57.4418%; height: 102px;\" border=\"0\">")
+								.append("<tbody><tr style=\"height: 17px;\"><td style=\"width: 3.04505%; height: 17px;\">작성자</td><td style=\"width: 12.0639%; height: 17px;\">")
+								.append(vo.getClientId())
+								.append("<tbody><tr style=\"height: 17px;\"><td style=\"width: 3.04505%; height: 17px;\">문의작성일</td><td style=\"width: 12.0639%; height: 17px;\">")
+								.append(vo.getQnaDate())
+								.append("</td></tr><tr style=\"height: 17px;\"><td style=\"width: 3.04505%; height: 17px;\">문의유형</td><td style=\"width: 12.0639%; height: 17px;\">")
+								.append(vo.getQnaType())
+								.append("</td></tr><tr style=\"height: 17px;\"><td style=\"width: 15.109%; height: 17px;\" colspan=\"2\"><hr></td></tr><tr style=\"height: 17px;\">")
+								.append("<td style=\"width: 3.04505%; height: 17px;\">제목</td><td style=\"width: 12.0639%; height: 17px;\">")
+								.append(vo.getQnaTitle())
+								.append("</td></tr><tr style=\"height: 17px;\"><td style=\"width: 3.04505%; height: 17px;\">문의내용</td><td style=\"width: 12.0639%; height: 17px;\">")
+								.append(vo.getQnaContent())
+								.append("</td></tr></tbody></table>");
+			
+			@Override
+			public void prepare(MimeMessage mimeMessage) throws Exception {
+				mimeMessage.setFrom(new InternetAddress("weatherwear493@gmail.com", "WeatherWear", "UTF-8"));
+				mimeMessage.setSubject("[웨더웨어] 1:1문의 글이 등록되었습니다.");
+				mimeMessage.setRecipients(Message.RecipientType.TO, InternetAddress.parse("weatherwear493@gmail.com"));
+				mimeMessage.setContent(content.toString(), "text/html;charset=UTF-8");
+				mimeMessage.setReplyTo(InternetAddress.parse("weatherwear493@gmail.com"));
+			}
+		};
+		
+		try {
+			mailSender.send(preparator);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	/**

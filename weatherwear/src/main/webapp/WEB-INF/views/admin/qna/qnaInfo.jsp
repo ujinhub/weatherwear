@@ -73,6 +73,7 @@
 										</div>
 										<div class="form-group row">
 											<label for="qnaContent" class="col-sm-1 col-form-control">내용</label>
+											<input type="hidden" name="qnaContent" value="${info.qnaContent}">
 											<div class="col-sm-10" style="border: 1px solid rgba(0, 0, 0, .1); padding:10px;">
 												${ info.qnaContent }
 											</div>

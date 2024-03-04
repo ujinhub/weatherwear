@@ -70,8 +70,8 @@
 <!-- 
 		회원 이메일 조회
 -->
-	<select id="getClientEmail" resultType="client">
-		SELECT clientEmail, clientEmailCheck
+	<select id="getClientEmailNum" resultType="client">
+		SELECT clientEmail, clientNum
 		FROM client
 		WHERE clientId = #{clientId}
 	</select>
@@ -82,7 +82,7 @@
 	<select id="getClientEmailList" resultType="client">
 		SELECT *
 		FROM client
-		WHERE clientEmailCheck = 'Y'
+<!-- 		WHERE clientEmailCheck = 'Y' -->
 	</select>
 	
 <!-- 
