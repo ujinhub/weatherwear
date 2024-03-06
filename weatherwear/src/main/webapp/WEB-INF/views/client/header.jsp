@@ -9,6 +9,7 @@ pageEncoding="UTF-8"%>
 		<nav id="navbar" class="navbar">
 			<ul>
 				<li><a href="productList.do">NEW</a></li>
+				<li><a href="productList.do?orderby=productCnt">BEST</a></li>
 				<li><a href="productList.do?searchType=outer">OUTER</a></li>
 				<li><a href="productList.do?searchType=tops">TOP</a></li>
 				<li><a href="productList.do?searchType=pants">PANTS</a></li>

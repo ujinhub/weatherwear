@@ -57,14 +57,14 @@ $(() => {
 	});
 	
 	$("#tosspay").on("click", ()=>{
-		pg = "tosspay";
-		payMethod = "card";
+		pg = "tosspay_v2";
+		payMethod = "tosspay";
 		sqlPayMethod = "토스페이";
 		console.log("토스페이 : " + pg + " / " + payMethod);
 	});
 	
 	$("#vbank").on("click", ()=>{
-		pg = "vbank";
+		pg = "html5_inicis";
 		payMethod = "vbank";
 		sqlPayMethod = "가상결제";
 		console.log("가상결제 : " + pg + " / " + payMethod);
