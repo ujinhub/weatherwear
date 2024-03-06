@@ -36,8 +36,8 @@
 
 <!-- Data Source -->
 	<!-- 데이터베이스 정보 -->
-    <context:property-placeholder location="classpath:config/webserverdb.properties" />
-    
+		<context:property-placeholder location="classpath:config/webserverdb.properties" />
+		
 	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="${jdbc.driverClassName}" />
 		<property name="url" value="${jdbc.url}" />
@@ -46,8 +46,50 @@
 	</bean>
 
 <!-- Transaction 관리자 설정 -->
-	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager" p:dataSource-ref="dataSource" />
+	<bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager" p:dataSource-ref="dataSource" />
 
+<!-- Transaction aop 설정 -->
+	<tx:advice id="txAdvice" transaction-manager="txManager">
+		<tx:attributes>
+			<tx:method name="insert*" rollback-for="Exception"/> 
+			<tx:method name="update*" rollback-for="Exception"/> 
+			<tx:method name="delete*" rollback-for="Exception"/> 
+		</tx:attributes>
+	</tx:advice>
+	
+	 <!-- aop -->
+	 <aop:config>
+		<aop:pointcut expression="execution(* com.w2..*(..))" id="txPointcut"/>
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="txPointcut"/>
+	</aop:config>
+	 
+	<!-- STMP mail -->
+	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+		<property name="host" value="${smtp.host}"/>
+		<property name="port" value="${smtp.port}"/>
+		<property name="username" value="${smtp.username}"/>
+		<property name="password" value="${smtp.password}"/>
+		<property name="javaMailProperties">
+		<props>
+			<prop key="mail.smtp.auth">true</prop>
+			<prop key="mail.smtp.starttls.enable">true</prop>
+			<prop key="mail.smtp.ssl.protocols">TLSv1.2</prop>
+		</props>
+		</property>
+	</bean>
+
+	<!-- Scheduler -->
+		<bean id="schedulerService" class="com.w2.util.SchedulingService" />
+		<bean id="CartDAO" class="com.w2.cart.CartDAO" />
+		<task:scheduler id="w2Scheduler" pool-size="10" />
+		<task:executor id="w2Executor" pool-size="10" />
+		<task:annotation-driven scheduler="w2Scheduler" executor="w2Executor" />
+		
+	<!-- 의존성 주입을 위해 빈 등록 대신 -->
+		<context:component-scan base-package="com.w2.util" />
+		<context:component-scan base-package="com.w2.weather" />
+		<context:component-scan base-package="com.w2.coupon" />
+		<context:component-scan base-package="com.w2.order" />
 </beans>
 
 

@@ -1,17 +1,15 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>WeatherWear 관리자</title>
-
-<!-- Font Awesome -->
-<link href="resources/admin/AdminLTE/plugins/fontawesome-free/css/all.min.css" rel="stylesheet">
-<!-- Theme style -->
-<link href="resources/admin/AdminLTE/dist/css/adminlte.min.css" rel="stylesheet">
+	<meta charset="UTF-8">
+	<title>WeatherWear 관리자</title>
+	<!-- Font Awesome -->
+	<link href="resources/admin/AdminLTE/plugins/fontawesome-free/css/all.min.css" rel="stylesheet">
+	<!-- Theme style -->
+	<link href="resources/admin/AdminLTE/dist/css/adminlte.min.css" rel="stylesheet">
 </head>
 <body class="hold-transition sidebar-collapse layout-top-nav">
 	<div class="wrapper">
@@ -66,9 +64,9 @@
 												<col width="15%" />
 												<col width="15%" />
 												<col width="15%" />
-												<col width="20%" />
+												<col width="25%" />
 												<col width="5%" />
-												<col width="20%" />
+												<col width="15" />
 											</colgroup>
 											<thead>
 												<tr>
@@ -78,7 +76,7 @@
 													<th>전화번호</th>
 													<th>이메일</th>
 													<th>등급</th>
-													<th>가입일자</th>
+													<th>상태</th>
 												</tr>
 											</thead>
 											<tbody>
@@ -91,7 +89,11 @@
 														<td>${fn:substring(clientNum,0,3)}-${fn:substring(clientNum,3,7)}-${fn:substring(clientNum,7,12)}</td>
 														<td>${item.clientEmail}</td>
 														<td>${item.gradeId}</td>
-														<td>${item.clientRegDate}</td>
+														<td>
+															<c:if test="${item.withdrawId != null && item.withdrawId != ''}">
+																탈퇴
+															</c:if>
+														</td>
 													</tr>
 												</c:forEach>
 											</tbody>
@@ -140,32 +142,41 @@
 		<%@ include file="../footer.jsp" %>
 	</div>
 
-<!-- jQuery -->
-<script src="resources/admin/AdminLTE/plugins/jquery/jquery.min.js"></script>
-<!-- Bootstrap 4 -->
-<script src="resources/admin/AdminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-<script src="resources/admin/js/common.js"></script>
-<script src="resources/util/js/paging.js"></script>
-<script>
-	$(function() {
-		$('#searchType').change(function() {
-			$('#keyword').remove();
+	<!-- jQuery -->
+	<script src="resources/admin/AdminLTE/plugins/jquery/jquery.min.js"></script>
+	<script	src="resources/util/plugins/sweetalert/jquery-lates.min.js"></script>
+	<script src="resources/util/plugins/sweetalert/sweetalert2.js"></script>
+	<!-- Bootstrap 4 -->
+	<script src="resources/admin/AdminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<!-- sweetAlert (alert/confirm/toast) -->
+	<script src="resources/util/js/sweetalert.js"></script>
+	
+	<script src="resources/admin/js/common.js"></script>
+	<script src="resources/util/js/pagingNoOrderBy.js"></script>
+	<script>
+		$(document).ready(function() {
+			// 한번 생각해보기
+			<c:if test="${msg != null && msg != ''}">
+				playalert("${msg}");
+			</c:if>
 			
-			var el;
-			if($(this).val() == 'gradeId') {
-				el = '<select id="keyword" class="form-control float-right">'
-						+ '<option value="S">S</option>'
-						+ '<option value="G">G</option>'
-						+ '<option value="B">B</option>'
-						+ '</select>';
-			} else {
-				el = '<input type="text" id="keyword" class="form-control float-right" placeholder="Search">';
-			}
-
-			$('#searchType').after(el);
+			$('#searchType').change(function() {
+				$('#keyword').remove();
+				
+				var el;
+				if($(this).val() == 'gradeId') {
+					el = '<select id="keyword" class="form-control float-right">'
+							+ '<option value="S">S</option>'
+							+ '<option value="G">G</option>'
+							+ '<option value="B">B</option>'
+							+ '</select>';
+				} else {
+					el = '<input type="text" id="keyword" class="form-control float-right" placeholder="Search">';
+				}
+	
+				$('#searchType').after(el);
+			});
 		});
-	});
-</script>
+	</script>
 </body>
 </html>

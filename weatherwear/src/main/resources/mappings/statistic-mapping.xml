@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	 			
+<mapper namespace="StatisticDAO">
+
+<!-- 
+		장바구니 사용 (전체/회원/비회원) 
+-->
+	<select id="getCartUserCnt" resultType="hashMap">
+		SELECT (SELECT COUNT(DISTINCT clientId) FROM cart) + (SELECT COUNT(DISTINCT cookieId) FROM cart) as totalUser, 
+			COUNT(DISTINCT clientId) as user, 
+		    COUNT(DISTINCT cookieId) as unKnownUser
+		FROM cart;
+	</select>
+	
+<!-- 
+		일별 결제 건수 
+-->
+	<select id="getPaymentCnt" resultType="hashMap">
+		SELECT DATE_FORMAT(paymentDate, "%Y-%m-%d") as 'DATE', COUNT(*) as SUM
+		FROM payment_info  
+		WHERE paymentDate >= (DATE_SUB(CURRENT_DATE(), INTERVAL 7 DAY))
+		GROUP BY DATE_FORMAT(paymentDate, "%Y-%m-%d")
+		ORDER BY paymentDate DESC;
+	</select>
+	
+<!-- 
+		일별 주문 금액 
+-->
+	<select id="getDayOrderPrice" resultType="hashMap">
+		SELECT DATE_FORMAT(od.orderDate, "%Y-%m-%d") as "date", SUM(od.orderPrice) as 'price'
+		<!-- SUM(CASE WHEN oi.orderStatus NOT IN ('환불완료') THEN od.orderPrice ELSE 0 END) as '환불 제외 주문 금액' -->
+		FROM orders od 
+		JOIN orders_info oi ON(od.orderId = oi.orderId)
+		WHERE od.orderDate >= (DATE_SUB(CURRENT_DATE(), INTERVAL 7 DAY))
+		GROUP BY DATE_FORMAT(od.orderDate, "%Y-%m-%d")
+		ORDER BY od.orderDate DESC;
+	</select>
+	
+<!-- 
+		일주일 간 상품 구매 누적 
+-->
+	<select id="getProductCnt" resultType="hashMap">
+		SELECT op.productId, SUM(oi.orderProCnt) as '상품별 구매 누적'
+		FROM orders_info oi
+		JOIN orders od ON (od.orderId = oi.orderId)
+		JOIN option_info op ON (op.optionId = oi.optionId)
+		WHERE od.orderDate >= (DATE_SUB(CURRENT_DATE(), INTERVAL 7 DAY))
+		GROUP BY op.productId
+		ORDER BY SUM(oi.orderProCnt) DESC;
+	</select>
+	
+<!-- 
+		일주일간 신규 회원 가입 수 
+-->
+	<select id="getNewUserCnt" resultType="int">
+		SELECT COUNT(*) as cnt
+		FROM client
+		WHERE clientRegDate >= (DATE_SUB(CURRENT_DATE(), INTERVAL 7 DAY))
+	</select>
+	
+<!-- 
+		일별 회원 가입 수 
+-->
+	<select id="getDayNewUserCnt" resultType="hashMap">
+		SELECT DATE_FORMAT(clientRegDate, "%Y-%m-%d") as 'DATE', COUNT(*) as SUM
+		FROM client
+		WHERE clientRegDate >= (DATE_SUB(CURRENT_DATE(), INTERVAL 7 DAY))
+		GROUP BY DATE_FORMAT(clientRegDate, "%Y-%m-%d")
+		ORDER BY clientRegDate DESC;
+	</select>
+	
+<!-- 
+		월별 주문 금액 
+-->
+	<select id="getMonthOrderPrice" resultType="hashMap">
+		SELECT DATE_FORMAT(od.orderDate, "%Y-%m") as 'DATE', SUM(od.orderPrice) as SUM
+		FROM orders od 
+		JOIN orders_info oi ON(od.orderId = oi.orderId)
+		GROUP BY DATE_FORMAT(od.orderDate, "%Y-%m")
+		ORDER BY od.orderDate DESC;
+	</select>
+
+<!-- 
+		신규 주문 건 
+-->
+	<select id="getNewOrderCnt" parameterType="admin" resultType="int">
+		SELECT COUNT(od.orderId) 
+		FROM orders od
+		JOIN orders_info oi ON (od.orderId = oi.orderId)
+		WHERE oi.orderStatus = "결제완료";
+	</select>
+
+<!-- 
+		상품별 판매 누적 순위 
+-->
+	<select id="getBestProductSell" resultType="product">
+		SELECT p.*, CONCAT(pm.imageDir, pm.imageName) as mainImage
+		FROM product p
+		LEFT JOIN product_image pm ON (p.productId = pm.imageBy AND pm.imageStatus = '대표')
+		ORDER BY p.productCnt DESC
+		LIMIT 0,10;
+	</select>
+
+<!-- 
+		상품별 판매 누적 순위 
+-->
+	<select id="getBestProductView" resultType="product">
+		SELECT p.*, CONCAT(pm.imageDir, pm.imageName) as mainImage
+		FROM product p
+		LEFT JOIN product_image pm ON (p.productId = pm.imageBy AND pm.imageStatus = '대표')
+		ORDER BY p.productView DESC
+		LIMIT 0,10;
+	</select>
+</mapper>

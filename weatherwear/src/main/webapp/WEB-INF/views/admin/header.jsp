@@ -16,22 +16,22 @@
 	    			<!-- Left navbar links -->
 	    			<ul class="navbar-nav">
 	    				<li class="nav-item">
-							<a href="#" class="nav-link">통계</a>    				
+							<a href="productList.mdo" class="nav-link">상품</a>    				
 	    				</li>
 	    				<li class="nav-item">
-							<a href="#" class="nav-link">상품</a>    				
+							<a href="orderList.mdo" class="nav-link">주문</a>    				
 	    				</li>
 	    				<li class="nav-item">
-							<a href="#" class="nav-link">주문</a>    				
-	    				</li>
-	    				<li class="nav-item">
-							<a href="#" class="nav-link">배송</a>    				
+							<a href="deliveryList.mdo" class="nav-link">배송</a>    				
 	    				</li>
 	    				<li class="nav-item">
 							<a href="qnaList.mdo" class="nav-link">문의</a>    				
 	    				</li>
 	    				<li class="nav-item">
 							<a href="noticeList.mdo" class="nav-link">공지</a>    				
+	    				</li>
+	    				<li class="nav-item">
+							<a href="couponList.mdo" class="nav-link">쿠폰</a>    				
 	    				</li>
 	    				<li class="nav-item">
 							<a href="clientList.mdo" class="nav-link">회원</a>    				
@@ -61,85 +61,85 @@
 	    		<!-- Right navbar links -->
 	    		<ul class="order-1 order-md-3 navbar-nav navbar-no-expand ml-auto">
 	    			<!-- Message Dropdown Menu -->
-	    			<li class="nav-item dropdown">
-	    				<a class="nav-link" data-toggle="dropdown" href="#">
-	    					<i class="fas fa-comments"></i>
-	    					<span class="badge badge-danger navbar-badge">3</span>
-	    				</a>
-	    				<div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-	    					<a href="#" class="dropdown-item">
-	    						<!-- Message Start -->
-	    						<div class="media">
-	    							<div class="media-body">
-	    								<h3 class="dropdown-item-title">
-	    									ABC
-	    									<span class="float-right text-sm text-danger"><i class="fas fa-star"></i></span>
-	    								</h3>
-	    								<p class="text-sm">text-danger</p>
-	    								<p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-	    							</div>
-	    						</div><!-- Message End -->
-	    					</a>
-	    					<div class="dropdown-divider"></div>
-	    					<a href="#" class="dropdown-item">
-	    						<!-- Message Start -->
-	    						<div class="media">
-	    							<div class="media-body">
-	    								<h3 class="dropdown-item-title">
-	    									QWE ERT
-	    									<span class="float-right text-sm text-muted"><i class="fas fa-star"></i></span>
-	    								</h3>
-	    								<p class="text-sm">text-muted</p>
-	    								<p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 6 Hours Ago</p>
-	    							</div>
-	    						</div><!-- Message End -->
-	    					</a>
-	    					<div class="dropdown-divider"></div>
-	    					<a href="#" class="dropdown-item">
-	    						<!-- Message Start -->
-	    						<div class="media">
-	    							<div class="media-body">
-	    								<h3 class="dropdown-item-title">
-	    									POUI DIS
-	    									<span class="float-right text-sm text-warning"><i class="fas fa-star"></i></span>
-	    								</h3>
-	    								<p class="text-sm">text-warning</p>
-	    								<p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 12 Hours Ago</p>
-	    							</div>
-	    						</div><!-- Message End -->
-	    					</a>
-	    					<div class="dropdown-divider"></div>
-	    					<a href="#" class="dropdown-item dropdown-footer">See All Message</a>
-	    				</div>
-	    			</li>
+<!-- 	    			<li class="nav-item dropdown"> -->
+<!-- 	    				<a class="nav-link" data-toggle="dropdown" href="#"> -->
+<!-- 	    					<i class="fas fa-comments"></i> -->
+<!-- 	    					<span class="badge badge-danger navbar-badge">3</span> -->
+<!-- 	    				</a> -->
+<!-- 	    				<div class="dropdown-menu dropdown-menu-lg dropdown-menu-right"> -->
+<!-- 	    					<a href="#" class="dropdown-item"> -->
+<!-- 	    						Message Start -->
+<!-- 	    						<div class="media"> -->
+<!-- 	    							<div class="media-body"> -->
+<!-- 	    								<h3 class="dropdown-item-title"> -->
+<!-- 	    									ABC -->
+<!-- 	    									<span class="float-right text-sm text-danger"><i class="fas fa-star"></i></span> -->
+<!-- 	    								</h3> -->
+<!-- 	    								<p class="text-sm">text-danger</p> -->
+<!-- 	    								<p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p> -->
+<!-- 	    							</div> -->
+<!-- 	    						</div>Message End -->
+<!-- 	    					</a> -->
+<!-- 	    					<div class="dropdown-divider"></div> -->
+<!-- 	    					<a href="#" class="dropdown-item"> -->
+<!-- 	    						Message Start -->
+<!-- 	    						<div class="media"> -->
+<!-- 	    							<div class="media-body"> -->
+<!-- 	    								<h3 class="dropdown-item-title"> -->
+<!-- 	    									QWE ERT -->
+<!-- 	    									<span class="float-right text-sm text-muted"><i class="fas fa-star"></i></span> -->
+<!-- 	    								</h3> -->
+<!-- 	    								<p class="text-sm">text-muted</p> -->
+<!-- 	    								<p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 6 Hours Ago</p> -->
+<!-- 	    							</div> -->
+<!-- 	    						</div>Message End -->
+<!-- 	    					</a> -->
+<!-- 	    					<div class="dropdown-divider"></div> -->
+<!-- 	    					<a href="#" class="dropdown-item"> -->
+<!-- 	    						Message Start -->
+<!-- 	    						<div class="media"> -->
+<!-- 	    							<div class="media-body"> -->
+<!-- 	    								<h3 class="dropdown-item-title"> -->
+<!-- 	    									POUI DIS -->
+<!-- 	    									<span class="float-right text-sm text-warning"><i class="fas fa-star"></i></span> -->
+<!-- 	    								</h3> -->
+<!-- 	    								<p class="text-sm">text-warning</p> -->
+<!-- 	    								<p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 12 Hours Ago</p> -->
+<!-- 	    							</div> -->
+<!-- 	    						</div>Message End -->
+<!-- 	    					</a> -->
+<!-- 	    					<div class="dropdown-divider"></div> -->
+<!-- 	    					<a href="#" class="dropdown-item dropdown-footer">See All Message</a> -->
+<!-- 	    				</div> -->
+<!-- 	    			</li> -->
 	    			
-	    			<!-- Notifications Dropdown Menu -->
-					<li class="nav-item dropdown">
-						<a class="nav-link" data-toggle="dropdown" href="#">
-							<i class="far fa-bell"></i>
-							<span class="badge badge-warning navbar-badge">15</span>
-						</a>
-						<div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-							<span class="dropdown-header">15 Notifications</span>
-							<div class="dropdown-divider"></div>
-							<a href="#" class="dropdown-item">
-								<i class="fas fa-envelope mr-2"></i> 4 new question
-								<span class="float-right text-muted text-sm">3 mins</span>
-							</a>
-							<div class="dropdown-divider"></div>
-							<a href="#" class="dropdown-item">
-								<i class="fas fa-users mr-2"></i> 8 client join
-								<span class="float-right text-muted text-sm">12 hours</span>
-							</a>
-							<div class="dropdown-divider"></div>
-							<a href="#" class="dropdown-item">
-								<i class="fas fa-file mr-2"></i> 3 new reports
-								<span class="float-right text-muted text-sm">2 days</span>
-							</a>
-							<div class="dropdown-divider"></div>
-							<a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
-						</div>
-					</li>
+<!-- 	    			Notifications Dropdown Menu -->
+<!-- 					<li class="nav-item dropdown"> -->
+<!-- 						<a class="nav-link" data-toggle="dropdown" href="#"> -->
+<!-- 							<i class="far fa-bell"></i> -->
+<!-- 							<span class="badge badge-warning navbar-badge">15</span> -->
+<!-- 						</a> -->
+<!-- 						<div class="dropdown-menu dropdown-menu-lg dropdown-menu-right"> -->
+<!-- 							<span class="dropdown-header">15 Notifications</span> -->
+<!-- 							<div class="dropdown-divider"></div> -->
+<!-- 							<a href="#" class="dropdown-item"> -->
+<!-- 								<i class="fas fa-envelope mr-2"></i> 4 new question -->
+<!-- 								<span class="float-right text-muted text-sm">3 mins</span> -->
+<!-- 							</a> -->
+<!-- 							<div class="dropdown-divider"></div> -->
+<!-- 							<a href="#" class="dropdown-item"> -->
+<!-- 								<i class="fas fa-users mr-2"></i> 8 client join -->
+<!-- 								<span class="float-right text-muted text-sm">12 hours</span> -->
+<!-- 							</a> -->
+<!-- 							<div class="dropdown-divider"></div> -->
+<!-- 							<a href="#" class="dropdown-item"> -->
+<!-- 								<i class="fas fa-file mr-2"></i> 3 new reports -->
+<!-- 								<span class="float-right text-muted text-sm">2 days</span> -->
+<!-- 							</a> -->
+<!-- 							<div class="dropdown-divider"></div> -->
+<!-- 							<a href="#" class="dropdown-item dropdown-footer">See All Notifications</a> -->
+<!-- 						</div> -->
+<!-- 					</li> -->
 					
 					<!-- User Config -->
 					<li class="nav-item dropdown">
@@ -147,15 +147,17 @@
 							<i class="far fa-user"></i>
 						</a>
 						<div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-							<span class="dropdown-header"> <b>${userInfo.adminName}</b>님 (${userInfo.gradeId}) </span>
+<%-- 							<span class="dropdown-header"> <b>${userInfo.adminName}</b>님 (${userInfo.gradeId}) </span> --%>
+							<span class="dropdown-header"> <b>${adminInfo.adminName}</b>님 (${adminInfo.gradeId}) </span>
 							<div class="dropdown-divider"></div>
-							<a href="#" class="dropdown-item">
+<%-- 							<a href="adminInfo.mdo?adminId=${userInfo.adminId}" class="dropdown-item"> --%>
+							<a href="adminInfo.mdo?adminId=${adminInfo.adminId}" class="dropdown-item">
 								<i class="fas fa-address-card mr-2"></i> My Profile
 							</a>
-							<div class="dropdown-divider"></div>
-							<a href="#" class="dropdown-item">
-								<i class="fas fa-info-circle mr-2"></i> Settings
-							</a>
+<!-- 							<div class="dropdown-divider"></div> -->
+<!-- 							<a href="#" class="dropdown-item"> -->
+<!-- 								<i class="fas fa-info-circle mr-2"></i> Settings -->
+<!-- 							</a> -->
 							<div class="dropdown-divider"></div>
 							<a href="logoutProc.mdo" class="dropdown-item">
 								<i class="fas fa-arrow-right mr-2"></i> Log Out

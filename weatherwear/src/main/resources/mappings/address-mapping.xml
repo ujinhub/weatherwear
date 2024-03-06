@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	 			
+<mapper namespace="AddressDAO">
+<!-- 
+		배송지 목록 조회
+-->
+	<select id="getAddressList" parameterType="String" resultType="address">
+		SELECT * FROM client_address
+		WHERE clientId=#{ clientId }
+	</select>
+	
+<!-- 
+		배송지 적용
+-->
+	<select id="getAddressInfo" parameterType="String" resultType="address">
+		SELECT * FROM client_address
+		WHERE addressId=#{ addressId }
+	</select>
+	
+<!-- 
+		기본 배송지 조회	
+-->
+	<select id="getBaseAddress" parameterType="String" resultType="address">
+		SELECT * FROM client_address
+		WHERE clientId=#{ clientId } AND addressBase = 'Y'
+	</select>
+	
+<!-- 
+		배송지 삭제	
+-->
+	<delete id="deleteAddress" parameterType="String">
+		DELETE FROM client_address
+		WHERE  addressId=#{ addressId }
+	</delete>
+</mapper>

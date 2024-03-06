@@ -11,7 +11,7 @@
 
 	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
 	<!-- 의존성 주입을 위해 빈 등록 대신 -->
-	<context:component-scan base-package="com.w2.client" />
+	<context:component-scan base-package="com.w2" />
 	
 	<!-- Annotation을 활용할 때 기본적인 Default 방식을 설정 -->
 	<annotation-driven />
@@ -25,4 +25,9 @@
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
 	
+	<!--  파일 업로드  -->
+	<beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<beans:property name="maxUploadSize" value="20971520"/>
+		<beans:property name="defaultEncoding" value="utf-8"/>
+	</beans:bean>
 </beans:beans>

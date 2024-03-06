@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	 			
+<mapper namespace="WeatherDAO">
+<!-- 
+		날씨 확인 
+-->
+	<select id="checkDate" resultType="weathervo">
+		SELECT * FROM weather
+		WHERE weatherDate = #{ weatherDate } AND province = #{ province }
+	</select>
+	
+<!--
+		날씨 저장 
+-->
+	<insert id="insertWeather">
+		INSERT INTO weather(weatherDate, province, temp_min, temp_max, weather_id, weatherday)
+		VALUES(#{ weatherDate }, #{ province }, #{ temp_min }, #{ temp_max }, #{ weather_id }, #{ weatherday })
+	</insert>
+	
+<!-- 
+		날씨 갱신 
+-->
+	<update id="updateWeather">
+		UPDATE weather SET temp_min = #{ temp_min }, temp_max = #{ temp_max }, weather_id = #{ weather_id }, weatherday = #{ weatherday }
+		WHERE weatherDate = #{ weatherDate } AND province = #{ province }
+	</update>
+	
+<!-- 
+		날씨 불러오기(메인페이지) 
+-->
+	<select id="getWeather" resultType="HashMap" parameterType="weathervo">
+		SELECT temp_min, temp_max, weatherday, weather_id, weatherDate
+		FROM weather
+		WHERE province=#{ province } AND weatherDate=#{ weatherDate };
+	</select>
+</mapper>

@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	 			
+<mapper namespace="CouponDAO">
+<!-- 
+		쿠폰 리스트 조회
+-->
+	<select id="getCouponList" parameterType="String" resultType="coupon">
+		SELECT *
+		FROM coupon_info ci
+		LEFT JOIN coupon_list cl ON (ci.couponId = cl.couponId AND cl.couponStatus='사용가능')
+		WHERE cl.clientId=#{ clientId }
+	</select>
+	
+<!-- 
+		나의 쿠폰 목록 (페이징)
+-->
+	<select id="getMyCouponList" parameterType="hashmap" resultType="coupon">
+		SELECT *
+		FROM coupon_info ci
+		LEFT JOIN coupon_list cl ON (ci.couponId = cl.couponId AND cl.couponStatus='사용가능')
+		WHERE cl.clientId = #{clientId}
+		ORDER BY ci.couponEndDate
+		LIMIT #{search.startList}, #{search.listSize}
+	</select>
+	
+<!-- 
+		마이페이지 쿠폰 리스트 개수 조회
+-->
+	<select id="getMyCouponListCnt" parameterType="String" resultType="int">
+		SELECT COUNT(*)
+		FROM coupon_info ci
+		LEFT JOIN coupon_list cl ON (ci.couponId = cl.couponId AND cl.couponStatus='사용가능')
+		WHERE cl.clientId=#{ clientId }
+	</select>
+	
+<!-- 
+		쿠폰 정보 조회
+-->
+	<select id="getCouponInfo" resultType="coupon">
+		SELECT *
+		FROM coupon_info
+		WHERE couponId = #{couponId}
+	</select>
+
+<!-- 
+		사용자 쿠폰 등록	
+-->
+	<insert id="myCouponReg">
+		INSERT INTO coupon_list
+		VALUES(#{couponId}, #{clientId}, #{couponStatus})
+	</insert>
+
+<!-- 
+		관리자 쿠폰 리스트 조회
+-->
+	<select id="getCouponListAll" resultType="coupon">
+		SELECT * 
+		FROM coupon_info
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="keyword != null and keyword != ''">
+				<if test="searchType == 'couponId'">
+					AND couponId like CONCAT('%', #{keyword}, '%')
+				</if>
+				<if test="searchType == 'couponName'">
+					AND couponName like CONCAT('%', #{keyword}, '%')
+				</if>
+			</if>
+		</trim>
+		ORDER BY couponId DESC
+		LIMIT #{startList}, #{listSize};
+	</select>
+
+<!-- 
+		관리자 쿠폰 리스트 개수 조회
+-->
+	<select id="getCouponListCnt" resultType="int">
+		SELECT COUNT(*) 
+		FROM coupon_info
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="keyword != null and keyword != ''">
+				<if test="searchType == 'couponId'">
+					AND couponId like CONCAT('%', #{keyword}, '%')
+				</if>
+				<if test="searchType == 'couponName'">
+					AND couponName like CONCAT('%', #{keyword}, '%')
+				</if>
+			</if>
+		</trim>
+	</select>
+
+<!-- 
+		쿠폰 등록
+-->
+	<insert id="insertCoupon" parameterType="coupon">
+		INSERT INTO coupon_info(couponId, couponName, couponPrice, couponStDate, couponEndDate, minPrice, gradeList)
+		VALUES(#{ couponId } , #{ couponName }, #{ couponPrice }, #{ couponStDate } , #{ couponEndDate }, #{ minPrice }, #{ gradeList });
+	</insert>
+
+<!-- 
+		하루전부터 현재 시간까지의 쿠폰 배부 
+-->
+	<insert id="setCoupon" parameterType="coupon">
+		INSERT INTO coupon_list (couponId, clientId, couponStatus)
+		SELECT ci.couponId, c.clientId, '사용가능'
+		FROM coupon_info AS ci
+		JOIN client AS c ON FIND_IN_SET(c.gradeId, ci.gradeList) > 0
+		WHERE ci.couponStDate BETWEEN DATE_SUB(CURDATE(), INTERVAL 1 DAY) AND now()
+		AND NOT EXISTS(
+			SELECT 1
+		    FROM coupon_list cl
+		    WHERE cl.couponId = ci.couponId 
+		    AND cl.clientId = c.clientId
+		);
+	</insert>
+
+<!-- 
+		현재 시간 이전의 기간 만료 쿠폰 만료 
+-->
+	<update id="setCouponLimit" parameterType="coupon">
+		<![CDATA[UPDATE coupon_list cl SET cl.couponStatus='기간만료'
+		WHERE cl.couponStatus="사용가능"
+		AND EXISTS(
+			SELECT 1 
+		    FROM coupon_info ci
+		    WHERE ci.couponId = cl.couponId
+		    AND ci.couponEndDate < NOW());]]>
+	</update>
+
+<!-- 
+		쿠폰 상태 수정
+-->
+	<update id="updateCoupon" parameterType="coupon">
+		UPDATE FROM coupon_list WHERE couponStatus=#{ couponStatus }
+	</update>
+
+<!-- 
+		쿠폰 정보 삭제
+-->
+	<delete id="deleteCouponInfo" parameterType="String">
+		DELETE FROM coupon_info WHERE couponId=#{ couponId }
+	</delete>
+	
+<!-- 
+		쿠폰 리스트 삭제
+-->
+	<delete id="deleteCouponList" parameterType="String">
+		DELETE FROM coupon_list WHERE couponId=#{ couponId }
+	</delete>
+
+<!-- 
+		신규 회원 쿠폰 등록
+ -->
+ 	<insert id="insertNewUserCoupon" parameterType="client">
+ 		INSERT INTO coupon_list (couponId, clientId, couponStatus)
+		SELECT couponId, #{ clientId }, '사용가능'
+		FROM coupon_info
+		WHERE couponName LIKE '신규%' 
+		<![CDATA[ 
+		AND couponEndDate > CURDATE()
+		AND couponStDate < CURDATE() 
+		]]>;
+ 	</insert>
+</mapper>

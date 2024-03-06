@@ -26,7 +26,7 @@ public class AwsS3 {
 	
 	public String upload(MultipartFile multipartFile, String key) throws IOException {
 		String s3FileName = key + "/" + UUID.randomUUID().toString() + "." + StringUtils.getFilenameExtension(multipartFile.getOriginalFilename());
-		
+
 		ObjectMetadata objMetaData = new ObjectMetadata();
 		objMetaData.setContentType(multipartFile.getContentType());
 		objMetaData.setContentLength(multipartFile.getInputStream().available());

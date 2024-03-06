@@ -1,17 +1,15 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>WeatherWear 관리자</title>
-
-<!-- Font Awesome -->
-<link href="resources/admin/AdminLTE/plugins/fontawesome-free/css/all.min.css" rel="stylesheet">
-<!-- Theme style -->
-<link href="resources/admin/AdminLTE/dist/css/adminlte.min.css" rel="stylesheet">
+	<meta charset="UTF-8">
+	<title>WeatherWear 관리자</title>
+	<!-- Font Awesome -->
+	<link href="resources/admin/AdminLTE/plugins/fontawesome-free/css/all.min.css" rel="stylesheet">
+	<!-- Theme style -->
+	<link href="resources/admin/AdminLTE/dist/css/adminlte.min.css" rel="stylesheet">
 </head>
 <body class="hold-transition sidebar-collapse layout-top-nav">
 	<div class="wrapper">
@@ -70,7 +68,7 @@
 										<div class="form-group row">
 											<label for="clientBirth" class="col-sm-2 col-form-control">생년월일</label>
 											<div class="col-sm-9">
-												<input type="text" class="form-control" id="clientBirth" name="clientBirth" value="${info.clientBirth}">
+												<input type="text" class="form-control" id="clientBirth" name="clientBirth" value="${fn:substring(info.clientBirth,0,4)}-${fn:substring(info.clientBirth,4,6)}-${fn:substring(info.clientBirth,6,8)}">
 											</div>
 										</div>
 										<div class="form-group row">
@@ -117,12 +115,20 @@
 												<input type="text" class="form-control" id="clientLogDate" name="clientLogDate" value="${info.clientLogDate}">
 											</div>
 										</div>
+										<c:forEach var="item" items="${termsAgree}">
+											<div class="form-group row">
+												<label class="col-sm-2 col-form-control">${item.termTitle}</label>
+												<div class="col-sm-9">
+												 	<input type="radio" id="${item.termId}_Y" name="${item.termId}" <c:if test="${item.termAgreeStatus == 'Y'}">checked</c:if>>
+													<label for="${item.termId}_Y" class="form-check-label">동의</label>
+												 	<input type="radio" name="${item.termId}" <c:if test="${item.termAgreeStatus == 'N'}">checked</c:if>>
+													<label for="${item.termId}_N" class="form-check-label">동의안함</label> 
+												</div>
+											</div>
+										</c:forEach>
 									</div>
 									
 									<div class="card-footer">
-										<button type="button" id="btnDelete" class="btn btn-danger float-left">삭제</button>
-										<button type="submit" id="btnUpdate" class="btn btn-info float-right">수정</button>
-                 						<button type="reset" class="btn btn-default float-right">취소</button>
 									</div>
 								</form>
 							</div>
@@ -136,140 +142,35 @@
 		<%@ include file="../footer.jsp" %>
 	</div>
 	
-<!-- jQuery -->
-<script src="resources/admin/AdminLTE/plugins/jquery/jquery.min.js"></script>
-<!-- Bootstrap 4 -->
-<script src="resources/admin/AdminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-<!-- jQuery-validation -->
-<script src="resources/admin/AdminLTE/plugins/jquery-validation/jquery.validate.min.js"></script>
-<script src="resources/admin/AdminLTE/plugins/jquery-validation/additional-methods.min.js"></script>
-<!-- AdminLTE App -->
-<script src="resources/admin/AdminLTE/dist/js/adminlte.js"></script>
-
-<script src="resources/admin/js/common.js"></script>
-<script>
-$(function() {
-	$('#adminUpdateForm').validate({
-		rules: {
-			adminName: {
-				required: true,
-				minlength: 2
-			},
-			adminPwd: {
-				required: true,
-				minlength: 8
-			},
-			adminPwdChk: {
-				required: true,
-				minlength: 8,
-				equalTo: "#adminPwd"
-			},
-			adminNum: {
-				required: true,
-				minlength: 13
-			},
-		},
-		messages: {
-			adminName: {
-				required: "이름을 입력해주세요.",
-				minlength: "최소 2글자 이상이어야 합니다."
-			},
-			adminPwd: {
-				required: "비밀번호를 입력해주세요.",
-				minlength: "비밀번호는 8자리 이상이어야 합니다."
-			},
-			adminPwdChk: {
-				required: "비밀번호 확인을 입력해주세요.",
-				minlength: "비밀번호는 8자리 이상이어야 합니다.",
-				equalTo: "비밀번호가 일치하지 않습니다."
-			},
-			adminNum: {
-				required: "전화번호를 입력해주세요.",
-				minlength: "전화번호를 확인해주세요."
-			}
-		},
-		errorElement: 'span',
-		errorPlacement: function(error, element) {
-			error.addClass('invalid-feedback');
-			element.closest('.form-group div').append(error);
-		},
-		highlight: function(element, errorClass, validClass) {
-			$(element).addClass('is-invalid');
-		},
-		unhighlight: function(element, errorClass, validClass) {
-			$(element).removeClass('is-invalid');
-		},
-	});
+	<!-- jQuery -->
+	<script src="resources/admin/AdminLTE/plugins/jquery/jquery.min.js"></script>
+	<script	src="resources/util/plugins/sweetalert/jquery-lates.min.js"></script>
+	<script src="resources/util/plugins/sweetalert/sweetalert2.js"></script>
+	<!-- Bootstrap 4 -->
+	<script src="resources/admin/AdminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<!-- jQuery-validation -->
+	<script src="resources/admin/AdminLTE/plugins/jquery-validation/jquery.validate.min.js"></script>
+	<script src="resources/admin/AdminLTE/plugins/jquery-validation/additional-methods.min.js"></script>
+	<!-- AdminLTE App -->
+	<script src="resources/admin/AdminLTE/dist/js/adminlte.js"></script>
+	<!-- sweetAlert (alert/confirm/toast) -->
+	<script src="resources/util/js/sweetalert.js"></script>
 	
-	$('#btnDelete').on('click', function() {
-		if(confirm('삭제하시겠습니까?')) {
-			if('${userInfo.gradeId}' != 'admin') {
-				if($('#adminUpdateForm').valid()) {
-					$.ajax({
-						url: "adminCheck.mdo",
-						type: "post",
-						dataType: "json",
-						data: {
-							adminId: $('#adminId').val(),
-							adminPwd: $('#adminPwd').val(),
-							type: 'adminPwd'
-						},
-						success: function(data) {
-							if(data == false) {
-								alert('비밀번호가 일치하지 않습니다.');
-							} else {
-								location.href = "adminDeleteProc.mdo?adminId=" + $('#adminId').val();
-							}
-						},
-						error: function(request, status, error) {
-							console.log("code: " + request.status + "\n" + "message: " + request.responseText + "\n" + "error: " + error);
-						}
-					});
-				}
-			} else {
-				location.href = "adminDeleteProc.mdo?adminId=" + $('#adminId').val();
+	<script src="resources/admin/js/common.js"></script>
+	<script>
+	$(function() {
+		$('#btnDelete').on('click', function() {
+			if(confirm('삭제하시겠습니까?')) {
+				
 			}
-		}
-	});
-	
-	$('#btnUpdate').on('click', function() {
-		if(confirm('수정하시겠습니까?')) {
-			if($('#adminUpdateForm').valid()) {
-				$.ajax({
-					url: "adminCheck.mdo",
-					type: "post",
-					data: {
-						adminId: $('#adminId').val(),
-						adminPwd: $('#adminPwd').val(),
-						type: 'adminPwd'
-					},
-					success: function(result) {
-						alert(result);
-						/*$.ajax({
-							url: "adminUpdateProcs.mdo",
-							type: "post",
-							dataType: "json",
-							data: {
-								adminId: $('#adminId').val(),
-								adminPwd: $('#adminPwd').val(),
-								changePwd: 'true'
-							},
-							success: function(data) {
-								location.href = data;
-							},
-							error: function(request, status, error) {
-								console.log("code: " + request.status + "\n" + "message: " + request.responseText + "\n" + "error: " + error);
-							}
-						});*/
-					},
-					error: function(request, status, error) {
-						console.log("code: " + request.status + "\n" + "message: " + request.responseText + "\n" + "error: " + error);
-					}
-				});
+		});
+		
+		$('#btnUpdate').on('click', function() {
+			if(confirm('수정하시겠습니까?')) {
+				
 			}
-		}
+		});
 	});
-});
-</script>
+	</script>
 </body>
 </html>

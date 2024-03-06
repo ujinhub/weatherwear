@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	 			
+<mapper namespace="ProductDAO">
+	<resultMap id="optionInfoResult" type="hashMap">
+		<result property="optionColor" column="optionColor" />
+		<result property="optionSize" column="optionSize" />
+		<result property="stockCnt" column="stockCnt" />
+	</resultMap>
+	
+	<resultMap id="insertResult" type="String">
+		<result property="productId" column="productId" />
+	</resultMap>
+
+<!-- 
+		상품 리스트 조회
+-->
+	<select id="getProductList" resultType="product">
+		SELECT p.*, CONCAT(pm.imageDir, pm.imageName) as mainImage, pr.productPrice
+		FROM product p
+		LEFT JOIN product_image pm ON (p.productId = pm.imageBy AND pm.imageStatus = '대표')
+		LEFT JOIN product_price pr ON (p.productId = pr.productId)
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="keyword != null and keyword != ''">
+				<if test="searchType == 'productName'">
+					AND productName like CONCAT('%', #{keyword}, '%')
+				</if>
+				<if test="searchType == 'productId'">
+					AND productId like CONCAT('%', #{keyword}, '%')
+				</if>
+			</if>
+			<if test="keyword == null or keyword == ''">
+				<if test="searchType == 'outer'">
+					AND p.productCate Like '11%'
+				</if>
+				<if test="searchType == 'tops'">
+					AND p.productCate Like '12%'
+				</if>
+				<if test="searchType == 'pants'">
+					AND p.productCate Like '13%'
+				</if>
+				<if test="searchType == 'skirts'">
+					AND p.productCate Like '14%'
+				</if>
+				<if test="searchType == 'dress'">
+					AND p.productCate Like '15%'
+				</if>
+			</if>
+		</trim>
+		ORDER BY ${ orderby } 
+			<if test="orderby == 'productRegDate'">DESC</if>
+			<if test="orderby == 'productCnt'">DESC</if>
+		LIMIT #{startList}, #{listSize};
+	</select>
+	
+<!-- 
+		상품 리스트 개수 조회
+-->
+	<select id="getProductListCnt" resultType="int">
+		SELECT count(*)
+		FROM product
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="keyword != null and keyword != ''">
+				<if test="searchType == 'productName'">
+					AND productName like CONCAT('%', #{keyword}, '%')
+				</if>
+				<if test="searchType == 'productId'">
+					AND productId like CONCAT('%', #{keyword}, '%')
+				</if>
+			</if>
+			<if test="keyword == null or keyword == ''">
+				<if test="searchType == 'outer'">
+					AND productCate Like '11%'
+				</if>
+				<if test="searchType == 'tops'">
+					AND productCate Like '12%'
+				</if>
+				<if test="searchType == 'pants'">
+					AND productCate Like '13%'
+				</if>
+				<if test="searchType == 'skirts'">
+					AND productCate Like '14%'
+				</if>
+				<if test="searchType == 'dress'">
+					AND productCate Like '15%'
+				</if>
+			</if>
+		</trim>
+		ORDER BY ${ orderby }
+	</select>
+	
+<!-- 
+		상품 상세 조회
+-->
+	<select id="getProduct" resultType="hashmap">
+		SELECT p.*, pr.*, CONCAT(pm.imageDir, pm.imageName) as mainImage
+		FROM product p
+		LEFT JOIN product_price pr ON(p.productId = pr.productId) 
+		LEFT JOIN product_image pm ON (p.productId = pm.imageBy AND pm.imageStatus = '대표')
+		WHERE p.productId=#{ productId }
+	</select>
+	
+<!-- 
+		상품 옵션 조회
+-->
+	<select id="getOptionInfo" resultType="hashmap">
+		SELECT GROUP_CONCAT(DISTINCT optionColor SEPARATOR ',') as optionColorList, 
+				GROUP_CONCAT(DISTINCT optionSize SEPARATOR ',') as optionSizeList
+		FROM option_info
+		WHERE productId=#{ productId }
+	</select>
+	
+<!-- 
+		상품 옵션 리스트 조회
+-->
+	<select id="getOptionList" resultMap="optionInfoResult">
+		SELECT optionColor, optionSize, stockCnt
+		FROM option_info
+		WHERE productId=#{ productId }
+	</select>
+	
+<!-- 
+		상품 상세 이미지 리스트 조회
+-->
+	<select id="getDetailImage" resultType="hashmap">
+		SELECT CONCAT(imageDir, imageName) as detailImage
+		FROM product_image
+		WHERE imageBy=#{ productId } AND imageStatus='상세'
+	</select>
+	
+<!-- 
+		상품 등록 
+-->
+	<insert id="insertProduct" parameterType="product" useGeneratedKeys="true" keyProperty="productId">
+		INSERT INTO product(productId, productName, productContent, productCate, productSell) 
+		VALUES(#{ productId }, #{ productName }, #{ productContent }, #{ productCate }, 'Y')
+	</insert>
+	
+<!-- 
+		가격 등록 
+-->	
+	<insert id="insertPrice" parameterType="hashmap">
+		INSERT INTO product_price(productId, productPrimeCost) 
+		VALUES(#{ product.productId }, #{ productPrimeCost })
+	</insert>
+	
+<!-- 
+		옵션 등록 
+-->
+	<insert id="insertOption" parameterType="list">
+		INSERT INTO option_info(productId, optionColor, optionSize, stockCnt)
+		VALUES
+		<foreach collection="list" item="option" separator=",">
+			(#{ option.productId }, #{ option.optionColor }, #{ option.optionSize }, #{ option.stockCnt })
+		</foreach>
+	</insert>
+
+<!-- 
+		상품 수정 
+-->
+	<update id="updateProduct" parameterType="product">
+		UPDATE product
+		SET productName=#{ productName }, productContent=#{ productContent }
+		WHERE productId=#{ productId }
+	</update>
+	
+<!-- 
+		가격 수정 
+-->	
+	<update id="updatePrice" parameterType="hashmap">
+		UPDATE product_price
+		SET productPrimeCost=#{ productPrimeCost } 
+		WHERE productId=#{ product.productId }
+	</update>
+
+<!-- 
+		상품상태 수정 
+-->
+	<update id="updateStatus" parameterType="hashmap">
+		UPDATE product
+		SET productSell=#{ productSell }
+		WHERE productId=#{ productId }
+	</update>
+	
+<!-- 
+		옵션 수정 
+-->
+	<update id="updateOption" parameterType="list">
+		UPDATE option_info
+		SET 
+		(productId, optionColor, optionSize, stockCnt)
+		VALUES
+		<foreach collection="list" item="option" separator=",">
+			(#{ option.productId }, #{ option.optionColor }, #{ option.optionSize }, #{ option.stockCnt })
+		</foreach>
+		WHERE productId=#{ productId }
+	</update>
+	
+<!-- 
+		옵션 삭제 
+-->
+	<delete id="deleteOption">
+		DELETE FROM option_info WHERE productId=#{ productId }
+	</delete>
+	
+<!-- 
+		상품가격 삭제 
+-->
+	<delete id="deletePrice">
+		DELETE FROM product_price WHERE productId=#{ productId }
+	</delete>
+	
+<!-- 
+		상품 삭제 
+-->
+	<delete id="deleteProduct">
+		DELETE FROM product WHERE productId=#{ productId }
+	</delete>
+
+<!-- 
+		메인페이지 상품 리스트 조회
+-->
+	<select id="getMainProductList" parameterType="String" resultType="product">
+		SELECT p.*, CONCAT(pm.imageDir, pm.imageName) as mainImage, pr.productPrice
+		FROM product p
+		LEFT JOIN product_image pm ON (p.productId = pm.imageBy AND pm.imageStatus = '대표')
+		LEFT JOIN product_price pr ON (p.productId = pr.productId)
+		ORDER BY 
+		<choose>
+			<when test="type == 'best'">p.productCnt DESC, p.productView DESC</when>
+			<when test="type == 'new'">p.productRegDate DESC</when>
+		</choose>
+		LIMIT 0,8;
+	</select>
+	
+<!-- 
+		위시리스트에 존재하는지 확인
+-->
+	<select id="checkWishList" parameterType="hashmap" resultType="String">
+		SELECT clientMarkList FROM client
+		WHERE  clientId=#{ clientId } AND clientMarkList LIKE CONCAT('%', 
+			<foreach collection="productList" item="product" index="index">
+			#{ product }, 
+			</foreach>
+			'%');
+	</select>
+	
+<!-- 
+		위시리스트 추가 
+-->
+	<update id="insertWishList" parameterType="hashmap">
+		<foreach collection="productList" item="product" index="index">
+			UPDATE client
+			SET clientMarkList = CASE 
+			    WHEN clientMarkList IS NULL OR clientMarkList = '' THEN #{product}
+			    ELSE CONCAT(clientMarkList, ',', #{product})
+			    END
+			WHERE FIND_IN_SET(#{ product }, clientMarkList) = 0
+			AND clientId=#{ clientId };
+		</foreach>
+	</update>
+	
+<!-- 
+		위시리스트 삭제 
+-->
+	<update id="deleteWishList" parameterType="hashmap">
+		<foreach collection="productList" item="productId" index="index">
+		UPDATE client
+		SET clientMarkList = TRIM(BOTH ',' FROM 
+									REPLACE(CONCAT(',', clientMarkList, ','), 
+									CONCAT(',', #{ productId },','), ','))
+		WHERE CONCAT(',', clientMarkList, ',') LIKE CONCAT('%,', #{ productId }, ',%') AND clientId=#{ clientId };
+		</foreach>
+	</update>
+	
+<!-- 
+		상품 정보 가져오기 (위시리스트, 최근본상품)
+-->
+	<select id="getProductInfo" parameterType="String" resultType="hashmap">
+		SELECT p.productId, p.productName, p.productSell, r.productPrice, CONCAT(i.ImageDir, i.ImageName) as image
+		FROM product p
+		JOIN product_price r ON (p.productId = r.productId)
+		JOIN product_image i ON (p.productId = i.ImageBy AND i.ImageStatus = '대표')
+		WHERE p.productId = #{productId};
+	</select>
+</mapper>
