@@ -16,16 +16,6 @@
   - 라이브러리 : MyBatis, AWS, Lombok, json-simple, Javax Mail, SDK-S3
   - 오픈 소스: 날씨API, PortOne 결제 시스템
   - 기타 Tool : MySQL Workbench
-- 담당 구현 파트
-  - 프로젝트 개발환경 구축, 설계 참여
-  - DB 설계, 구현
-  - AWS, RDS, S3 구축/관리
-  - 메인 페이지
-  - 관리자 상품 관리
-  - 관리자 주문 관리
-  - 사용자 상품 목록/상세페이지 구현
-  - 사용자 주문 목록/상세페이지 구현
-  - 주문 취소/교환/환불/리뷰
 
 # DB
 ![ERD](https://github.com/hyeonga493/WEATHERWEAR/assets/127083504/0696d9e8-a47f-4df0-ae57-e50676db5f4f)
